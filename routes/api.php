@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\api\CategoryController;
+use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,5 +22,8 @@ Route::group([
 
         // Product
         Route::get('/products', [ProductController::class, 'index']);
+
+        // Category
+        Route::get('/categories', [CategoryController::class, 'index']);
     });
 });

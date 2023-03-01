@@ -2,6 +2,9 @@
 /public/build
 /public/hot
 /public/storage
+/public/uploads/category
+/public/uploads/products
+/public/uploads/slider
 /storage/*.key
 /vendor
 .env

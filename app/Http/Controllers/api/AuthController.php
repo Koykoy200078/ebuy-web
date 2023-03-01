@@ -5,9 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -19,7 +19,6 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('JWT', ['except' => ['login', 'register']]);
-        // auth:api', ['except' => ['login', 'register']]
     }
 
     /**
@@ -33,21 +32,33 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:6',
         ]);
-        // $credentials = request(['email', 'password']);
-
-        // if (!$token = auth()->attempt($credentials)) {
-        //     return response()->json(['error' => 'Unauthorized'], 401);
-        // }
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        if (!$token = auth()->guard('api')->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        return $this->respondWithToken($token);
+        if (!$token = auth()->guard('api')->attempt($validator->validated())) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login failed',
+                'errors' => ['email' => 'These credentials do not match our records.']
+            ], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login successful',
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
+            'user' => auth()->guard('api')->user()
+        ]);
     }
+
 
     /**
      * Register a User.
@@ -61,18 +72,30 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required', 'string', 'min:8', 'confirmed',
         ]);
+
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json([
+                'success' => false,
+                'message' => 'Registration failed',
+                'errors' => $validator->errors()
+            ], 400);
         }
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
+
         return response()->json([
+            'success' => true,
             'message' => 'User successfully registered',
             'user' => $user
         ], 201);
     }
+
+
+
 
     /**
      * Get the authenticated User.
@@ -81,7 +104,21 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->guard('api')->user());
+        $user = auth()->guard('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+                'error' => 'Unauthorized'
+            ], 401);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User found',
+            'user' => $user
+        ]);
     }
 
     /**
@@ -93,7 +130,10 @@ class AuthController extends Controller
     {
         auth()->guard('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'success' => true,
+            'message' => 'User successfully logged out',
+        ]);
     }
 
     /**
@@ -103,22 +143,20 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->guard('api')->refresh());
-    }
+        try {
+            $newToken = JWTAuth::parseToken()->refresh();
+        } catch (JWTException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to refresh token',
+                'error' => $e->getMessage()
+            ], 401);
+        }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60
+            'success' => true,
+            'message' => 'Token successfully refreshed',
+            'token' => $newToken
         ]);
     }
 }

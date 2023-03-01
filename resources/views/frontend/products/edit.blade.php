@@ -88,13 +88,12 @@
                                     <div class="mb-3">
                                         <label>Select Brand</label>
                                         <select name="brand" class="form-control">
-                                            <option value="">Select Brand</option>
+                                            <option value="Reycle">Reycle</option>
+                                            <option value="NotReycle">Not Reycle</option>
+                                            {{-- @foreach ($brands as $brand)
 
-                                            @foreach ($brands as $brand)
-                                            <option value="{{ $brand ->name }}" {{ $brand ->name == $product->brand ? 'selected':'' }}>
-                                                {{ $brand ->name }}
-                                            </option>
-                                            @endforeach
+                                            <option value="{{ $brand ->name }}">{{ $brand ->name }}</option>
+                                            @endforeach --}}
                                         </select>
                                     </div>
 

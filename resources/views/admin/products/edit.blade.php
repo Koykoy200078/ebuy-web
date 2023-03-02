@@ -177,7 +177,9 @@
                                     <div class="col-md-2">
                                         <img src="{{ asset($image->image) }}" style="width: 80px;height:80px;"
                                         class="me-4 border" alt="Img" />
+                                        @if($loop->iteration != 1)
                                         <a href="{{ url('admin/product-image/'.$image->id.'/delete') }}" class="d-block">Remove</a>
+                                        @endif
                                     </div>
                                     @endforeach
                                 </div>

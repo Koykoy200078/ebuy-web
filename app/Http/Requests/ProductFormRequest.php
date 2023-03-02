@@ -84,8 +84,10 @@ class ProductFormRequest extends FormRequest
                 'max:255'
             ],
 
+            'image' => [
+                'required',
+            ],
             'image.*' => [
-                'nullable',
                 'image',
                 'mimes:png,jpg,jpeg'
             ],

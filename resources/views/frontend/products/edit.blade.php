@@ -86,13 +86,13 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label>Select Brand</label>
-                                        <select name="brand" class="form-control">
-                                            <option value="{{ $product ->brand }}">{{ $product ->brand }}</option>
-                                            <option value="Reycle">Reycle</option>
-                                            <option value="NotReycle">Not Reycle</option>
+                                            <label>Select Brand</label>
+                                            <select name="brand" class="form-control">
+                                                <option value="{{ $product ->brand }}">{{ $product ->brand }}</option>
+                                                <option value="Reycle">Reycle</option>
+                                                <option value="NotReycle">Not Reycle</option>
 
-                                        </select>
+                                            </select>
                                     </div>
 
                                     <div class="mb-3">
@@ -145,6 +145,24 @@
                                                 <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control">
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label>Trending</label>
+                                                <input type="checkbox" name="trending" {{ $product->trending == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label>Featured</label>
+                                                <input type="checkbox" name="featured" {{ $product->featured == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label>Status</label>
+                                                <input type="checkbox" name="status" {{ $product->status == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -160,7 +178,9 @@
                                             <div class="col-md-2">
                                                 <img src="{{ asset($image->image) }}" style="width: 80px;height:80px;"
                                                 class="me-4 border" alt="Img" />
-                                                <a href="{{ url('admin/product-image/'.$image->id.'/delete') }}" class="d-block">Remove</a>
+                                                @if($loop->iteration != 1)
+                                                <a href="{{ url('product-image/'.$image->id.'/delete') }}" class="d-block">Remove</a>
+                                                @endif
                                             </div>
                                             @endforeach
                                         </div>

@@ -57,16 +57,51 @@ class CategoryController extends Controller
         return view('admin.category.edit', compact('category'));
     }
 
-    public function update(CategoryFormRequest $request, $category)
+    public function update(Request $request, $category)
     {
-        $validatedData = $request->validated();
+        $validatedData = $request->validate([
+            'name' => [
+                'required',
+                'string'
+            ],
+            'slug' => [
+                'required',
+                'string'
+            ],
+            'description' => [
+                'required',
+            ],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:png,jpg,jpeg'
+            ],
+            'meta_title' => [
+                'required',
+                'string'
+            ],
+            'meta_keyword' => [
+                'required',
+                'string'
 
+            ],
+            'meta_description' => [
+                'required',
+                'string'
+
+            ],
+        ]);
+
+
+
+        
         $category = Category::findOrFail($category);
 
         $category->name = $validatedData['name'];
         $category->slug = Str::slug($validatedData['slug']);
         $category->description = $validatedData['description'];
 
+        
         if($request->hasFile('image')){
 
                 $uploadPath = 'uploads/category/';
@@ -83,6 +118,13 @@ class CategoryController extends Controller
                 $file->move('uploads/category/',$filename);
                 $category->image = $uploadPath.$filename;
         }
+        // else
+        // {
+        //     $file = $request->file("image");
+        //     $path = 'uploads/category/'.$category->image;
+        //     $file->move("uploads/category/",$category->image->getClientOriginalName());
+        //     $Image                = $file->getClientOriginalName();
+        // }
 
         $category->meta_title = $validatedData['meta_title'];
         $category->meta_keyword = $validatedData['meta_keyword'];

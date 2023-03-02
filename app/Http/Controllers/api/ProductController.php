@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductFormRequest;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -17,17 +22,30 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $sliders = Slider::where('status', '0')->get();
-        $trendingProducts = Product::where('trending', '1')->latest()->take(15)->get();
-        $newArrivalProducts = Product::latest()->take(14)->get();
-        $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
+        try {
+            $sliders = Slider::where('status', '0')->get();
+            $trendingProducts = Product::where('trending', '1')->latest()->take(15)->get();
+            $newArrivalProducts = Product::latest()->take(14)->get();
+            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
 
-        return response()->json([
-            'sliders' => $sliders,
-            'trending_products' => $trendingProducts,
-            'new_arrival_products' => $newArrivalProducts,
-            'featured_products' => $featuredProducts
-        ]);
+            if (!$sliders->isEmpty() || !$trendingProducts->isEmpty() || !$newArrivalProducts->isEmpty() || !$featuredProducts->isEmpty()) {
+                return response()->json([
+                    'sliders' => $sliders,
+                    'trending_products' => $trendingProducts,
+                    'new_arrival_products' => $newArrivalProducts,
+                    'featured_products' => $featuredProducts
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'No products or sliders found',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while fetching data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -37,7 +55,28 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            $categories = Category::all();
+            $brands = Brand::all();
+            $colors = Color::where('status', '0')->get();
+
+            if ($categories->isNotEmpty() || $brands->isNotEmpty() || $colors->isNotEmpty()) {
+                return response()->json([
+                    'categories' => $categories,
+                    'brands' => $brands,
+                    'colors' => $colors,
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'No categories, brands, or colors found',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while fetching data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -46,10 +85,74 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
-        //
+        try {
+            $validatedData = $request->validated();
+
+            $category = Category::findOrFail($validatedData['category_id']);
+            $product = $category->products()->create([
+                'category_id' => $validatedData['category_id'],
+                'product_user_id' => auth()->user()->id,
+                'name' => $validatedData['name'],
+                'slug' => Str::slug($validatedData['slug']),
+                'brand' => $validatedData['brand'],
+                'small_description' => $validatedData['small_description'],
+                'description' => $validatedData['description'],
+                'original_price' => $validatedData['original_price'],
+                'selling_price' => $validatedData['selling_price'],
+                'quantity' => $validatedData['quantity'],
+                'trending' => $request->trending == true ? '1' : '0',
+                'featured' => $request->featured == true ? '1' : '0',
+                'status' => $request->status == true ? '1' : '0',
+                'meta_title' => $validatedData['meta_title'],
+                'meta_description' => $validatedData['meta_description'],
+                'meta_keyword' => $validatedData['meta_keyword'],
+            ]);
+
+            if ($request->hasFile('image')) {
+                $uploadPath = public_path('uploads/products/');
+
+                if (!File::exists($uploadPath)) {
+                    File::makeDirectory($uploadPath, $mode = 0777, true, true);
+                }
+
+                $i = 1;
+                foreach ($request->file('image') as $imageFile) {
+                    $extention = $imageFile->getClientOriginalExtension();
+                    $filename = time() . $i++ . '.' . $extention;
+                    $imageFile->move($uploadPath, $filename);
+                    $finalImagePathName = 'uploads/products/' . $filename;
+
+                    $product->productImages()->create([
+                        'product_id' => $product->id,
+                        'image' => $finalImagePathName,
+                    ]);
+                }
+            }
+
+            if ($request->colors) {
+                foreach ($request->colors as $key => $color) {
+                    $product->productColors()->create([
+                        'product_id' => $product->id,
+                        'color_id' => $color,
+                        'quantity' => $request->colorquantity[$key] ?? 0,
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'message' => 'Product added successfully',
+                'product' => $product,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while adding the product',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -59,7 +162,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-       //
+        //
     }
 
     /**

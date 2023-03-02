@@ -22,6 +22,8 @@ Route::group([
 
         // Product
         Route::get('/products', [ProductController::class, 'index']);
+        Route::get('/products/view', [ProductController::class, 'create']);
+        Route::post('/products/create', [ProductController::class, 'store']);
 
         // Category
         Route::get('/categories', [CategoryController::class, 'index']);

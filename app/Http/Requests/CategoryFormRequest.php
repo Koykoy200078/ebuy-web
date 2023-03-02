@@ -37,6 +37,7 @@ class CategoryFormRequest extends FormRequest
             ],
             'image' => [
                 'nullable',
+                'image',
                 'mimes:png,jpg,jpeg'
             ],
             'meta_title' => [

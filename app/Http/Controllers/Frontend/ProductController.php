@@ -28,7 +28,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         $colors = Color::where('status', '0')->get();
-        return view('frontend.products.create', compact('categories', 'brands', 'colors', 'product'));
+        return view('frontend.products.create', compact('categories', 'brands', 'colors'));
     }
 
     public function store(ProductFormRequest $request)

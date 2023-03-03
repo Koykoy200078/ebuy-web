@@ -139,8 +139,15 @@
                                                 <input type="number" name="quantity" class="form-control">
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label>Status</label>
+                                                <!-- <input type="checkbox" name="status" {{ $product->status == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/> -->
+                                                 Checked=Hidden,Uncheked=Visible
+                                            </div>
+                                        </div>
                                     </div>
-
+                                                
                                 </div>
                                 <div class="tab-pane fade border p-3" id="image-tab-pane" role="tabpanel" aria-labelledby="image-tab" tabindex="0">
                                     <div class="mb-3">

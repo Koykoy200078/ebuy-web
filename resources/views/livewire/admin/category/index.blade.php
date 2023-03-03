@@ -38,7 +38,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Satus</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

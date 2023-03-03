@@ -47,6 +47,7 @@
                         <div class="col-md-6 mb-3">
                             <label>Status</label> <br/>
                             <input type="checkbox" name="status"/>
+                            Checked=Hidden,Uncheked=Visible
                         </div>
 
                         <div class="col-md-12">

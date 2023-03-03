@@ -31,12 +31,15 @@
                     </div>
 
                     <div class="mb-3">
+                    
                         <label for="">Image</label>
                         <input type="file" name="image" class="form-control"/>
-                    </div>
-
+                    </div>  
+                    Recommeded to use 1000x1000 image 
                     <div class="mb-3">
-                        <label for="">Status</label> <br/>
+                        <label for="">Status</label>
+                        
+                         <br/>
                         <input type="checkbox" name="status" style="width:30px; height:30px"/>
                         Checked=Hidden,Uncheked=Visible
                     </div>

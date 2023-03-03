@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="">Color Code</label>
+                        <label for="">Color Code (hex)</label>
                         <input type="text" name="code" class="form-control">
                     </div>
 

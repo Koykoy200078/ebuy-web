@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Frontend\Product;
 
 use App\Models\Cart;
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
@@ -15,44 +16,44 @@ class View extends Component
 
     public function addToWishList($productId)
     {
-        if(Auth::check())
-        {
-            if(Wishlist::where('user_id', auth()->user()->id)->where('product_id' ,$productId)->exists())
+            if(Auth::check())
             {
-                session()->flash('message', 'Already added to wish list');
-                $this->dispatchBrowserEvent('message', [
-                    'text' => 'Already added to wish list',
-                    'type' => 'warning',
-                    'status' => 409
-                ]);
-                return false;
+                if(Wishlist::where('user_id', auth()->user()->id)->where('product_id' ,$productId)->exists())
+                {
+                    session()->flash('message', 'Already added to wish list');
+                    $this->dispatchBrowserEvent('message', [
+                        'text' => 'Already added to wish list',
+                        'type' => 'warning',
+                        'status' => 409
+                    ]);
+                    return false;
+                }
+                else
+                {
+                        Wishlist::create([
+                        'user_id' => auth()->user()->id,
+                        'product_id' => $productId,
+                    ]);
+                    $this->emit('wishlistAddedUpdated');
+                    session()->flash('message', 'Wishlist added successfully');
+                    $this->dispatchBrowserEvent('message', [
+                        'text' => 'Wishlist added successfully',
+                        'type' => 'success',
+                        'status' => 200
+                    ]);
+
+                }
             }
             else
             {
-                    Wishlist::create([
-                    'user_id' => auth()->user()->id,
-                    'product_id' => $productId,
-                ]);
-                $this->emit('wishlistAddedUpdated');
-                session()->flash('message', 'Wishlist added successfully');
+                session()->flash('message', 'Please Login to Continue');
                 $this->dispatchBrowserEvent('message', [
-                    'text' => 'Wishlist added successfully',
-                    'type' => 'success',
-                    'status' => 200
+                    'text' => 'Please Login to Continue',
+                    'type' => 'info',
+                    'status' => 401
                 ]);
-
+                return false;
             }
-        }
-        else
-        {
-            session()->flash('message', 'Please Login to Continue');
-            $this->dispatchBrowserEvent('message', [
-                'text' => 'Please Login to Continue',
-                'type' => 'info',
-                'status' => 401
-            ]);
-            return false;
-        }
     }
 
     public function incrementQuantitys()

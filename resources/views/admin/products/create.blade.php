@@ -154,6 +154,7 @@
                                     <div class="mb-3">
                                         <label>Status</label>
                                         <input type="checkbox" name="status" style="width: 50px; height: 50px;"/>
+                                        Checked=Hidden,Uncheked=Visible
                                     </div>
                                 </div>
                             </div>

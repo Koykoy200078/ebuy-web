@@ -21,7 +21,8 @@ class DashboardController extends Controller
 
         $totalAllUsers = User::count();
         $totalUser = User::where('role_as','0')->count();
-        $totalAdmin = User::where('role_as','1')->count();
+        $totalSupport = User::where('role_as','1')->count();
+        $totalAdmin = User::where('role_as','2')->count();
 
         $todayDate = Carbon::now()->format('d-m-Y');
         $thisMonth = Carbon::now()->format('m');
@@ -34,7 +35,7 @@ class DashboardController extends Controller
         $thisYearOrder = Order::whereYear('created_at',$thisYear)->count();
 
 
-        return view('admin.dashboard', compact('totalProducts', 'totalCategories', 'totalBrands', 'totalAllUsers', 'totalUser', 'totalAdmin',
+        return view('admin.dashboard', compact('totalProducts', 'totalCategories', 'totalBrands', 'totalAllUsers', 'totalUser', 'totalSupport', 'totalAdmin',
                                                 'totalOrder', 'todayOrder', 'thisMonthOrder', 'thisYearOrder'));
     }
 }

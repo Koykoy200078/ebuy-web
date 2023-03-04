@@ -19,7 +19,7 @@
             <div class="card-body">
                 <form action="{{ url('admin/sliders/'.$slider->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT');
+                    @method('PUT')
                     <div class="mb-3">
                         <label for="">Title</label>
                         <input type="text" name="title" value="{{ $slider->title }}" class="form-control">
@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="">Image</label>
+                        <label for="">Image&nbsp;&nbsp;</label> <i title="Recommeded to use 1000x1000 image"class="mdi mdi-information menu-icon"></i>
                         <input type="file" name="image" class="form-control"/>
                         <img src="{{ asset("$slider->image")}}" style="width: 50px; height: 50px" alt="Slider">
                     </div>

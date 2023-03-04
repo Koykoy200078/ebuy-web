@@ -89,6 +89,13 @@
             </div>
             <div class="col-md-3">
                 <div class="card card-body bg-warning text-white mb-3">
+                    <label for="">Total Support</label>
+                    <h1>{{ $totalSupport }}</h1>
+                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-body bg-danger text-white mb-3">
                     <label for="">Total Admins</label>
                     <h1>{{ $totalAdmin }}</h1>
                     <a href="{{ url('admin/users') }}" class="text-white">view</a>

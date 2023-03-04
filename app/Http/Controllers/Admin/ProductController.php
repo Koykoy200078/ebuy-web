@@ -163,10 +163,12 @@ class ProductController extends Controller
 
             'image' => [
                 'nullable',
+                'max:5'
             ],
             'image.*' => [
                 'image',
                 'mimes:png,jpg,jpeg'
+                
             ],
         ]);
 

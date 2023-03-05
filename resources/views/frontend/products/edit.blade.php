@@ -8,7 +8,11 @@
             <div class="col-md-12">
                     @if(session('message'))
                             <h4 class="alert alert-success mb-2">{{session('message')}}</h4>
-                        @endif
+                    @endif
+
+                    @if(session('messageError'))
+                        <h4 class="alert alert-danger mb-2">{{session('messageError')}}</h4>
+                    @endif
                 <div class="card">
                     <div class="card-header">
                         <h3>Edit Products

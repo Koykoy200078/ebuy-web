@@ -6,12 +6,12 @@
             <div class="card">
                 <div class="card-header"><h4>Brands</h4></div>
                 <div class="card-body">
-                    @foreach ($category->brands as $brandItem)
+               
                     <label class="d-block">
-                        <input type="checkbox" wire:model="brandInputs" value="{{ $brandItem->name }}" /> {{ $brandItem->name }}
+                 
+                        <input type="checkbox" wire:model="brandInputs" value="Recycle" /> Recycle
+                        <input type="checkbox" wire:model="brandInputs" value="Not Recycle" /> Not Recycle
                     </label>
-                    @endforeach
-
                 </div>
             </div>
             @endif

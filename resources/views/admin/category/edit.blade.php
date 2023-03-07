@@ -50,6 +50,7 @@
                         <div class="col-md-6 mb-3">
                             <label>Status</label> <br/>
                             <input type="checkbox" name="status" {{ $category->status == '1' ? 'checked':''}}/>
+                            Checked=Hidden,Uncheked=Visible
                             @error('status') <small class="text-danger">{{$message}}</small> @enderror
 
                         </div>

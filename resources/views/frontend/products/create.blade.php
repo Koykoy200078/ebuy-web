@@ -80,12 +80,10 @@
                                     <div class="mb-3">
                                         <label>Select Brand</label>
                                         <select name="brand" class="form-control">
-                                            <option value="Reycle">Reycle</option>
-                                            <option value="NotReycle">Not Reycle</option>
-                                            {{-- @foreach ($brands as $brand)
+                                            
+                                            <option value="Recycle">Recycle</option>
+                                            <option value="Not Recycle">Not Recycle</option>
 
-                                            <option value="{{ $brand ->name }}">{{ $brand ->name }}</option>
-                                            @endforeach --}}
                                         </select>
                                     </div>
 
@@ -142,8 +140,8 @@
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label>Status</label>
-                                                <!-- <input type="checkbox" name="status" {{ $product->status == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/> -->
-                                                 Checked=Hidden,Uncheked=Visible
+                                                <input type="checkbox" name="status" style="width: 50px; height: 50px;"/>
+                                                Checked=Hidden,Uncheked=Visible
                                             </div>
                                         </div>
                                     </div>

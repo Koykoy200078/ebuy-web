@@ -99,132 +99,151 @@ class ProductController extends Controller
 
     public function update(Request $request, int $product_id)
     {
-        $validatedData = $request->validate([
-            'category_id' => [
-                'required',
-                'integer'
-            ],
-           'name' => [
-                'required',
-                'string'
-            ],
-           'slug' => [
-                'required',
-                'string',
-            'max:255'
-            ],
-           'brand' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-           'small_description' => [
-                'required',
-                'string'
-            ],
-            'description' => [
-                'required',
-                'string'
-            ],
-            'original_price' => [
-                'required',
-                'integer'
-            ],
-           'selling_price' => [
-                'required',
-                'integer'
-            ],
-           'quantity' => [
-                'required',
-                'integer'
-            ],
-           'trending' => [
-                'nullable',
-            ],
-           'status' => [
-                'nullable',
-            ],
-           'meta_title' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-           'meta_description' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-           'meta_keyword' => [
-                'required',
-                'string',
-                'max:255'
-            ],
 
-            'image' => [
-                'nullable',
-            ],
-            'image.*' => [
-                'image',
-                'mimes:png,jpg,jpeg'
-            ],
-        ]);
-
-        $product = Category::findOrFail($validatedData['category_id'])
-                        ->products()->where('id', $product_id)->first();
-        if($product)
+        $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
+        $countUploadImage = 0;
+        if($request->hasFile('image')){
+            foreach($request->file('image') as $imageFile){
+                $countUploadImage++;
+            }
+        }
+        $totalImageProduct = $countUploadImage+$countInDBImange;
+        if($totalImageProduct <= 10)
         {
-            $product->update([
-                'category_id' => $validatedData['category_id'],
-                'name' => $validatedData['name'],
-                'slug' => Str::slug($validatedData['slug']),
-                'brand' => $validatedData['brand'],
-                'small_description' => $validatedData['small_description'],
-                'description' => $validatedData['description'],
-                'original_price' => $validatedData['original_price'],
-                'selling_price' => $validatedData['selling_price'],
-                'quantity' => $validatedData['quantity'],
-                'trending' => $request ->trending == true ? '1':'0',
-                'featured' => $request ->featured == true ? '1':'0',
-                'status' => $request ->status == true ? '1':'0',
-                'meta_title' => $validatedData['meta_title'],
-                'meta_description' => $validatedData['meta_description'],
-                'meta_keyword' => $validatedData['meta_keyword'],
+
+            $validatedData = $request->validate([
+                'category_id' => [
+                    'required',
+                    'integer'
+                ],
+            'name' => [
+                    'required',
+                    'string'
+                ],
+            'slug' => [
+                    'required',
+                    'string',
+                'max:255'
+                ],
+            'brand' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+            'small_description' => [
+                    'required',
+                    'string'
+                ],
+                'description' => [
+                    'required',
+                    'string'
+                ],
+                'original_price' => [
+                    'required',
+                    'integer'
+                ],
+            'selling_price' => [
+                    'required',
+                    'integer'
+                ],
+            'quantity' => [
+                    'required',
+                    'integer'
+                ],
+            'trending' => [
+                    'nullable',
+                ],
+            'status' => [
+                    'nullable',
+                ],
+            'meta_title' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+            'meta_description' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+            'meta_keyword' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+
+                'image' => [
+                    'nullable',
+                    'max:10'
+
+                ],
+                'image.*' => [
+                    'image',
+                    'mimes:png,jpg,jpeg'
+                ],
             ]);
 
-            if($request->hasFile('image')){
-                $uploadPath = 'uploads/products/';
+            $product = Category::findOrFail($validatedData['category_id'])
+                            ->products()->where('id', $product_id)->first();
+            if($product)
+            {
+                $product->update([
+                    'category_id' => $validatedData['category_id'],
+                    'name' => $validatedData['name'],
+                    'slug' => Str::slug($validatedData['slug']),
+                    'brand' => $validatedData['brand'],
+                    'small_description' => $validatedData['small_description'],
+                    'description' => $validatedData['description'],
+                    'original_price' => $validatedData['original_price'],
+                    'selling_price' => $validatedData['selling_price'],
+                    'quantity' => $validatedData['quantity'],
+                    'trending' => $request ->trending == true ? '1':'0',
+                    'featured' => $request ->featured == true ? '1':'0',
+                    'status' => $request ->status == true ? '1':'0',
+                    'meta_title' => $validatedData['meta_title'],
+                    'meta_description' => $validatedData['meta_description'],
+                    'meta_keyword' => $validatedData['meta_keyword'],
+                ]);
 
-                $i = 1;
-                foreach($request->file('image') as $imageFile){
-                    $extention = $imageFile->getClientOriginalExtension();
-                    $filename = time().$i++.'.'.$extention;
-                    $imageFile->move($uploadPath,$filename);
-                    $finalImagePathName = $uploadPath.$filename;
+                if($request->hasFile('image')){
+                    $uploadPath = 'uploads/products/';
 
-                    $product->productImages()->create([
-                        'product_id' => $product->id,
-                        'image' => $finalImagePathName,
+                    $i = 1;
+                    foreach($request->file('image') as $imageFile){
+                        $extention = $imageFile->getClientOriginalExtension();
+                        $filename = time().$i++.'.'.$extention;
+                        $imageFile->move($uploadPath,$filename);
+                        $finalImagePathName = $uploadPath.$filename;
 
-                    ]);
+                        $product->productImages()->create([
+                            'product_id' => $product->id,
+                            'image' => $finalImagePathName,
+
+                        ]);
+                    }
                 }
-            }
 
-            if($request->colors){
-                foreach($request->colors as $key => $color){
-                    $product->productColors()->create([
-                        'product_id' => $product->id,
-                        'color_id' => $color,
-                        'quantity' => $request->colorquantity[$key] ?? 0
-                    ]);
+                if($request->colors){
+                    foreach($request->colors as $key => $color){
+                        $product->productColors()->create([
+                            'product_id' => $product->id,
+                            'color_id' => $color,
+                            'quantity' => $request->colorquantity[$key] ?? 0
+                        ]);
+                    }
                 }
+
+                return redirect('/products')->with('message', 'Product Updated Succesfully');
+
             }
-
-            return redirect('/products')->with('message', 'Product Updated Succesfully');
-
+            else
+            {
+                return redirect('/products')->with('message', 'No Such Product Id Found');
+            }
         }
-        else
+        else 
         {
-            return redirect('/products')->with('message', 'No Such Product Id Found');
+            return redirect('/products/'.$product_id.'/edit')->with('messageError', 'You cant upload more than 10 images');
         }
     }
 

@@ -79,12 +79,10 @@
                             <div class="mb-3">
                                 <label>Select Brand</label>
                                 <select name="brand" class="form-control">
-                                    <option value="Reycle">Reycle</option>
-                                    <option value="NotReycle">Not Reycle</option>
-                                    {{-- @foreach ($brands as $brand)
-
-                                    <option value="{{ $brand ->name }}">{{ $brand ->name }}</option>
-                                    @endforeach --}}
+                                    
+                                
+                                    <option value="Recycle">Recycle</option>
+                                    <option value="Not Recycle">Not Recycle</option>
                                 </select>
                             </div>
 

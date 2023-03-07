@@ -8,6 +8,10 @@
             @if(session('message'))
                     <h4 class="alert alert-success mb-2">{{session('message')}}</h4>
                 @endif
+
+            @if(session('messageError'))
+                    <h4 class="alert alert-danger mb-2">{{session('messageError')}}</h4>
+            @endif
         <div class="card">
             <div class="card-header">
                 <h3>Edit Products
@@ -87,11 +91,11 @@
                             <div class="mb-3">
                                     <label>Select Brand</label>
                                     <select name="brand" class="form-control">
-                                        <option value="{{ $product ->brand }}">{{ $product ->brand }}</option>
-                                        <option value="Reycle">Reycle</option>
-                                        <option value="NotReycle">Not Reycle</option>
-
+                                    <option value="{{ $product ->brand }}">{{ $product ->brand }}</option>
+                                    <option value="Recycle">Recycle</option>
+                                    <option value="Not Recycle">Not Recycle</option>
                                     </select>
+
                             </div>
 
                             <div class="mb-3">

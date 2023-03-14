@@ -101,79 +101,67 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ProductFormRequest $request)
     {
-        try {
-            $validatedData = $request->validated();
+        $validatedData = $request->validated();
 
-            $category = Category::findOrFail($validatedData['category_id']);
-            $product = $category->products()->create([
-                'category_id' => $validatedData['category_id'],
-                'product_user_id' => auth()->user()->id,
-                'name' => $validatedData['name'],
-                'slug' => Str::slug($validatedData['slug']),
-                'brand' => $validatedData['brand'],
-                'small_description' => $validatedData['small_description'],
-                'description' => $validatedData['description'],
-                'original_price' => $validatedData['original_price'],
-                'selling_price' => $validatedData['selling_price'],
-                'quantity' => $validatedData['quantity'],
-                'trending' => $request->trending == true ? '1' : '0',
-                'featured' => $request->featured == true ? '1' : '0',
-                'status' => $request->status == true ? '1' : '0',
-                'meta_title' => $validatedData['meta_title'],
-                'meta_description' => $validatedData['meta_description'],
-                'meta_keyword' => $validatedData['meta_keyword'],
+        $category = Category::findOrFail($validatedData['category_id']);
+        $product = $category->products()->create([
+            'category_id' => $validatedData['category_id'],
+            'product_user_id' => auth()->user()->id,
+            'name' => $validatedData['name'],
+            'slug' => Str::slug($validatedData['slug']),
+            'brand' => $validatedData['brand'],
+            'small_description' => $validatedData['small_description'],
+            'description' => $validatedData['description'],
+            'original_price' => $validatedData['original_price'],
+            'selling_price' => $validatedData['selling_price'],
+            'quantity' => $validatedData['quantity'],
+            'trending' => $request->trending == true ? '1' : '0',
+            'featured' => $request->featured == true ? '1' : '0',
+            'status' => $request->status == true ? '1' : '0',
+            'meta_title' => $validatedData['meta_title'],
+            'meta_description' => $validatedData['meta_description'],
+            'meta_keyword' => $validatedData['meta_keyword'],
+        ]);
+
+        // Check if image is present in request
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+
+            // Validate image file
+            $validatedImage = $request->validate([
+                'image' => 'required|image|max:1024', // Example validation rules
             ]);
 
-            if ($request->hasFile('image')) {
-                $uploadPath = public_path('uploads/products/');
+            $uploadPath = 'uploads/products/';
+            $extension = $imageFile->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $imageFile->move($uploadPath, $filename);
+            $finalImagePathName = $uploadPath . $filename;
 
-                if (!File::exists($uploadPath)) {
-                    File::makeDirectory($uploadPath, $mode = 0777, true, true);
-                }
-
-                $i = 1;
-                foreach ($request->file('image') as $imageFile) {
-                    $extention = $imageFile->getClientOriginalExtension();
-                    $filename = time() . $i++ . '.' . $extention;
-                    $imageFile->move($uploadPath, $filename);
-                    $finalImagePathName = 'uploads/products/' . $filename;
-
-                    $product->productImages()->create([
-                        'product_id' => $product->id,
-                        'image' => $finalImagePathName,
-                    ]);
-                }
-            }
-
-            if ($request->colors) {
-                foreach ($request->colors as $key => $color) {
-                    $product->productColors()->create([
-                        'product_id' => $product->id,
-                        'color_id' => $color,
-                        'quantity' => $request->colorquantity[$key] ?? 0,
-                    ]);
-                }
-            }
-
-            return response()->json([
-                'message' => 'Product added successfully',
-                'product' => $product,
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred while adding the product',
-                'error' => $e->getMessage(),
-            ], 500);
+            $product->productImages()->create([
+                'product_id' => $product->id,
+                'image' => $finalImagePathName,
+            ]);
         }
+
+        if ($request->colors) {
+            foreach ($request->colors as $key => $color) {
+                $product->productColors()->create([
+                    'product_id' => $product->id,
+                    'color_id' => $color,
+                    'quantity' => $request->colorquantity[$key] ?? 0,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Product added successfully'], 201);
     }
+
+
+
+
 
 
     /**

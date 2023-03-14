@@ -24,25 +24,25 @@ class ProductFormRequest extends FormRequest
     public function rules()
     {
         return [
-           'category_id' => [
+            'category_id' => [
                 'required',
                 'integer'
             ],
-           'name' => [
+            'name' => [
                 'required',
                 'string'
             ],
-           'slug' => [
-                'required',
-                'string',
-            'max:255'
-            ],
-           'brand' => [
+            'slug' => [
                 'required',
                 'string',
                 'max:255'
             ],
-           'small_description' => [
+            'brand' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+            'small_description' => [
                 'required',
                 'string'
             ],
@@ -54,31 +54,31 @@ class ProductFormRequest extends FormRequest
                 'required',
                 'integer'
             ],
-           'selling_price' => [
+            'selling_price' => [
                 'required',
                 'integer'
             ],
-           'quantity' => [
+            'quantity' => [
                 'required',
                 'integer'
             ],
-           'trending' => [
+            'trending' => [
                 'nullable',
             ],
-           'status' => [
+            'status' => [
                 'nullable',
             ],
-           'meta_title' => [
+            'meta_title' => [
                 'required',
                 'string',
                 'max:255'
             ],
-           'meta_description' => [
+            'meta_description' => [
                 'required',
                 'string',
                 'max:255'
             ],
-           'meta_keyword' => [
+            'meta_keyword' => [
                 'required',
                 'string',
                 'max:255'

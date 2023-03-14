@@ -49,23 +49,23 @@
             </ul>
           </div>
       </li>
-
+<!-- 
       <li class="nav-item {{ Request::is('admin/brands') ? 'active':''}}">
         <a class="nav-link"  href="{{ url('admin/brands') }}">
           <i class="mdi mdi-view-headline menu-icon"></i>
-          <span class="menu-arrow" >Brands</span>
+          <span class="menu-title" >Brands</span>
         </a>
-      </li>
+      </li> -->
       <li class="nav-item {{ Request::is('admin/colors') ? 'active':''}}">
         <a class="nav-link"  href="{{ url('admin/colors') }}">
           <i class="mdi mdi-view-headline menu-icon"></i>
-          <span class="menu-arrow" >Colors</span>
+          <span class="menu-title" >Colors</span>
         </a>
       </li>
       <li class="nav-item {{ Request::is('admin/users') ? 'active':''}}">
         <a class="nav-link"  href="{{ url('admin/users') }}">
           <i class="mdi mdi-account-multiple-plus menu-icon"></i>
-          <span class="menu-arrow" >Users</span>
+          <span class="menu-title" >Users</span>
         </a>
       </li>
 

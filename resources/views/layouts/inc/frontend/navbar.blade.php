@@ -54,6 +54,9 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user"></i> Profile</a></li>
+                            @if(Auth::user()->role_as != 0)
+                            <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user"></i> Admin</a></li>
+                            @endif
                             <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list"></i> My Orders</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Store</a></li>
                             <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> My Wishlist</a></li>
@@ -99,7 +102,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/featured-products') }}">Featured Products</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Electronics</a>
                     </li>
                     <li class="nav-item">
@@ -113,7 +116,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Appliances</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>

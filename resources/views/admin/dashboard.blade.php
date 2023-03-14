@@ -62,13 +62,13 @@
                     <a href="{{ url('admin/category') }}" class="text-white">view</a>
                 </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <div class="card card-body bg-warning text-white mb-3">
                     <label for="">Total Brands</label>
                     <h1>{{ $totalBrands }}</h1>
                     <a href="{{ url('admin/brands') }}" class="text-white">view</a>
                 </div>
-            </div>
+            </div> -->
         </div>
         <hr>
 

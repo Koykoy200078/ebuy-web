@@ -1,3 +1,10 @@
+
+  
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+  }
 .colorSelectionLabel{
     color: #000;
     padding: 2px 10px;
@@ -320,6 +327,8 @@
     margin: 10px 0;
 }
 
+
+
 .footer-area{
     padding: 40px 0px;
     background-color: #2874f0;
@@ -338,6 +347,7 @@
     background-color: #ddd;
     margin: 10px 0px;
 }
+
 .copyright-area{
     padding: 14px 0px;
     background-color: #262626;

@@ -45,6 +45,6 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User Profile Updated'
-        ], 200);
+        ], 200)->header('Content-Type', 'application/json')->header('X-Request-Id', uniqid());
     }
 }

@@ -6,6 +6,10 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+
 
 Route::group([
     'middleware' => 'api',
@@ -23,6 +27,8 @@ Route::group([
 
         // Product
         Route::get('/products', [ProductController::class, 'index']);
+
+
         Route::get('/products/view', [ProductController::class, 'view']);
         Route::post('/products/create', [ProductController::class, 'store']);
 
@@ -31,6 +37,6 @@ Route::group([
 
         // User
 
-        Route::post('/user/details', [UserController::class, 'updateUserDetails']);
+        Route::put('/user/details', [UserController::class, 'updateUserDetails']);
     });
 });

@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         try {
@@ -28,18 +23,44 @@ class ProductController extends Controller
             $newArrivalProducts = Product::latest()->take(14)->get();
             $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
 
-            if (!$sliders->isEmpty() || !$trendingProducts->isEmpty() || !$newArrivalProducts->isEmpty() || !$featuredProducts->isEmpty()) {
-                return response()->json([
-                    'sliders' => $sliders,
-                    'trending_products' => $trendingProducts,
-                    'new_arrival_products' => $newArrivalProducts,
-                    'featured_products' => $featuredProducts
-                ], 200);
-            } else {
+            $data = [
+                'sliders' => [],
+                'trending_products' => [],
+                'new_arrival_products' => [],
+                'featured_products' => []
+            ];
+
+            foreach ($sliders as $slider) {
+                $sliderData = $slider->toArray();
+                $sliderData['image_url'] = asset($slider->image);
+                $data['sliders'][] = $sliderData;
+            }
+
+            foreach ($trendingProducts as $product) {
+                $productData = $product->toArray();
+                $productData['image_url'] = asset($product->productImages[0]->image);
+                $data['trending_products'][] = $productData;
+            }
+
+            foreach ($newArrivalProducts as $product) {
+                $productData = $product->toArray();
+                $productData['image_url'] = asset($product->productImages[0]->image);
+                $data['new_arrival_products'][] = $productData;
+            }
+
+            foreach ($featuredProducts as $product) {
+                $productData = $product->toArray();
+                $productData['image_url'] = asset($product->productImages[0]->image);
+                $data['featured_products'][] = $productData;
+            }
+
+            if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
                 return response()->json([
                     'message' => 'No products or sliders found',
                 ], 404);
             }
+
+            return response()->json($data, 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while fetching data',
@@ -47,6 +68,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Show the form for creating a new resource.

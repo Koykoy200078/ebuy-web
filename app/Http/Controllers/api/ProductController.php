@@ -8,8 +8,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductImage;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
@@ -69,12 +72,6 @@ class ProductController extends Controller
         }
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function view()
     {
         try {
@@ -130,8 +127,8 @@ class ProductController extends Controller
             $imageFile = $request->file('image');
 
             // Validate image file
-            $validatedImage = $request->validate([
-                'image' => 'required|image|max:1024', // Example validation rules
+            $validatedData = $request->validate([
+                'image' => 'required|image|max:2048',
             ]);
 
             $uploadPath = 'uploads/products/';
@@ -159,53 +156,178 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product added successfully'], 201);
     }
 
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function showProduct(int $product_id)
     {
-        //
+        $categories = Category::all();
+        $brands = Brand::all();
+        $product = Product::findOrFail($product_id);
+
+        $product_colors = $product->productColors->pluck('color_id')->toArray();
+        $colors = Color::whereNotIn('id', $product_colors)->get();
+
+        $data = [
+            'categories' => $categories,
+            'brands' => $brands,
+            'product' => $product,
+            'colors' => $colors,
+        ];
+
+        $headers = [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
+
+        return response()->json($data, 200, $headers);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    // public function update(Request $request, int $product_id)
+    // {
+    //     $countInDBImange = ProductImage::where('product_id', $product_id)->count('product_id');
+    //     $countUploadImage = 0;
+    //     if ($request->hasFile('image')) {
+    //         foreach ($request->file('image') as $imageFile) {
+    //             $countUploadImage++;
+    //         }
+    //     }
+    //     $totalImageProduct = $countUploadImage + $countInDBImange;
+
+    //     if ($totalImageProduct <= 10) {
+
+    //         $validatedData = $request->validated();
+
+    //         $product = Category::findOrFail($validatedData['category_id'])
+    //             ->products()->where('id', $product_id)->first();
+    //         if ($product) {
+    //             $product->update([
+    //                 'category_id' => $validatedData['category_id'],
+    //                 'name' => $validatedData['name'],
+    //                 'slug' => Str::slug($validatedData['slug']),
+    //                 'brand' => $validatedData['brand'],
+    //                 'small_description' => $validatedData['small_description'],
+    //                 'description' => $validatedData['description'],
+    //                 'original_price' => $validatedData['original_price'],
+    //                 'selling_price' => $validatedData['selling_price'],
+    //                 'quantity' => $validatedData['quantity'],
+    //                 'trending' => $request->trending == true ? '1' : '0',
+    //                 'featured' => $request->featured == true ? '1' : '0',
+    //                 'status' => $request->status == true ? '1' : '0',
+    //                 'meta_title' => $validatedData['meta_title'],
+    //                 'meta_description' => $validatedData['meta_description'],
+    //                 'meta_keyword' => $validatedData['meta_keyword'],
+    //             ]);
+
+    //             if ($request->hasFile('image')) {
+    //                 $uploadPath = 'uploads/products/';
+
+    //                 $i = 1;
+    //                 foreach ($request->file('image') as $imageFile) {
+    //                     $extention = $imageFile->getClientOriginalExtension();
+    //                     $filename = time() . $i++ . '.' . $extention;
+    //                     $imageFile->move($uploadPath, $filename);
+    //                     $finalImagePathName = $uploadPath . $filename;
+
+    //                     $product->productImages()->create([
+    //                         'product_id' => $product->id,
+    //                         'image' => $finalImagePathName,
+
+    //                     ]);
+    //                 }
+    //             }
+
+    //             if ($request->colors) {
+    //                 foreach ($request->colors as $key => $color) {
+    //                     $product->productColors()->create([
+    //                         'product_id' => $product->id,
+    //                         'color_id' => $color,
+    //                         'quantity' => $request->colorquantity[$key] ?? 0
+    //                     ]);
+    //                 }
+    //             }
+
+    //             return response()->json([
+    //                 'message' => 'Product updated successfully',
+    //                 'data' => $product
+    //             ], 200);
+    //         } else {
+    //             return response()->json([
+    //                 'message' => 'No such product ID found'
+    //             ], 404);
+    //         }
+    //     } else {
+    //         return response()->json([
+    //             'message' => 'You cannot upload more than 10 images'
+    //         ], 400);
+    //     }
+    // }
+
+    public function destroyImage(Request $request, int $product_image_id)
     {
-        //
+        $productImage = ProductImage::findOrFail($product_image_id);
+
+        if (File::exists($productImage->image)) {
+            File::delete($productImage->image);
+        }
+
+        $productImage->delete();
+
+        return response()->json([
+            'message' => 'Product image deleted successfully',
+        ], 200, [
+            'Content-Type' => 'application/json',
+            'X-Product-Image-ID' => $product_image_id,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function destroy(Request $request, int $product_id)
     {
-        //
+        $product = Product::findOrFail($product_id);
+
+        if ($product->productImages) {
+            foreach ($product->productImages as $image) {
+                if (File::exists($image->image)) {
+                    File::delete($image->image);
+                }
+            }
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Product deleted successfully with all its images',
+        ], 200, [
+            'Content-Type' => 'application/json',
+            'X-Product-ID' => $product_id,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function updateProdColorQty(Request $request, $prod_color_id)
     {
-        //
+        $productColorData = Product::findOrFail($request->product_id)
+            ->productColors()->where('id', $prod_color_id)->first();
+
+        $productColorData->update([
+            'quantity' => $request->qty
+        ]);
+
+        return response()->json([
+            'message' => 'Product color quantity updated successfully',
+        ], 200, [
+            'Content-Type' => 'application/json',
+            'X-Product-Color-ID' => $prod_color_id,
+        ]);
+    }
+
+    public function deleteProdColor($prod_color_id)
+    {
+        $prodColor = ProductColor::findOrFail($prod_color_id);
+        $prodColor->delete();
+
+        return response()->json([
+            'message' => 'Product color deleted successfully',
+        ], 200, [
+            'Content-Type' => 'application/json',
+            'X-Product-Color-ID' => $prod_color_id,
+        ]);
     }
 }

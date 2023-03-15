@@ -28,15 +28,25 @@ Route::group([
         // Product
         Route::get('/products', [ProductController::class, 'index']);
 
-
         Route::get('/products/view', [ProductController::class, 'view']);
         Route::post('/products/create', [ProductController::class, 'store']);
+        Route::get('/products/{product_id}', [ProductController::class, 'showProduct']);
+        Route::put('/products/{product_id}/update', [ProductController::class, 'update']);
+
+        Route::delete('product_images/{product_image_id}', [ProductController::class, 'destroyImage']);
+        Route::delete('products/{product_id}', [ProductController::class, 'destroy']);
+
+        Route::put('/product-colors/{prod_color_id}', [ProductController::class, 'updateProdColorQty']);
+        Route::delete('/product-colors/{prod_color_id}', [ProductController::class, 'deleteProdColor']);
+
+
+
+
 
         // Category
         Route::get('/categories', [CategoryController::class, 'index']);
 
         // User
-
         Route::put('/user/details', [UserController::class, 'updateUserDetails']);
     });
 });

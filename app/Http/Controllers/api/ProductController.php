@@ -72,6 +72,30 @@ class ProductController extends Controller
         }
     }
 
+    public function productView(Request $request, string $category_slug, string $product_slug)
+    {
+        $category = Category::select('id', 'name', 'slug')
+            ->where('slug', $category_slug)
+            ->where('status', 0)
+            ->first();
+        if ($category) {
+            $product = $category->products()->select('id', 'name', 'slug', 'description', 'price')
+                ->where('slug', $product_slug)
+                ->where('status', 0)
+                ->first();
+            if ($product) {
+                return response()->json([
+                    'category' => $category,
+                    'product' => $product
+                ], 200);
+            } else {
+                return response()->json(['message' => 'Product not found'], 404);
+            }
+        } else {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+    }
+
     public function view()
     {
         try {

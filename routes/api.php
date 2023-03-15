@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::group([
         Route::get('/user/info', [AuthController::class, 'me']);
 
         // Product
+        Route::get('/categories/{category_slug}/products/{product_slug}', [ProductController::class, 'productView']);
+
         Route::get('/products', [ProductController::class, 'index']);
 
         Route::get('/products/view', [ProductController::class, 'view']);
@@ -44,9 +47,13 @@ Route::group([
 
 
         // Category
-        Route::get('/categories', [CategoryController::class, 'index']);
+        Route::get('/categories', [CategoryController::class, 'categories']);
+
 
         // User
         Route::put('/user/details', [UserController::class, 'updateUserDetails']);
+
+        // Search
+        Route::get('/search', [SearchController::class, 'searchProducts']);
     });
 });

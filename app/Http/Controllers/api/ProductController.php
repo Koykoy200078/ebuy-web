@@ -72,29 +72,50 @@ class ProductController extends Controller
         }
     }
 
-    public function productView(Request $request, string $category_slug, string $product_slug)
+    public function productView(string $category_slug, string $product_slug)
     {
-        $category = Category::select('id', 'name', 'slug')
-            ->where('slug', $category_slug)
-            ->where('status', 0)
-            ->first();
+        $category = Category::where('slug', $category_slug)->first();
+
         if ($category) {
-            $product = $category->products()->select('id', 'name', 'slug', 'description', 'price')
-                ->where('slug', $product_slug)
-                ->where('status', 0)
-                ->first();
+            $product = $category->products()->where('slug', $product_slug)->where('status', '0')->first();
             if ($product) {
+                $image_url = url($product->productImages[0]->image);
+
                 return response()->json([
+                    'product' => $product,
                     'category' => $category,
-                    'product' => $product
+                    'image_url' => $image_url
                 ], 200);
             } else {
-                return response()->json(['message' => 'Product not found'], 404);
+                return response()->json(['error' => 'Product not found'], 404);
             }
         } else {
-            return response()->json(['message' => 'Category not found'], 404);
+            return response()->json(['error' => 'Category not found'], 404);
         }
     }
+
+
+    // public function productView(Request $request, string $category_slug, string $product_slug)
+    // {
+    //     $category = Category::select('id', 'name', 'slug')
+    //         ->where('slug', $category_slug)
+    //         ->first();
+    //     if ($category) {
+    //         $product = $category->products()->select('id', 'name', 'slug', 'description', 'price')
+    //             ->where('slug', $product_slug)
+    //             ->first();
+    //         if ($product) {
+    //             return response()->json([
+    //                 'category' => $category,
+    //                 'product' => $product
+    //             ], 200);
+    //         } else {
+    //             return response()->json(['message' => 'Product not found'], 404);
+    //         }
+    //     } else {
+    //         return response()->json(['message' => 'Category not found'], 404);
+    //     }
+    // }
 
     public function view()
     {
@@ -189,6 +210,7 @@ class ProductController extends Controller
         $product_colors = $product->productColors->pluck('color_id')->toArray();
         $colors = Color::whereNotIn('id', $product_colors)->get();
 
+
         $data = [
             'categories' => $categories,
             'brands' => $brands,
@@ -205,85 +227,151 @@ class ProductController extends Controller
         return response()->json($data, 200, $headers);
     }
 
-    // public function update(Request $request, int $product_id)
-    // {
-    //     $countInDBImange = ProductImage::where('product_id', $product_id)->count('product_id');
-    //     $countUploadImage = 0;
-    //     if ($request->hasFile('image')) {
-    //         foreach ($request->file('image') as $imageFile) {
-    //             $countUploadImage++;
-    //         }
-    //     }
-    //     $totalImageProduct = $countUploadImage + $countInDBImange;
+    public function update(Request $request, int $product_id)
+    {
+        // validate input data
 
-    //     if ($totalImageProduct <= 10) {
+        $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
+        $countUploadImage = 0;
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $imageFile) {
+                $countUploadImage++;
+            }
+        }
+        $totalImageProduct = $countUploadImage + $countInDBImange;
+        if ($totalImageProduct <= 3) {
+            $validatedData = $request->validate([
+                'category_id' => [
+                    'required',
+                    'integer'
+                ],
+                'name' => [
+                    'required',
+                    'string'
+                ],
+                'slug' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+                'brand' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+                'small_description' => [
+                    'required',
+                    'string'
+                ],
+                'description' => [
+                    'required',
+                    'string'
+                ],
+                'original_price' => [
+                    'required',
+                    'integer'
+                ],
+                'selling_price' => [
+                    'required',
+                    'integer'
+                ],
+                'quantity' => [
+                    'required',
+                    'integer'
+                ],
+                'trending' => [
+                    'nullable',
+                ],
+                'status' => [
+                    'nullable',
+                ],
+                'meta_title' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+                'meta_description' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+                'meta_keyword' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
 
-    //         $validatedData = $request->validated();
+                'image' => [
+                    'nullable',
+                    'max:10'
 
-    //         $product = Category::findOrFail($validatedData['category_id'])
-    //             ->products()->where('id', $product_id)->first();
-    //         if ($product) {
-    //             $product->update([
-    //                 'category_id' => $validatedData['category_id'],
-    //                 'name' => $validatedData['name'],
-    //                 'slug' => Str::slug($validatedData['slug']),
-    //                 'brand' => $validatedData['brand'],
-    //                 'small_description' => $validatedData['small_description'],
-    //                 'description' => $validatedData['description'],
-    //                 'original_price' => $validatedData['original_price'],
-    //                 'selling_price' => $validatedData['selling_price'],
-    //                 'quantity' => $validatedData['quantity'],
-    //                 'trending' => $request->trending == true ? '1' : '0',
-    //                 'featured' => $request->featured == true ? '1' : '0',
-    //                 'status' => $request->status == true ? '1' : '0',
-    //                 'meta_title' => $validatedData['meta_title'],
-    //                 'meta_description' => $validatedData['meta_description'],
-    //                 'meta_keyword' => $validatedData['meta_keyword'],
-    //             ]);
+                ],
+                'image.*' => [
+                    'image',
+                    'mimes:png,jpg,jpeg'
+                ],
+            ]);
 
-    //             if ($request->hasFile('image')) {
-    //                 $uploadPath = 'uploads/products/';
+            $product = Category::findOrFail($validatedData['category_id'])
+                ->products()->where('id', $product_id)->first();
+            if ($product) {
+                $product->update([
+                    'category_id' => $validatedData['category_id'],
+                    'name' => $validatedData['name'],
+                    'slug' => Str::slug($validatedData['slug']),
+                    'brand' => $validatedData['brand'],
+                    'small_description' => $validatedData['small_description'],
+                    'description' => $validatedData['description'],
+                    'original_price' => $validatedData['original_price'],
+                    'selling_price' => $validatedData['selling_price'],
+                    'quantity' => $validatedData['quantity'],
+                    'trending' => $request->trending == true ? '1' : '0',
+                    'featured' => $request->featured == true ? '1' : '0',
+                    'status' => $request->status == true ? '1' : '0',
+                    'meta_title' => $validatedData['meta_title'],
+                    'meta_description' => $validatedData['meta_description'],
+                    'meta_keyword' => $validatedData['meta_keyword'],
+                ]);
 
-    //                 $i = 1;
-    //                 foreach ($request->file('image') as $imageFile) {
-    //                     $extention = $imageFile->getClientOriginalExtension();
-    //                     $filename = time() . $i++ . '.' . $extention;
-    //                     $imageFile->move($uploadPath, $filename);
-    //                     $finalImagePathName = $uploadPath . $filename;
+                if ($request->hasFile('image')) {
+                    $uploadPath = 'uploads/products/';
 
-    //                     $product->productImages()->create([
-    //                         'product_id' => $product->id,
-    //                         'image' => $finalImagePathName,
+                    $i = 1;
+                    foreach ($request->file('image') as $imageFile) {
+                        $extention = $imageFile->getClientOriginalExtension();
+                        $filename = time() . $i++ . '.' . $extention;
+                        $imageFile->move($uploadPath, $filename);
+                        $finalImagePathName = $uploadPath . $filename;
 
-    //                     ]);
-    //                 }
-    //             }
+                        $product->productImages()->create([
+                            'product_id' => $product->id,
+                            'image' => $finalImagePathName,
 
-    //             if ($request->colors) {
-    //                 foreach ($request->colors as $key => $color) {
-    //                     $product->productColors()->create([
-    //                         'product_id' => $product->id,
-    //                         'color_id' => $color,
-    //                         'quantity' => $request->colorquantity[$key] ?? 0
-    //                     ]);
-    //                 }
-    //             }
+                        ]);
+                    }
+                }
 
-    //             return response()->json([
-    //                 'message' => 'Product updated successfully',
-    //                 'data' => $product
-    //             ], 200);
-    //         } else {
-    //             return response()->json([
-    //                 'message' => 'No such product ID found'
-    //             ], 404);
-    //         }
-    //     } else {
-    //         return response()->json([
-    //             'message' => 'You cannot upload more than 10 images'
-    //         ], 400);
-    //     }
-    // }
+                if ($request->colors) {
+                    foreach ($request->colors as $key => $color) {
+                        $product->productColors()->create([
+                            'product_id' => $product->id,
+                            'color_id' => $color,
+                            'quantity' => $request->colorquantity[$key] ?? 0
+                        ]);
+                    }
+                }
+
+                return response()->json(['message' => 'Product Updated Successfully']);
+            } else {
+                return response()->json(['error' => 'No Such Product Id Found'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'You cant upload more than 3 images'], 400);
+        }
+    }
+
+
+
 
     public function destroyImage(Request $request, int $product_image_id)
     {

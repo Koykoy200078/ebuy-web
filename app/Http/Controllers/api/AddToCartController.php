@@ -23,20 +23,59 @@ class AddToCartController extends Controller
     }
 
 
+    // public function cartShow(Request $request)
+    // {
+    //     $cart = Cart::where('user_id', $request->user()->id)->get();
+    //     $totalPrice = 0;
+
+    //     // $image_url = url($product->productImages[0]->image);
+    //     foreach ($cart as $cartItem) {
+    //         $product = $cartItem->product;
+    //         $image_url = url($product->productImages[0]->image); // add image_url link
+    //         $totalPrice += $product->selling_price * $cartItem->quantity;
+    //     }
+
+    //     return response()->json([
+    //         'cart' => $cart,
+    //         'image_url' => $image_url,
+    //         'totalPrice' => $totalPrice
+    //     ]);
+    // }
     public function cartShow(Request $request)
     {
         $cart = Cart::where('user_id', $request->user()->id)->get();
         $totalPrice = 0;
+        $cartData = [];
 
         foreach ($cart as $cartItem) {
-            $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+            $product = $cartItem->product;
+            $image_url = url($product->productImages[0]->image);
+            $item_name = $product->name;
+            $product_price = $product->selling_price * $cartItem->quantity;
+            $totalPrice += $product->selling_price * $cartItem->quantity;
+
+            $cartData[] = [
+                'id' => $cartItem->id,
+                'user_id' => $cartItem->user_id,
+                'product_id' => $cartItem->product_id,
+                'product_color_id' => $cartItem->product_color_id,
+                'quantity' => $cartItem->quantity,
+                'created_at' => $cartItem->created_at,
+                'updated_at' => $cartItem->updated_at,
+                'item_name' => $item_name,
+                'image_url' => $image_url,
+                'product_price' => $product_price,
+            ];
         }
 
         return response()->json([
-            'cart' => $cart,
+            'cart' => $cartData,
             'totalPrice' => $totalPrice
         ]);
     }
+
+
+
 
     public function decrementQuantity(Request $request, $cartId)
     {

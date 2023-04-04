@@ -36,7 +36,7 @@ class ProductController extends Controller
         $validatedData = $request->validated();
 
         $category = Category::findOrFail($validatedData['category_id']);
-        $product = $category ->products()->create([
+        $product = $category->products()->create([
             'category_id' => $validatedData['category_id'],
             'product_user_id' => auth()->user()->id,
             'name' => $validatedData['name'],
@@ -47,23 +47,23 @@ class ProductController extends Controller
             'original_price' => $validatedData['original_price'],
             'selling_price' => $validatedData['selling_price'],
             'quantity' => $validatedData['quantity'],
-            'trending' => $request ->trending == true ? '1':'0',
-            'featured' => $request ->featured == true ? '1':'0',
-            'status' => $request ->status == true ? '1':'0',
+            'trending' => $request->trending == true ? '1' : '0',
+            'featured' => $request->featured == true ? '1' : '0',
+            'status' => $request->status == true ? '1' : '0',
             'meta_title' => $validatedData['meta_title'],
             'meta_description' => $validatedData['meta_description'],
             'meta_keyword' => $validatedData['meta_keyword'],
         ]);
 
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $uploadPath = 'uploads/products/';
 
             $i = 1;
-            foreach($request->file('image') as $imageFile){
+            foreach ($request->file('image') as $imageFile) {
                 $extention = $imageFile->getClientOriginalExtension();
-                $filename = time().$i++.'.'.$extention;
-                $imageFile->move($uploadPath,$filename);
-                $finalImagePathName = $uploadPath.$filename;
+                $filename = time() . $i++ . '.' . $extention;
+                $imageFile->move($uploadPath, $filename);
+                $finalImagePathName = $uploadPath . $filename;
 
                 $product->productImages()->create([
                     'product_id' => $product->id,
@@ -73,8 +73,8 @@ class ProductController extends Controller
             }
         }
 
-        if($request->colors){
-            foreach($request->colors as $key => $color){
+        if ($request->colors) {
+            foreach ($request->colors as $key => $color) {
                 $product->productColors()->create([
                     'product_id' => $product->id,
                     'color_id' => $color,
@@ -97,40 +97,188 @@ class ProductController extends Controller
         return view('frontend.products.edit', compact('categories', 'brands', 'product', 'colors'));
     }
 
+    // public function update(Request $request, int $product_id)
+    // {
+
+    //     $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
+    //     $countUploadImage = 0;
+    //     if($request->hasFile('image')){
+    //         foreach($request->file('image') as $imageFile){
+    //             $countUploadImage++;
+    //         }
+    //     }
+    //     $totalImageProduct = $countUploadImage+$countInDBImange;
+    //     if($totalImageProduct <= 10)
+    //     {
+
+    //         $validatedData = $request->validate([
+    //             'category_id' => [
+    //                 'required',
+    //                 'integer'
+    //             ],
+    //         'name' => [
+    //                 'required',
+    //                 'string'
+    //             ],
+    //         'slug' => [
+    //                 'required',
+    //                 'string',
+    //             'max:255'
+    //             ],
+    //         'brand' => [
+    //                 'required',
+    //                 'string',
+    //                 'max:255'
+    //             ],
+    //         'small_description' => [
+    //                 'required',
+    //                 'string'
+    //             ],
+    //             'description' => [
+    //                 'required',
+    //                 'string'
+    //             ],
+    //             'original_price' => [
+    //                 'required',
+    //                 'integer'
+    //             ],
+    //         'selling_price' => [
+    //                 'required',
+    //                 'integer'
+    //             ],
+    //         'quantity' => [
+    //                 'required',
+    //                 'integer'
+    //             ],
+    //         'trending' => [
+    //                 'nullable',
+    //             ],
+    //         'status' => [
+    //                 'nullable',
+    //             ],
+    //         'meta_title' => [
+    //                 'required',
+    //                 'string',
+    //                 'max:255'
+    //             ],
+    //         'meta_description' => [
+    //                 'required',
+    //                 'string',
+    //                 'max:255'
+    //             ],
+    //         'meta_keyword' => [
+    //                 'required',
+    //                 'string',
+    //                 'max:255'
+    //             ],
+
+    //             'image' => [
+    //                 'nullable',
+    //                 'max:10'
+
+    //             ],
+    //             'image.*' => [
+    //                 'image',
+    //                 'mimes:png,jpg,jpeg'
+    //             ],
+    //         ]);
+
+    //         $product = Category::findOrFail($validatedData['category_id'])
+    //                         ->products()->where('id', $product_id)->first();
+    //         if($product)
+    //         {
+    //             $product->update([
+    //                 'category_id' => $validatedData['category_id'],
+    //                 'name' => $validatedData['name'],
+    //                 'slug' => Str::slug($validatedData['slug']),
+    //                 'brand' => $validatedData['brand'],
+    //                 'small_description' => $validatedData['small_description'],
+    //                 'description' => $validatedData['description'],
+    //                 'original_price' => $validatedData['original_price'],
+    //                 'selling_price' => $validatedData['selling_price'],
+    //                 'quantity' => $validatedData['quantity'],
+    //                 'trending' => $request ->trending == true ? '1':'0',
+    //                 'featured' => $request ->featured == true ? '1':'0',
+    //                 'status' => $request ->status == true ? '1':'0',
+    //                 'meta_title' => $validatedData['meta_title'],
+    //                 'meta_description' => $validatedData['meta_description'],
+    //                 'meta_keyword' => $validatedData['meta_keyword'],
+    //             ]);
+
+    //             if($request->hasFile('image')){
+    //                 $uploadPath = 'uploads/products/';
+
+    //                 $i = 1;
+    //                 foreach($request->file('image') as $imageFile){
+    //                     $extention = $imageFile->getClientOriginalExtension();
+    //                     $filename = time().$i++.'.'.$extention;
+    //                     $imageFile->move($uploadPath,$filename);
+    //                     $finalImagePathName = $uploadPath.$filename;
+
+    //                     $product->productImages()->create([
+    //                         'product_id' => $product->id,
+    //                         'image' => $finalImagePathName,
+
+    //                     ]);
+    //                 }
+    //             }
+
+    //             if($request->colors){
+    //                 foreach($request->colors as $key => $color){
+    //                     $product->productColors()->create([
+    //                         'product_id' => $product->id,
+    //                         'color_id' => $color,
+    //                         'quantity' => $request->colorquantity[$key] ?? 0
+    //                     ]);
+    //                 }
+    //             }
+
+    //             return redirect('/products')->with('message', 'Product Updated Succesfully');
+
+    //         }
+    //         else
+    //         {
+    //             return redirect('/products')->with('message', 'No Such Product Id Found');
+    //         }
+    //     }
+    //     else 
+    //     {
+    //         return redirect('/products/'.$product_id.'/edit')->with('messageError', 'You cant upload more than 10 images');
+    //     }
+    // }
+
     public function update(Request $request, int $product_id)
     {
-
         $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
         $countUploadImage = 0;
-        if($request->hasFile('image')){
-            foreach($request->file('image') as $imageFile){
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $imageFile) {
                 $countUploadImage++;
             }
         }
-        $totalImageProduct = $countUploadImage+$countInDBImange;
-        if($totalImageProduct <= 10)
-        {
+        $totalImageProduct = $countUploadImage + $countInDBImange;
+        if ($totalImageProduct <= 10) {
 
             $validatedData = $request->validate([
                 'category_id' => [
                     'required',
                     'integer'
                 ],
-            'name' => [
+                'name' => [
                     'required',
                     'string'
                 ],
-            'slug' => [
-                    'required',
-                    'string',
-                'max:255'
-                ],
-            'brand' => [
+                'slug' => [
                     'required',
                     'string',
                     'max:255'
                 ],
-            'small_description' => [
+                'brand' => [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+                'small_description' => [
                     'required',
                     'string'
                 ],
@@ -142,31 +290,31 @@ class ProductController extends Controller
                     'required',
                     'integer'
                 ],
-            'selling_price' => [
+                'selling_price' => [
                     'required',
                     'integer'
                 ],
-            'quantity' => [
+                'quantity' => [
                     'required',
                     'integer'
                 ],
-            'trending' => [
+                'trending' => [
                     'nullable',
                 ],
-            'status' => [
+                'status' => [
                     'nullable',
                 ],
-            'meta_title' => [
+                'meta_title' => [
                     'required',
                     'string',
                     'max:255'
                 ],
-            'meta_description' => [
+                'meta_description' => [
                     'required',
                     'string',
                     'max:255'
                 ],
-            'meta_keyword' => [
+                'meta_keyword' => [
                     'required',
                     'string',
                     'max:255'
@@ -184,9 +332,8 @@ class ProductController extends Controller
             ]);
 
             $product = Category::findOrFail($validatedData['category_id'])
-                            ->products()->where('id', $product_id)->first();
-            if($product)
-            {
+                ->products()->where('id', $product_id)->first();
+            if ($product) {
                 $product->update([
                     'category_id' => $validatedData['category_id'],
                     'name' => $validatedData['name'],
@@ -197,23 +344,23 @@ class ProductController extends Controller
                     'original_price' => $validatedData['original_price'],
                     'selling_price' => $validatedData['selling_price'],
                     'quantity' => $validatedData['quantity'],
-                    'trending' => $request ->trending == true ? '1':'0',
-                    'featured' => $request ->featured == true ? '1':'0',
-                    'status' => $request ->status == true ? '1':'0',
+                    'trending' => $request->trending == true ? '1' : '0',
+                    'featured' => $request->featured == true ? '1' : '0',
+                    'status' => $request->status == true ? '1' : '0',
                     'meta_title' => $validatedData['meta_title'],
                     'meta_description' => $validatedData['meta_description'],
                     'meta_keyword' => $validatedData['meta_keyword'],
                 ]);
 
-                if($request->hasFile('image')){
+                if ($request->hasFile('image')) {
                     $uploadPath = 'uploads/products/';
 
                     $i = 1;
-                    foreach($request->file('image') as $imageFile){
+                    foreach ($request->file('image') as $imageFile) {
                         $extention = $imageFile->getClientOriginalExtension();
-                        $filename = time().$i++.'.'.$extention;
-                        $imageFile->move($uploadPath,$filename);
-                        $finalImagePathName = $uploadPath.$filename;
+                        $filename = time() . $i++ . '.' . $extention;
+                        $imageFile->move($uploadPath, $filename);
+                        $finalImagePathName = $uploadPath . $filename;
 
                         $product->productImages()->create([
                             'product_id' => $product->id,
@@ -223,8 +370,8 @@ class ProductController extends Controller
                     }
                 }
 
-                if($request->colors){
-                    foreach($request->colors as $key => $color){
+                if ($request->colors) {
+                    foreach ($request->colors as $key => $color) {
                         $product->productColors()->create([
                             'product_id' => $product->id,
                             'color_id' => $color,
@@ -233,63 +380,52 @@ class ProductController extends Controller
                     }
                 }
 
-                return redirect('/products')->with('message', 'Product Updated Succesfully');
-
+                return response()->json([
+                    'message' => 'Product Updated Successfully'
+                ], 200);
             }
-            else
-            {
-                return redirect('/products')->with('message', 'No Such Product Id Found');
-            }
-        }
-        else 
-        {
-            return redirect('/products/'.$product_id.'/edit')->with('messageError', 'You cant upload more than 10 images');
         }
     }
 
     public function destroyImage(int $product_image_id)
     {
         $productImage = ProductImage::findOrFail($product_image_id);
-        if(File::exists($productImage->image)){
+        if (File::exists($productImage->image)) {
             File::delete($productImage->image);
         }
         $productImage->delete();
         return redirect()->back()->with('message', 'Product Image Deleted');
-
     }
 
     public function destroy(int $product_id)
     {
         $product = Product::findOrFail($product_id);
-       if($product->productImages){
-            foreach($product->productImages as $image){
-                if(File::exists($image->image)){
+        if ($product->productImages) {
+            foreach ($product->productImages as $image) {
+                if (File::exists($image->image)) {
                     File::delete($image->image);
                 }
             }
-       }
-       $product->delete();
-       return redirect()->back()->with('message', 'Product Deleted with  all its Image');
-
+        }
+        $product->delete();
+        return redirect()->back()->with('message', 'Product Deleted with  all its Image');
     }
 
 
     public function updateProdColorQty(Request $request, $prod_color_id)
     {
         $productColorData = Product::findOrFail($request->product_id)
-                                    ->productColors()->where('id', $prod_color_id)->first();
+            ->productColors()->where('id', $prod_color_id)->first();
         $productColorData->update([
             'quantity' => $request->qty
         ]);
-        return response()->json(['message'=>'Product Color Qty updated']);
+        return response()->json(['message' => 'Product Color Qty updated']);
     }
 
     public function deleteProdColor($prod_color_id)
     {
         $prodColor = ProductColor::findOrFail($prod_color_id);
         $prodColor->delete();
-        return response()->json(['message'=>'Product Color Deleted']);
-
+        return response()->json(['message' => 'Product Color Deleted']);
     }
-
 }

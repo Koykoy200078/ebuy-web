@@ -62,6 +62,10 @@ Route::group([
         // Cart Count
         Route::get('/cart/count', [AddToCartController::class, 'cart']);
         Route::get('/cart', [AddToCartController::class, 'cartShow']);
+
+        Route::post('products/{productId}/cart', [AddToCartController::class, 'addToCart']);
+
+
         Route::put('/cart/{cartId}/decrement', [CartController::class, 'decrementQuantity']);
         Route::delete('/cart/{cartId}', [CartController::class, 'removeCartItem']);
         Route::put('/cart/{cartId}/increment', [CartController::class, 'incrementQuantity']);

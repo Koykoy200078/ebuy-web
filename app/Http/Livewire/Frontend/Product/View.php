@@ -17,15 +17,12 @@ class View extends Component
 
     public function addToWishList($productId)
     {
-        $verify =Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
-        $Productverify =Product::where('id', $productId)->value('product_user_id');
+        $verify = Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
+        $Productverify = Product::where('id', $productId)->value('product_user_id');
 
-        if($Productverify != $verify)    
-        {
-            if(Auth::check())
-            {
-                if(Wishlist::where('user_id', auth()->user()->id)->where('product_id' ,$productId)->exists())
-                {
+        if ($Productverify != $verify) {
+            if (Auth::check()) {
+                if (Wishlist::where('user_id', auth()->user()->id)->where('product_id', $productId)->exists()) {
                     session()->flash('message', 'Already added to wish list');
                     $this->dispatchBrowserEvent('message', [
                         'text' => 'Already added to wish list',
@@ -33,10 +30,8 @@ class View extends Component
                         'status' => 409
                     ]);
                     return false;
-                }
-                else
-                {
-                        Wishlist::create([
+                } else {
+                    Wishlist::create([
                         'user_id' => auth()->user()->id,
                         'product_id' => $productId,
                     ]);
@@ -47,11 +42,8 @@ class View extends Component
                         'type' => 'success',
                         'status' => 200
                     ]);
-
                 }
-            }
-            else
-            {
+            } else {
                 session()->flash('message', 'Please Login to Continue');
                 $this->dispatchBrowserEvent('message', [
                     'text' => 'Please Login to Continue',
@@ -60,9 +52,7 @@ class View extends Component
                 ]);
                 return false;
             }
-        }
-        else
-        {
+        } else {
             session()->flash('message', 'You cannot buy your own product');
             $this->dispatchBrowserEvent('message', [
                 'text' => 'You cannot buy your own product',
@@ -75,18 +65,15 @@ class View extends Component
 
     public function incrementQuantitys()
     {
-        if( $this->quantityCount < 10)
-        {
+        if ($this->quantityCount < 10) {
             $this->quantityCount++;
-
         }
     }
 
     public function decrementQuantitys()
     {
-        if( $this->quantityCount > 1)
-        {
-        $this->quantityCount--;
+        if ($this->quantityCount > 1) {
+            $this->quantityCount--;
         }
     }
 
@@ -97,45 +84,36 @@ class View extends Component
         $productColor = $this->product->productColors()->where('id', $productColorId)->first();
         $this->prodColorSelectedQuantity = $productColor->quantity;
 
-        if($this->prodColorSelectedQuantity == 0){
+        if ($this->prodColorSelectedQuantity == 0) {
             $this->prodColorSelectedQuantity = 'outOfStock';
         }
     }
 
     public function addToCart(int $productId)
     {
-        $verify =Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
-        $Productverify =Product::where('id', $productId)->value('product_user_id');
-
-        if($Productverify != $verify)    
-        {
-            if(Auth::check())
-            {
-                if($this->product->where('id', $productId)->where('status', '0')->exists())
-                {
+        $verify = Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
+        $Productverify = Product::where('id', $productId)->value('product_user_id');
+        
+        if ($Productverify != $verify) {
+            if (Auth::check()) {
+                if ($this->product->where('id', $productId)->where('status', '0')->exists()) {
                     // Check for product color quantity and add to cart
-                    if($this->product->productColors()->count() > 1)
-                    {
-                        if($this->prodColorSelectedQuantity != NULL)
-                        {
-                            if(Cart::where('user_id', auth()->user()->id)
+                    if ($this->product->productColors()->count() > 1) {
+                        if ($this->prodColorSelectedQuantity != NULL) {
+                            if (Cart::where('user_id', auth()->user()->id)
                                 ->where('product_id', $productId)
                                 ->where('product_color_id', $this->productColorId)
-                                ->exists())
-                            {
+                                ->exists()
+                            ) {
                                 $this->dispatchBrowserEvent('message', [
                                     'text' => 'Product Already Added',
                                     'type' => 'warning',
                                     'status' => 200
                                 ]);
-                            }
-                            else
-                            {
-                                $productColor = $this->product->productColors()->where('id',$this->productColorId)->first();
-                                if($productColor->quantity > 0)
-                                {
-                                    if($productColor->quantity >= $this->quantityCount)
-                                    {
+                            } else {
+                                $productColor = $this->product->productColors()->where('id', $this->productColorId)->first();
+                                if ($productColor->quantity > 0) {
+                                    if ($productColor->quantity >= $this->quantityCount) {
                                         // Insert Product to Cart
                                         Cart::create([
                                             'user_id' => auth()->user()->id,
@@ -151,18 +129,14 @@ class View extends Component
                                             'type' => 'success',
                                             'status' => 200
                                         ]);
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $this->dispatchBrowserEvent('message', [
-                                            'text' => 'Only '.$productColor->quantity.' Quantity Available',
+                                            'text' => 'Only ' . $productColor->quantity . ' Quantity Available',
                                             'type' => 'warning',
                                             'status' => 404
                                         ]);
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     $this->dispatchBrowserEvent('message', [
                                         'text' => 'Out of Stock',
                                         'type' => 'warning',
@@ -170,33 +144,23 @@ class View extends Component
                                     ]);
                                 }
                             }
-
-                        }
-                        else
-                        {
+                        } else {
                             $this->dispatchBrowserEvent('message', [
                                 'text' => 'Select Your Product Color',
                                 'type' => 'info',
                                 'status' => 404
                             ]);
                         }
-                    }
-                    else
-                    {
-                        if(Cart::where('user_id', auth()->user()->id)->where('product_id', $productId)->exists())
-                        {
+                    } else {
+                        if (Cart::where('user_id', auth()->user()->id)->where('product_id', $productId)->exists()) {
                             $this->dispatchBrowserEvent('message', [
                                 'text' => 'Product Already Added',
                                 'type' => 'warning',
                                 'status' => 200
                             ]);
-                        }
-                        else
-                        {
-                            if($this->product->quantity > 0)
-                            {
-                                if($this->product->quantity >= $this->quantityCount)
-                                {
+                        } else {
+                            if ($this->product->quantity > 0) {
+                                if ($this->product->quantity >= $this->quantityCount) {
                                     // Insert Product to Cart
                                     Cart::create([
                                         'user_id' => auth()->user()->id,
@@ -211,18 +175,14 @@ class View extends Component
                                         'type' => 'success',
                                         'status' => 200
                                     ]);
-                                }
-                                else
-                                {
+                                } else {
                                     $this->dispatchBrowserEvent('message', [
-                                        'text' => 'Only '.$this->product->quantity.' Quantity Available',
+                                        'text' => 'Only ' . $this->product->quantity . ' Quantity Available',
                                         'type' => 'warning',
                                         'status' => 404
                                     ]);
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 $this->dispatchBrowserEvent('message', [
                                     'text' => 'Out of Stock',
                                     'type' => 'warning',
@@ -230,30 +190,22 @@ class View extends Component
                                 ]);
                             }
                         }
-
                     }
-
-                }
-                else
-                {
+                } else {
                     $this->dispatchBrowserEvent('message', [
                         'text' => 'Product does not exist',
                         'type' => 'warning',
                         'status' => 404
                     ]);
                 }
-            }
-            else
-            {
+            } else {
                 $this->dispatchBrowserEvent('message', [
                     'text' => 'Please Login to add to cart',
                     'type' => 'info',
                     'status' => 401
                 ]);
             }
-        }
-        else
-        {
+        } else {
             session()->flash('message', 'You cannot buy your own product');
             $this->dispatchBrowserEvent('message', [
                 'text' => 'You cannot buy your own product',
@@ -262,8 +214,6 @@ class View extends Component
             ]);
             return false;
         }
-        
-            
     }
 
     public function mount($category, $product)

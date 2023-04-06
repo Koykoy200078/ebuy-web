@@ -77,14 +77,21 @@ class ProductController extends Controller
         $category = Category::where('slug', $category_slug)->first();
 
         if ($category) {
-            $product = $category->products()->where('slug', $product_slug)->where('status', '0')->first();
+            $product = $category->products()->with('productColors.color')->where('slug', $product_slug)->where('status', '0')->first();
             if ($product) {
                 $image_url = url($product->productImages[0]->image);
 
                 return response()->json([
-                    'product' => $product,
+                    'product' => $product->toArray(),
                     'category' => $category,
-                    'image_url' => $image_url
+                    'image_url' => $image_url,
+                    'product_colors' => $product->productColors->map(function ($item) {
+                        return [
+                            'product_color_id' => $item->id,
+                            'color_name' => $item->color->name,
+                            'quantity' => $item->quantity,
+                        ];
+                    }),
                 ], 200);
             } else {
                 return response()->json(['error' => 'Product not found'], 404);

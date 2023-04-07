@@ -102,6 +102,18 @@ class ProductController extends Controller
     }
 
 
+    public function newArrival()
+    {
+        $newArrivalProducts = Product::latest()->take(16)->get();
+        return response()->json(['message' => 'Success', 'data' => $newArrivalProducts], 200);
+    }
+
+    public function featuredProducts()
+    {
+        $featuredProducts = Product::where('featured', '1')->latest()->get();
+        return response()->json(['message' => 'Success', 'data' => $featuredProducts], 200);
+    }
+
     // public function productView(Request $request, string $category_slug, string $product_slug)
     // {
     //     $category = Category::select('id', 'name', 'slug')

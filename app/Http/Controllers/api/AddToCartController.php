@@ -36,8 +36,10 @@ class AddToCartController extends Controller
             $product_price = $product->selling_price * $cartItem->quantity;
             $totalPrice += $product->selling_price * $cartItem->quantity;
 
+
+
             $cartData[] = [
-                'id' => $cartItem->id,
+                'cart_id' => $cartItem->id,
                 'user_id' => $cartItem->user_id,
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,

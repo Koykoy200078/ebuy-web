@@ -23,4 +23,20 @@ class CategoryController extends Controller
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');
     }
+
+    public function show($category_slug)
+    {
+        $category = Category::where('slug', $category_slug)->first();
+
+        if ($category) {
+            $products = $category->products;
+            $products = $products->map(function ($product) {
+                $product->image_url = url($product->productImages[0]->image);
+                return $product;
+            });
+            return response()->json(['message' => 'Success', 'data' => $products], 200);
+        } else {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+    }
 }

@@ -31,6 +31,9 @@ Route::group([
         // Route::get('/categories/{category_slug}/products/{product_slug}', [ProductController::class, 'productView']);
 
         Route::get('/products/index', [ProductController::class, 'index']);
+        Route::get('/products/new-arrival', [ProductController::class, 'newArrival']);
+        Route::get('/products/featured-products', [ProductController::class, 'featuredProducts']);
+
         // Route::get('/products/view', [ProductController::class, 'view']);
         Route::post('/products/create', [ProductController::class, 'store']);
         // Route::get('/products/{product_id}', [ProductController::class, 'showProduct']);
@@ -52,6 +55,10 @@ Route::group([
 
         // Category
         Route::get('/categories', [CategoryController::class, 'categories']);
+        Route::get(
+            '/categories/products/{category_slug}',
+            [CategoryController::class, 'show']
+        );
 
         // User
         Route::put('/user/details', [UserController::class, 'updateUserDetails']);
@@ -63,11 +70,11 @@ Route::group([
         Route::get('/cart/count', [AddToCartController::class, 'cart']);
         Route::get('/cart', [AddToCartController::class, 'cartShow']);
 
-        Route::post('products/{productId}/cart', [AddToCartController::class, 'addToCart']);
+        Route::post('/products/cart/{productId}', [AddToCartController::class, 'addToCart']);
 
 
         Route::put('/cart/{cartId}/decrement', [CartController::class, 'decrementQuantity']);
-        Route::delete('/cart/{cartId}', [CartController::class, 'removeCartItem']);
+        Route::delete('/cart/remove/{cartId}', [AddToCartController::class, 'removeCartItem']);
         Route::put('/cart/{cartId}/increment', [CartController::class, 'incrementQuantity']);
     });
 });

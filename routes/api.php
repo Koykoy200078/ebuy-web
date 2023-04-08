@@ -73,8 +73,8 @@ Route::group([
         Route::post('/products/cart/{productId}', [AddToCartController::class, 'addToCart']);
 
 
-        Route::put('/cart/{cartId}/decrement', [CartController::class, 'decrementQuantity']);
+        Route::put('/cart/decrementQuantity/{cartId}', [AddToCartController::class, 'decrementQuantity']);
         Route::delete('/cart/remove/{cartId}', [AddToCartController::class, 'removeCartItem']);
-        Route::put('/cart/{cartId}/increment', [CartController::class, 'incrementQuantity']);
+        Route::put('/cart/incrementQuantity/{cartId}', [AddToCartController::class, 'incrementQuantity']);
     });
 });

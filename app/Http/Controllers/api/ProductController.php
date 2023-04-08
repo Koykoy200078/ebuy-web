@@ -104,14 +104,30 @@ class ProductController extends Controller
 
     public function newArrival()
     {
+        // $newArrivalProducts = Product::latest()->take(16)->get();
+        // return response()->json(['message' => 'Success', 'data' => $newArrivalProducts], 200);
         $newArrivalProducts = Product::latest()->take(16)->get();
-        return response()->json(['message' => 'Success', 'data' => $newArrivalProducts], 200);
+
+        $data = $newArrivalProducts->map(function ($product) {
+            $image_url = url($product->productImages[0]->image);
+            $product->image_url = $image_url; // add the image_url to the product object
+            return $product;
+        });
+
+        return response()->json([
+            'message' => 'Success', 'data' => $data
+        ], 200);
     }
 
     public function featuredProducts()
     {
         $featuredProducts = Product::where('featured', '1')->latest()->get();
-        return response()->json(['message' => 'Success', 'data' => $featuredProducts], 200);
+        $data = $featuredProducts->map(function ($product) {
+            $image_url = url($product->productImages[0]->image);
+            $product->image_url = $image_url; // add the image_url to the product object
+            return $product;
+        });
+        return response()->json(['message' => 'Success', 'data' => $data], 200);
     }
 
     // public function productView(Request $request, string $category_slug, string $product_slug)

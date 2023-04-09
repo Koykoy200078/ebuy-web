@@ -21,7 +21,7 @@ class UserController extends Controller
         $request->validate([
             'username' => ['required', 'string'],
             'phone' => ['required', 'digits:10'],
-            'pin_code' => ['required', 'digits:6'],
+            'pin_code' => ['required', 'min:4', 'max:6'],
             'address' => ['required', 'string', 'max:500'],
         ]);
 
@@ -52,22 +52,21 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            'current_password' => ['required','string','min:8'],
+            'current_password' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed']
         ]);
 
         $currentPasswordStatus = Hash::check($request->current_password, auth()->user()->password);
-        if($currentPasswordStatus){
+        if ($currentPasswordStatus) {
 
             User::findOrFail(Auth::user()->id)->update([
                 'password' => Hash::make($request->password),
             ]);
 
-            return redirect()->back()->with('message','Password Updated Successfully');
+            return redirect()->back()->with('message', 'Password Updated Successfully');
+        } else {
 
-        }else{
-
-            return redirect()->back()->with('message','Current Password does not match with Old Password');
+            return redirect()->back()->with('message', 'Current Password does not match with Old Password');
         }
     }
 }

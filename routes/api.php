@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AddToCartController;
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\CheckoutController;
 use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
@@ -76,5 +77,8 @@ Route::group([
         Route::put('/cart/decrementQuantity/{cartId}', [AddToCartController::class, 'decrementQuantity']);
         Route::delete('/cart/remove/{cartId}', [AddToCartController::class, 'removeCartItem']);
         Route::put('/cart/incrementQuantity/{cartId}', [AddToCartController::class, 'incrementQuantity']);
+
+        // Checkout
+        Route::post('/add-orders', [CheckoutController::class, 'store']);
     });
 });

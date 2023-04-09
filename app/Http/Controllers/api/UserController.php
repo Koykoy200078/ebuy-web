@@ -15,7 +15,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string'],
             'phone' => ['required', 'digits:10'],
-            'pin_code' => ['required', 'digits:6'],
+            'pin_code' => ['required', 'min:4', 'max:6'],
             'address' => ['required', 'string', 'max:500'],
         ]);
 

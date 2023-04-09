@@ -28,17 +28,16 @@ class CheckoutShow extends Component
         $this->payment_mode = 'Paid by Paypal';
 
         $codOrder = $this->placeOrder();
-        if($codOrder)
-        {
+        if ($codOrder) {
             Cart::where('user_id', auth()->user()->id)->delete();
 
 
             //
-            try{
+            try {
                 $order = Order::findOrFail($codOrder->id);
                 Mail::to("$order->email")->send(new PlaceOrderMailable($order));
                 // Mail sent successfully
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 // Something went wrong
                 // return redirect()->to('thank-you')->with('message', 'Something went wrong!'.$e);
 
@@ -51,9 +50,7 @@ class CheckoutShow extends Component
                 'status' => 200
             ]);
             return redirect()->to('thank-you');
-        }
-
-        else{
+        } else {
             $this->dispatchBrowserEvent('message', [
                 'text' => 'Something went wrong!',
                 'type' => 'error',
@@ -73,7 +70,7 @@ class CheckoutShow extends Component
             'fullname' => 'required|string|max:121',
             'email' => 'required|email|max:121',
             'phone' => 'required|string|max:11|min:10',
-            'pincode' => 'required|string|max:6|min:6',
+            'pincode' => 'required|string|max:6|min:4',
             'address' => 'required|string|max:500'
         ];
     }
@@ -84,7 +81,7 @@ class CheckoutShow extends Component
 
         $order = Order::create([
             'user_id' => auth()->user()->id,
-            'tracking_no' => 'ebuy-'.Str::random(10),
+            'tracking_no' => 'ebuy-' . Str::random(10),
             'fullname' => $this->fullname,
             'email' => $this->email,
             'phone' => $this->phone,
@@ -104,22 +101,15 @@ class CheckoutShow extends Component
                 'price' => $cartItem->product->selling_price
             ]);
 
-            if($cartItem->product_color_id != NULL)
-            {
+            if ($cartItem->product_color_id != NULL) {
                 $cartItem->productColor()->where('id', $cartItem->product_color_id)->decrement('quantity', $cartItem->quantity);
                 $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
-
-            }
-            else
-            {
+            } else {
                 $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
-
             }
-
         }
 
         return $order;
-
     }
 
     public function codOrder()
@@ -128,16 +118,15 @@ class CheckoutShow extends Component
         $this->payment_mode = 'Cash on Delivery';
 
         $codOrder = $this->placeOrder();
-        if($codOrder)
-        {
+        if ($codOrder) {
             Cart::where('user_id', auth()->user()->id)->delete();
 
             //
-            try{
+            try {
                 $order = Order::findOrFail($codOrder->id);
                 Mail::to("$order->email")->send(new PlaceOrderMailable($order));
                 // Mail sent successfully
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 // Something went wrong
             }
             //
@@ -149,9 +138,7 @@ class CheckoutShow extends Component
                 'status' => 200
             ]);
             return redirect()->to('thank-you');
-        }
-
-        else{
+        } else {
             $this->dispatchBrowserEvent('message', [
                 'text' => 'Something went wrong!',
                 'type' => 'error',
@@ -169,7 +156,6 @@ class CheckoutShow extends Component
         }
 
         return $this->totalProductAmount;
-
     }
 
     public function render()

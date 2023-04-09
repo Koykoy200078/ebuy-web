@@ -73,6 +73,13 @@
 
     <script src="{{asset('assets/exzoom/jquery.exzoom.js')}}"></script>
 
+    <script src="{{ asset('admin/js/dashboard.js')}}"></script>
+    <script src="{{ asset('admin/js/data-table.js')}}"></script>
+    <script src="{{ asset('admin/js/jquery.dataTables.js')}}"></script>
+    <script src="{{ asset('admin/js/dataTables.bootstrap4.js')}}"></script>
+    <!-- End custom js for this page-->
+
+    @yield('scripts2')
 
     @yield('script')
 

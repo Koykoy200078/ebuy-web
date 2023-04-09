@@ -264,7 +264,7 @@
 @endsection
 
 
-@section('scripts')
+@section('scripts2')
 <script>
     $(document).ready(function (){
 
@@ -278,7 +278,7 @@
             var product_id = "{{ $product->id }}";
             var prod_color_id = $(this).val();
             var qty = $(this).closest('.prod-color-tr').find('.productColorQuantity').val();
-            // alert(prod_color_id);
+            alert(prod_color_id);
 
             if(qty <= 0){
                 alert('Quantity is required');
@@ -292,7 +292,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/admin/product-color/"+prod_color_id,
+                url: "/product-color/"+prod_color_id,
                 data: data,
                 success: function (response) {
                     alert(response.message)
@@ -308,7 +308,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/admin/product-color/"+prod_color_id+"/delete",
+                url: "/product-color/"+prod_color_id+"/delete",
                 success: function (response) {
                     thisClick.closest('.prod-color-tr').remove();
                     alert(response.message);

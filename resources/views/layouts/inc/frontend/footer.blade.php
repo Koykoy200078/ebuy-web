@@ -53,7 +53,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <p class=""> &copy; 2022 - 2023 </p>
+                    <p class=""> &copy; 2023 </p>
                 </div>
                 <div class="col-md-4">
                     <div class="social-media">
@@ -82,4 +82,5 @@
             </div>
         </div>
     </div>
+   
 </div>

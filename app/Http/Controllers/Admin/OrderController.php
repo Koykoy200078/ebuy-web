@@ -94,6 +94,9 @@ class OrderController extends Controller
     public function mailInvoice(int $orderId)
     {
 
+        $order = Order::findOrfail($orderId);
+        Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
+        return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
         try{
             $order = Order::findOrfail($orderId);
             Mail::to("$order->email")->send(new InvoiceOrderMailable($order));

@@ -62,7 +62,8 @@ Route::group([
         );
 
         // User
-        Route::put('/user/details', [UserController::class, 'updateUserDetails']);
+        Route::get('/user/details', [UserController::class, 'getUserDetails']);
+        Route::put('/user/details/update', [UserController::class, 'updateUserDetails']);
 
         // Search
         Route::get('/search', [SearchController::class, 'searchProducts']);

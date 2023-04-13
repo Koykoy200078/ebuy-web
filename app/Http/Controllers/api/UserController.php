@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function getUserDetails()
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        $userDetails = $user->userDetail;
+
+        return response()->json([
+            'username' => $user->name,
+            'email' => $user->email,
+            'phone' => $userDetails->phone,
+            'pin_code' => $userDetails->pin_code,
+            'address' => $userDetails->address,
+        ]);
+    }
+
     public function updateUserDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [

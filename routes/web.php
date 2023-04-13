@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\authcontroller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +40,14 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/search','searchProducts');
 
 });
+
+    Route::get("/auth/github/redirect", [App\Http\Controllers\authcontroller::class, 'githubredirect'])->name('githublogin');
+    Route::get("/auth/github/callback", [App\Http\Controllers\authcontroller::class, 'githubcallback']);
+
+    Route::get("/auth/google/redirect", [App\Http\Controllers\authcontroller::class, 'googleredirect'])->name('googlelogin');
+    Route::get("/auth/google/callback", [App\Http\Controllers\authcontroller::class, 'googlecallback']);
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index']);

@@ -18,9 +18,9 @@ class UserController extends Controller
         return response()->json([
             'username' => $user->name,
             'email' => $user->email,
-            'phone' => $userDetails->phone,
-            'pin_code' => $userDetails->pin_code,
-            'address' => $userDetails->address,
+            'phone' => $userDetails ? $userDetails->phone : null,
+            'pin_code' => $userDetails ? $userDetails->pin_code : null,
+            'address' => $userDetails ? $userDetails->address : null,
         ]);
     }
 
@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string'],
-            'phone' => ['required', 'digits:10'],
+            'phone' => ['required', 'min:10', 'max:11'],
             'pin_code' => ['required', 'min:4', 'max:6'],
             'address' => ['required', 'string', 'max:500'],
         ]);

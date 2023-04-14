@@ -49,7 +49,7 @@ class ProductController extends Controller
             'quantity' => $validatedData['quantity'],
             'trending' => $request->trending == true ? '1' : '0',
             'featured' => $request->featured == true ? '1' : '0',
-            'status' => $request->status == true ? '1' : '0',
+            'status' => '1',
             'meta_title' => $validatedData['meta_title'],
             'meta_description' => $validatedData['meta_description'],
             'meta_keyword' => $validatedData['meta_keyword'],
@@ -100,7 +100,7 @@ class ProductController extends Controller
     public function update(Request $request, int $product_id)
     {
 
-        $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
+        $countInDBImange = ProductImage::where('product_id',  $product_id)->count();
         $countUploadImage = 0;
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $imageFile) {
@@ -108,7 +108,7 @@ class ProductController extends Controller
             }
         }
         $totalImageProduct = $countUploadImage + $countInDBImange;
-        if ($totalImageProduct <= 10) {
+        if ($totalImageProduct <= 5) {
 
             $validatedData = $request->validate([
                 'category_id' => [
@@ -173,7 +173,7 @@ class ProductController extends Controller
 
                 'image' => [
                     'nullable',
-                    'max:10'
+                    'max:5'
 
                 ],
                 'image.*' => [
@@ -197,7 +197,6 @@ class ProductController extends Controller
                     'quantity' => $validatedData['quantity'],
                     'trending' => $request->trending == true ? '1' : '0',
                     'featured' => $request->featured == true ? '1' : '0',
-                    'status' => $request->status == true ? '1' : '0',
                     'meta_title' => $validatedData['meta_title'],
                     'meta_description' => $validatedData['meta_description'],
                     'meta_keyword' => $validatedData['meta_keyword'],
@@ -236,7 +235,7 @@ class ProductController extends Controller
                 return redirect('/products')->with('message', 'No Such Product Id Found');
             }
         } else {
-            return redirect('/products/' . $product_id . '/edit')->with('messageError', 'You cant upload more than 10 images');
+            return redirect('/products/' . $product_id . '/edit')->with('messageError', 'You cant upload more than 5 images');
         }
     }
 

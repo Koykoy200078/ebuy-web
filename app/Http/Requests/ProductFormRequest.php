@@ -86,6 +86,7 @@ class ProductFormRequest extends FormRequest
 
             'image' => [
                 'required',
+                'max:5'
             ],
             'image.*' => [
                 'image',

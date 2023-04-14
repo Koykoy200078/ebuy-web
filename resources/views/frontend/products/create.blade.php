@@ -137,13 +137,7 @@
                                                 <input type="number" name="quantity" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label>Status</label>
-                                                <input type="checkbox" name="status" style="width: 50px; height: 50px;"/>
-                                                Checked=Hidden,Uncheked=Visible
-                                            </div>
-                                        </div>
+                                      
                                     </div>
                                                 
                                 </div>

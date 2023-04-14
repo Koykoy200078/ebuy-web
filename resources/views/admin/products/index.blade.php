@@ -45,9 +45,13 @@
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->selling_price }}</td>
                             <td>{{ $product->quantity }}</td>
-                            <td>{{ $product->status == '1' ? 'Hidden':'Visible'}}</td>
+                            @if( $product->status == '1')
+                                <td style="color:red">{{ $product->status == '1' ? 'Not Verified ':'Verified '}}</td>
+                            @else
+                                <td style="color:green">{{ $product->status == '1' ? 'Not Verified ':'Verified '}}</td>
+                            @endif
                             <td>
-                                <a href="{{ url('admin/products/'.$product->id.'/edit') }}" class="btn btn-sm btn-success">Edit</a>
+                                <a href="{{ url('products/'.$product->id.'/edit') }}" class="btn btn-sm" style="color:white; background-color:darkblue">Edit</a>
                                 <a href="{{ url('admin/products/'.$product->id.'/delete') }}" onclick="return confirm('Are you sure, you want to delete this data?')" class="btn btn-sm btn-danger">
                                     Delete
                                 </a>

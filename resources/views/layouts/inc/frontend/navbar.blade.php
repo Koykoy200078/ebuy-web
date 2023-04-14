@@ -40,7 +40,9 @@
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
-
+                            <!-- <li class="nav-item">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#addBrandModal" class="nav-link">Add Brands</a>
+                            </li> -->
 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('githublogin') }}">{{ __('Github Login') }}</a>

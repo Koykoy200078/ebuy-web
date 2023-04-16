@@ -30,9 +30,7 @@
                                 <div class="col-md-6 my-auto">
                                     <a href="{{ url('collections/'.$wishlistItem->product->category->slug.'/'.$wishlistItem->product->slug) }}">
                                         <label class="product-name">
-                                            <img src="{{ $wishlistItem->product->productImages[0]->image }}"
-                                            style="withd: 50px; height: 50px"
-                                            alt="{{ $wishlistItem->product->name }}"/>
+                                            <img src="{{ $wishlistItem->product->productImages[0]->image }}" style="withd: 50px; height: 50px" alt="{{ $wishlistItem->product->name }}" />
 
                                             {{ $wishlistItem->product->name }}
                                         </label>
@@ -58,7 +56,7 @@
                         </div>
                         @endif
                         @empty
-                            <h4>No Wishlist Added</h4>
+                        <h4>No Wishlist Added</h4>
                         @endforelse
 
                     </div>
@@ -75,5 +73,5 @@
 
         </div>
     </div>
-    
+
 </div>

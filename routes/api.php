@@ -7,6 +7,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CheckoutController;
 use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\File;
@@ -64,9 +65,16 @@ Route::group([
         // User
         Route::get('/user/details', [UserController::class, 'getUserDetails']);
         Route::put('/user/details/update', [UserController::class, 'updateUserDetails']);
+        Route::put('/change-password', [UserController::class, 'changePassword']);
 
         // Search
         Route::get('/search', [SearchController::class, 'searchProducts']);
+
+        // Product Count
+        Route::get('/user/item/count', [ProductController::class, 'productCount']);
+
+        // Wishlist Count
+        Route::get('/wishlist/count', [WishlistController::class, 'wishlistCount']);
 
         // Cart Count
         Route::get('/cart/count', [AddToCartController::class, 'cart']);

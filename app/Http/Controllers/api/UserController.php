@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -60,5 +61,27 @@ class UserController extends Controller
             'success' => true,
             'message' => 'User Profile Updated'
         ], 200)->header('Content-Type', 'application/json')->header('X-Request-Id', uniqid());
+    }
+
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8']
+        ]);
+
+        $currentPasswordStatus = Hash::check($request->current_password, auth()->user()->password);
+        if ($currentPasswordStatus) {
+
+            User::findOrFail(Auth::user()->id)->update([
+                'password' => Hash::make($request->password),
+            ]);
+
+            return response()->json(['message' => 'Password Updated Successfully'], 200);
+        } else {
+
+            return response()->json(['message' => 'Current Password does not match.'], 400);
+        }
     }
 }

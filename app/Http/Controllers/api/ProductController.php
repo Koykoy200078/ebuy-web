@@ -13,11 +13,25 @@ use App\Models\ProductImage;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
+    public function productCount()
+    {
+        if (Auth::check()) {
+            $productCount = Product::where('product_user_id', auth()->user()->id)->count();
+        } else {
+            $productCount = 0;
+        }
+
+        return response()->json([
+            'productCount' => $productCount
+        ]);
+    }
+
     public function index()
     {
         try {

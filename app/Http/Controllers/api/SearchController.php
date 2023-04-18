@@ -16,6 +16,11 @@ class SearchController extends Controller
                 ->latest()
                 ->paginate(15);
 
+            // Retrieve the image URL for each product
+            foreach ($searchProducts as $product) {
+                $product->image_url = url($product->productImages[0]->image);
+            }
+
             return response()->json(['searchResults' => $searchProducts], 200)
                 ->header('Content-Type', 'application/json')
                 ->header('Access-Control-Allow-Origin', '*')

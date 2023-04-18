@@ -37,19 +37,25 @@ class AddToCartController extends Controller
             $totalPrice += $product->selling_price * $cartItem->quantity;
 
             // Get product color information
-            $productColors = $product->productColors->map(function ($item) {
-                return [
-                    'product_color_id' => $item->id,
-                    'color_name' => $item->color->name,
-                    'quantity' => $item->quantity,
-                ];
-            });
+            $productColors = $product->productColors->map(function ($item) use ($cartItem) {
+                if ($item->id === $cartItem->product_color_id) {
+                    return [
+                        'product_color_id' => $item->id,
+                        'color_name' => $item->color->name,
+                        'quantity' => $item->quantity,
+                    ];
+                }
+            })->filter();
+
+            $productColors = collect($productColors)->values()->first();
+
 
             // Add product color information to cart data
             $cartData[] = [
                 'cart_id' => $cartItem->id,
                 'user_id' => $cartItem->user_id,
                 'product_id' => $cartItem->product_id,
+                'product_color_id' => $cartItem->product_color_id,
                 'quantity' => $cartItem->quantity,
                 'created_at' => $cartItem->created_at,
                 'updated_at' => $cartItem->updated_at,
@@ -65,6 +71,7 @@ class AddToCartController extends Controller
             'totalPrice' => $totalPrice
         ]);
     }
+
 
 
     public function decrementQuantity(Request $request, $cartId)

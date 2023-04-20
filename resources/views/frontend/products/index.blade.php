@@ -44,7 +44,7 @@
                                         </td>
                                         <td>{{ $product->productUser->name }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->selling_price }}</td>
+                                        <td>₱{{ $product->selling_price }}</td>
                                         <td>{{ $product->quantity }}</td>
                                         @if( $product->status == '1')
                                             <td style="color:red">{{ $product->status == '1' ? 'Not Verified ':'Verified '}}</td>

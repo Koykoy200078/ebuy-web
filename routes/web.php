@@ -63,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('change-password', [App\Http\Controllers\Frontend\UserController::class, 'passwordCreate']);
     Route::post('change-password', [App\Http\Controllers\Frontend\UserController::class, 'changePassword']);
 
+    Route::get('product-status', [App\Http\Controllers\Frontend\ProductStatusrController::class, 'index']);
+
+
     //Product Route For Users
     Route::controller(App\Http\Controllers\Frontend\ProductController::class)->group(function () {
         Route::get('/products', 'index');

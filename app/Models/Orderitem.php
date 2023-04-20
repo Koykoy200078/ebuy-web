@@ -18,8 +18,10 @@ class Orderitem extends Model
         'order_id',
         'product_id',
         'product_color_id',
+        'product_user_id',
         'quantity',
-        'price'
+        'price',
+        'status_message'
     ];
 
 

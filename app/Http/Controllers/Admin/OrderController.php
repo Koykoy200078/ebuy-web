@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\Order;
+use App\Models\Orderitem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -55,13 +56,39 @@ class OrderController extends Controller
 
     public function updateOrderStatus(int $orderId, Request $request)
     {
-
         $order = Order::where('id', $orderId)->first();
+
+        // return view($orderId);
+
+        // $product_count = OrderItem::all()->where("order_id", 8);
+        // $product_status = Orderitem::all()->where('order_id', $orderId)->get('order_id', "9");
+        // $product_status = Orderitem::where('order_id', $orderId)->get('id');
+        // $test = Orderitem::whereIn('id', $product_status)->update(['price' => '4']);
+        // // return view($product_count);
+
+        // $test = 4;
+
+        
+        // $product_status->update([
+        //     'quantity' => $test
+            
+        // ]);
+
+
+        // testing phase
+
         if($order)
         {
+            $product_status = Orderitem::where('order_id', $orderId)->get('id');
+            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status]);
+
+
+
             $order->update([
                 'status_message' => $request->order_status
+                
             ]);
+
             return redirect('admin/orders/'.$orderId)->with('message', 'Order Status Updated');
         }
         else

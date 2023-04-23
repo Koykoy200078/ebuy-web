@@ -99,7 +99,8 @@ class ProductController extends Controller
 
     public function update(Request $request, int $product_id)
     {
-        $countInDBImange = ProductImage::where('product_id', 11)->count('product_id');
+        $countInDBImange = ProductImage::where('product_id', $product_id)->count();
+
         $countUploadImage = 0;
         if($request->hasFile('image')){
             foreach($request->file('image') as $imageFile){
@@ -107,7 +108,7 @@ class ProductController extends Controller
             }
         }
         $totalImageProduct = $countUploadImage+$countInDBImange;
-        if($totalImageProduct <= 10)
+        if($totalImageProduct <= 5)
         {
 
             $validatedData = $request->validate([
@@ -173,7 +174,7 @@ class ProductController extends Controller
 
                 'image' => [
                     'nullable',
-                    'max:10'
+                    'max:5'
                 ],
                 'image.*' => [
                     'image',
@@ -242,7 +243,7 @@ class ProductController extends Controller
         }
         else 
         {
-            return redirect('admin/products/'.$product_id.'/edit')->with('messageError', 'You cant upload more than 10 images');
+            return redirect('admin/products/'.$product_id.'/edit')->with('messageError', 'You cant upload more than 5 images');
         }
     }
 

@@ -18,8 +18,10 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('product_id');
             $table->integer('product_color_id')->nullable();
+            $table->integer('product_user_id');
             $table->integer('quantity');
             $table->integer('price');
+            $table->string('status_message');
             $table->timestamps();
         });
     }

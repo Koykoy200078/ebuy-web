@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontend\Checkout;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Orderitem;
 use Livewire\Component;
 use App\Mail\PlaceOrderMailable;
@@ -77,6 +78,16 @@ class CheckoutShow extends Component
 
     public function placeOrder()
     {
+        
+        // foreach ($this->carts as $cartItem) {
+        //     $product_id = $cartItem->product_id;
+        // // return view($product_id);
+
+        //     $test =  Product::where('id', $product_id)->pluck('product_user_id');
+        // }
+        // return view($test);
+
+
         $this->validate();
 
         $order = Order::create([
@@ -97,8 +108,13 @@ class CheckoutShow extends Component
                 'order_id' => $order->id,
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,
+                $product_id = $cartItem->product_id,
+                $test =  Product::where('id', $product_id)->value('product_user_id'),
+                'product_user_id' =>  $test,
                 'quantity' => $cartItem->quantity,
-                'price' => $cartItem->product->selling_price
+                'price' => $cartItem->product->selling_price,
+                'status_message' => 'pending'
+
             ]);
 
             if ($cartItem->product_color_id != NULL) {

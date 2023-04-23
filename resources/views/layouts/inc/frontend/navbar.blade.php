@@ -30,22 +30,36 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ url('product-status') }}">
+                                <i class="fa fa-cart-plus"></i>  Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ url('wishlist') }}">
                                 <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count/>)
                             </a>
                         </li>
                         @guest
-                        @if (Route::has('login'))
+                    @if (Route::has('login'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
+                            <!-- <li class="nav-item">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#addBrandModal" class="nav-link">Add Brands</a>
+                            </li> -->
 
-                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('githublogin') }}">{{ __('Github Login') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('googlelogin') }}">{{ __('Goggle Login') }}</a>
+                            </li>
+                        <!-- @if (Route::has('register'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
-                        @endif
+                        @endif -->
                     @else
 
                         <li class="nav-item dropdown">

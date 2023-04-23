@@ -86,12 +86,48 @@ class ProductController extends Controller
         }
     }
 
+    // public function productView(string $category_slug, string $product_slug)
+    // {
+    //     $category = Category::where('slug', $category_slug)->first();
+
+    //     if ($category) {
+    //         $product = $category->products()->with('productColors.color')->where('slug', $product_slug)->where('status', '0')->first();
+    //         if ($product) {
+    //             $image_url = url($product->productImages[0]->image);
+
+    //             return response()->json([
+    //                 'product' => $product->toArray(),
+    //                 'category' => $category,
+    //                 'image_url' => $image_url,
+    //                 'product_colors' => $product->productColors->map(function ($item) {
+    //                     return [
+    //                         'product_color_id' => $item->id,
+    //                         'color_name' => $item->color->name,
+    //                         'quantity' => $item->quantity,
+    //                     ];
+    //                 }),
+    //             ], 200);
+    //         } else {
+    //             return response()->json(['error' => 'Product not found'], 404);
+    //         }
+    //     } else {
+    //         return response()->json(['error' => 'Category not found'], 404);
+    //     }
+    // }
+
     public function productView(string $category_slug, string $product_slug)
     {
         $category = Category::where('slug', $category_slug)->first();
 
         if ($category) {
-            $product = $category->products()->with('productColors.color')->where('slug', $product_slug)->where('status', '0')->first();
+            $product = $category->products()
+                ->with(['productColors' => function ($query) {
+                    $query->where('quantity', '>', 0)->with('color');
+                }])
+                ->where('slug', $product_slug)
+                ->where('status', '0')
+                ->first();
+
             if ($product) {
                 $image_url = url($product->productImages[0]->image);
 
@@ -103,6 +139,7 @@ class ProductController extends Controller
                         return [
                             'product_color_id' => $item->id,
                             'color_name' => $item->color->name,
+                            'color_code' => $item->color->code,
                             'quantity' => $item->quantity,
                         ];
                     }),
@@ -114,6 +151,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'Category not found'], 404);
         }
     }
+
 
 
     public function newArrival()

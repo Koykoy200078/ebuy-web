@@ -79,7 +79,6 @@ class View extends Component
 
     public function colorSelected($productColorId)
     {
-        // dd($productColorId);
         $this->productColorId = $productColorId;
         $productColor = $this->product->productColors()->where('id', $productColorId)->first();
         $this->prodColorSelectedQuantity = $productColor->quantity;
@@ -93,13 +92,13 @@ class View extends Component
     {
         $verify = Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
         $Productverify = Product::where('id', $productId)->value('product_user_id');
-        
+
         if ($Productverify != $verify) {
             if (Auth::check()) {
                 if ($this->product->where('id', $productId)->where('status', '0')->exists()) {
                     // Check for product color quantity and add to cart
                     if ($this->product->productColors()->count() > 1) {
-                        if ($this->prodColorSelectedQuantity != NULL) {
+                        if ($this->prodColorSelectedQuantity != null) {
                             if (Cart::where('user_id', auth()->user()->id)
                                 ->where('product_id', $productId)
                                 ->where('product_color_id', $this->productColorId)
@@ -112,6 +111,7 @@ class View extends Component
                                 ]);
                             } else {
                                 $productColor = $this->product->productColors()->where('id', $this->productColorId)->first();
+                                // dd($productColor);
                                 if ($productColor->quantity > 0) {
                                     if ($productColor->quantity >= $this->quantityCount) {
                                         // Insert Product to Cart

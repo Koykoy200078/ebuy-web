@@ -179,6 +179,50 @@
             </div>
         </div>
     </div>
+    <div class="py-3 py-md-5 bg-white">
+        <div class="container" >
+            @if (session('message'))
+                <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
+            @endif
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <h6>Leave a Comment</h6>
+                    <form action="{{ url('/comments') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $product->id }}">
+                        <textarea name="comment_body" class="form-control" rows="3"></textarea>
+                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    </form>
+                </div>
+                @forelse ($product->comments as $comment)
+                <div class="comment-container card card-body shadow-sm mt-3">
+                    <div class="detail-area">
+                        <h6 class="user-name m-1">
+                            @if($comment->user)
+                            {{ $comment->user->name}}
+                            @endif
+                            <small class="ms-3 text-primary">Comment on: {{$comment->created_at->format('d-m-Y');}}</small>
+                        </h6>
+                        <p class="user-comment mb-1">
+                            {!! $comment->comment_body !!}
+                        </p>
+                    </div>
+                    @if (Auth::check() && Auth::id() == $comment->user_id)
+                    <div>
+                        {{-- <a href="" class="btn btn-primary btn-sm me-2">Edit</a> --}}
+                        <button type="button" value="{{ $comment->id}}" class="deleteComment btn btn-danger btn-sm me-2">Delete</button>
+                    </div>
+                    @endif
+                </div>
+                @empty
+                <div class="card card-body shadow-sm mt-3">
+                    <h6>No Comments Yet</h6>
+                </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
 
     {{-- Brand --}}
     {{-- <div class="py-3 py-md-5 bg-white">
@@ -233,6 +277,18 @@
     </div> --}}
 </div>
 
+{{-- @section('scripts')
+
+    <script>
+        $(document).ready(function() {
+
+            $(document).on('click', '.deleteComment', function(){
+                alert("hello ajax");
+            });
+        });
+    </script>
+
+@endsection --}}
 
 @push('scripts')
     <script>
@@ -269,5 +325,39 @@
             }
         });
 
+        $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(document).on('click', '.deleteComment', function(){
+                if(confirm('Are you sure you wanted to delete this comment?'))
+                {
+                    var thisCliked = $(this);
+                    var comment_id = thisCliked.val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-comment",
+                        data: {
+                            'comment_id': comment_id
+                        },
+                        success: function (res) {
+                            if(res.status == 200)
+                            {
+                                thisCliked.closest('.comment-container').remove();  
+                                alert(res.message);
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush
+

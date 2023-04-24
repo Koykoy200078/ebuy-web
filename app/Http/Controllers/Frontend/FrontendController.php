@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Slider;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductComment;
 
 class FrontendController extends Controller
 {

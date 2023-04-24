@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\ProductImage;
 use App\Models\ProductColor;
+use App\Models\ProductComment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -51,5 +53,10 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'product_user_id', 'id');
 
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(ProductComment::class, 'product_id', 'id');
     }
 }

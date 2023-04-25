@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
+
 class AuthController extends Controller
 {
     /**
@@ -20,7 +23,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('JWT', ['except' => ['login', 'register']]);
+        $this->middleware('JWT', ['except' => ['login', 'register', 'googleRedirect', 'googleCallback']]);
     }
 
     /**
@@ -96,6 +99,56 @@ class AuthController extends Controller
         ], 201)->header('Content-Type', 'application/json');
     }
 
+
+    // Social Login
+    public function googleRedirect()
+    {
+        return Socialite::driver('google')->stateless()->redirect();
+    }
+
+    public function googleCallback(Request $request)
+    {
+        try {
+            $userdata = Socialite::driver('google')->stateless()->user();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch user data from Google'], 400);
+        }
+
+        $validator = Validator::make(['email' => $userdata->email], [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $user = User::where('email', $userdata->email)->where('auth_type', 'google')->first();
+
+        if ($user) {
+            $token = JWTAuth::fromUser($user);
+            return response()->json(['token' => $token], 200);
+        }
+
+        $newUser = $this->createNewUser($userdata);
+
+        $token = JWTAuth::fromUser($newUser);
+        return response()->json(['token' => $token], 200);
+    }
+
+    private function createNewUser($userdata)
+    {
+        $uuid = Str::uuid()->toString();
+
+        $user = new User();
+        $user->name = $userdata->name;
+        $user->email = $userdata->email;
+        $user->password = Hash::make($uuid . now());
+        $user->auth_type = 'google';
+        $user->email_verified_at = now();
+        $user->save();
+
+        return $user;
+    }
 
 
 

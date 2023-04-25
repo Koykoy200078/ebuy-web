@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 class authcontroller extends Controller
 {
+    // Github
     public function githubredirect(Request $request)
     {
         return Socialite::driver('github')->redirect();
@@ -19,58 +21,97 @@ class authcontroller extends Controller
 
     public function githubcallback(Request $request)
     {
-        $userdata = Socialite::driver('github')->user();
+        try {
+            $userdata = Socialite::driver('github')->user();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to fetch user data from Github']);
+        }
 
-        $user = User::where('email', $userdata->email)->where('auth_type','github')->first();
+        $validator = Validator::make(['email' => $userdata->email], [
+            'email' => 'required|email',
+        ]);
 
-        if($user)
-        {
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $user = User::where('email', $userdata->email)->where('auth_type', 'github')->first();
+
+        if ($user) {
             Auth::login($user);
             return redirect('/');
         }
-        else
-        {
 
+        $newUser = $this->createNewGithubUser($userdata);
+
+        Auth::login($newUser);
+        return redirect('/');
+    }
+
+    private function createNewGithubUser($userdata)
+    {
         $uuid = Str::uuid()->toString();
+
         $user = new User();
         $user->name = $userdata->name;
         $user->email = $userdata->email;
-        $user->password = Hash::make($uuid.now());
-        $user->auth_type ='github';
-        $user->save();  
-        Auth::login($user);
-        return redirect('/');
-        }
+        $user->password = Hash::make($uuid . now());
+        $user->auth_type = 'github';
+        $user->email_verified_at = now();
+        $user->save();
+
+        return $user;
     }
 
+
+    // Google
     public function googleredirect(Request $request)
     {
+
         return Socialite::driver('google')->redirect();
     }
 
     public function googlecallback(Request $request)
     {
-        $userdata = Socialite::driver('google')->user();
+        try {
+            $userdata = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to fetch user data from Google']);
+        }
 
-        $user = User::where('email', $userdata->email)->where('auth_type','google')->first();
+        $validator = Validator::make(['email' => $userdata->email], [
+            'email' => 'required|email',
+        ]);
 
-        if($user)
-        {
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $user = User::where('email', $userdata->email)->where('auth_type', 'google')->first();
+
+        if ($user) {
             Auth::login($user);
             return redirect('/');
         }
-        else
-        {
 
+        $newUser = $this->createNewUser($userdata);
+
+        Auth::login($newUser);
+        return redirect('/');
+    }
+
+    private function createNewUser($userdata)
+    {
         $uuid = Str::uuid()->toString();
+
         $user = new User();
         $user->name = $userdata->name;
         $user->email = $userdata->email;
-        $user->password = Hash::make($uuid.now());
-        $user->auth_type ='google';
-        $user->save();  
-        Auth::login($user);
-        return redirect('/');
-        }
+        $user->password = Hash::make($uuid . now());
+        $user->auth_type = 'google';
+        $user->email_verified_at = now();
+        $user->save();
+
+        return $user;
     }
 }

@@ -21,6 +21,9 @@ Route::group([
     Route::prefix('auth')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
+
+        Route::get('/google/redirect', [AuthController::class, 'googleRedirect']);
+        Route::get('/google/callback', [AuthController::class, 'googleCallback']);
     });
 
     Route::middleware(['auth:api'])->group(function () {
@@ -73,8 +76,10 @@ Route::group([
         // Product Count
         Route::get('/user/item/count', [ProductController::class, 'productCount']);
 
-        // Wishlist Count
-        Route::get('/wishlist/count', [WishlistController::class, 'wishlistCount']);
+        // Wishlist
+        Route::get('/wishlist/count', [WishlistController::class, 'wishlistCount']); // count
+        Route::get('/wishlist', [WishlistController::class, 'wishlistView']); // view
+        Route::delete('/wishlist/{wishlistId}', [WishlistController::class, 'destroy']); // delete
 
         // Cart Count
         Route::get('/cart/count', [AddToCartController::class, 'cart']);

@@ -33,11 +33,14 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/collections/{category_slug}', 'products');
     Route::get('/collections/{category_slug}/{product_slug}', 'productView');
 
+    //Comment System
+    Route::post('/comments', [App\Http\Controllers\Frontend\CommentProductController::class, 'store']);
+    Route::post('/delete-comment', [App\Http\Controllers\Frontend\CommentProductController::class, 'destroy']);
 
     Route::get('/new-arrivals', 'newArrival' );
     Route::get('/featured-products', 'featuredProducts' );
 
-    Route::get('/search','searchProducts');
+    Route::get('/search' ,'searchProducts');
 
 });
 

@@ -8,6 +8,9 @@
 
         <div class="carousel-inner">
 
+        @if (session('message'))
+            <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
+        @endif
         @foreach ($sliders as $key => $sliderItem)
             <div class="carousel-item {{ $key == '0' ? 'active':''}} ">
                 @if ($sliderItem->image)

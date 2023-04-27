@@ -1,15 +1,15 @@
-<div class="main-navbar shadow-sm sticky-top">
-    <div class="top-navbar">
+<div class="main-navbar shadow-sm">
+    <div class="top-navbar" >
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+            <div class="row" >
+                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block" >
                     <h5 class="brand-name">{{ $appSetting->website_name ?? 'website name'}}</h5>
                 </div>
                 <div class="col-md-5 my-auto">
                     <form action="{{ url('search') }}" method="GET" role="search">
                         <div class="input-group">
-                            <input type="search" name="search" value="{{ Request::get('search') }}" placeholder="Search your product" class="form-control" />
-                            <button class="btn bg-white" type="submit">
+                            <input type="search" name="search" value="{{ Request::get('search') }}" placeholder="Search your product" class="form-control " />
+                            <button class="btn" style="background-color: rgba(255,255,255,0.5);" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -64,24 +64,24 @@
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user"></i>  {{ Auth::user()->name }}
+                            <i class="fa fa-user" style="color:  #202020;"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user" style="color:  #202020;"></i> Profile</a></li>
                             @if(Auth::user()->role_as != 0)
-                            <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user"></i> Admin</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user" style="color:  #202020;"></i> Admin</a></li>
                             @endif
-                            <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list"></i> My Orders</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Store</a></li>
-                            <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> My Wishlist</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Orders</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-list" style="color:  #202020;"></i> My Store</a></li>
+                            <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart" style="color:  #202020;"></i> My Wishlist</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart" style="color:  #202020;"></i> My Cart</a></li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                    <i class="fa fa-sign-out"></i> Logout</a> {{ __('') }}
+                                    onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                    <i class="fa fa-sign-out" style="color:  #202020;"></i> Logout</a> {{ __('') }}
                                 </a>
-
+                        
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
@@ -97,7 +97,6 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand d-block d-sm-block d-md-none d-lg-none" href="#">
-                Funda Ecom
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

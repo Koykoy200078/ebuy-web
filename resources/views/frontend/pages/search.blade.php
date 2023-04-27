@@ -21,7 +21,7 @@
                                 <label class="stock bg-danger">New</label>
                                 @if ($productsItem->productImages->count() > 0)
                                 <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}">
-                                    <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}">
+                                    <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}" width="500" height="300">
                                 </a>
                                 @endif
                             </div>

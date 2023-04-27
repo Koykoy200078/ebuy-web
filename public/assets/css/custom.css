@@ -1,4 +1,16 @@
-
+body {
+  color: #202020;
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  font-style: normal;
+  font-weight: 400;
+}
+.label-rounded-bottom-right {
+    border-radius: 0 0 10px 0;
+  }
+  
+  
   
 footer {
     position: fixed;
@@ -49,22 +61,65 @@ footer {
     font-weight: 600;
     letter-spacing: 0.5px;
 }
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    display: none;
+}
 
+.carousel-button:hover {
+    background-color: #4CAF50;
+}
+
+.carousel-button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.carousel-prev {
+    left: 16px;
+}
+
+.carousel-next {
+    right: 16px;
+}
+carousel-control-prev-icon,
+.carousel-control-next-icon {
+  font-size: 6rem;
+}
 
 /* Navbar CSS */
 .main-navbar{
+    border-top: 1px solid #ffffff;
     border-bottom: 1px solid #ccc;
 }
+.main-navbar .top-navbar .nav-link:hover {
+    color: #02be12; /* Change to red when hovering */
+}
 .main-navbar .top-navbar{
-    background-color: #2874f0;
+    background-color: #ffffff;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 .main-navbar .top-navbar .brand-name{
-    color: #fff;
+    color: #202020;
 }
 .main-navbar .top-navbar .nav-link{
-    color: #fff;
+    color: #202020;
     font-size: 16px;
     font-weight: 500;
 }
@@ -74,8 +129,9 @@ footer {
 }
 .main-navbar .top-navbar .dropdown-menu .dropdown-item{
     padding: 8px 16px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ffffff;
     font-size: 14px;
+    color: #202020;
 }
 .main-navbar .top-navbar .dropdown-menu .dropdown-item i{
     width: 20px;
@@ -84,14 +140,50 @@ footer {
     font-size: 14px;
 }
 .main-navbar .navbar{
-    padding: 0px;
-    background-color: #ddd;
+    border-top: 1px solid #ccc;
+    padding: 1px;
+    background-color: #ffffff;
 }
 .main-navbar .navbar .nav-item .nav-link{
     padding: 8px 20px;
-    color: #000;
+    color: #202020;
     font-size: 15px;
 }
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffffff; /* Change to red when hovering */
+    background-color: #02be12;
+}
+.dropdown-menu a:hover {
+    background-color:#02be12 !important;
+    color: white !important;
+  }
+.dropdown-menu a:hover i {
+    color: white !important;
+}
+.navbar.fixed-top{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    animation: slideDown 0.5s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* add box-shadow */
+  }
+  
+  /* add another keyframe for sliding the navbar up */
+  @keyframes slideUp {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+  
+  /* use JavaScript to add and remove the "scrolled" class */
+  .scrolled {
+    box-shadow: 0 2px 4px rgb(0, 0, 0); /* add stronger box-shadow when scrolled */
+  }
+  
 
 @media only screen and (max-width: 600px) {
     .main-navbar .top-navbar .nav-link{
@@ -99,7 +191,12 @@ footer {
         padding: 8px 10px;
     }
 }
-
+input[type="search"].form-control {
+    border-color: green;
+}
+input[type="search"]:hover {
+    border-color: rgba(8, 255, 103, 0.719);
+  }
 /* Category Start */
 .category-card{
     border: 1px solid #ddd;
@@ -191,6 +288,13 @@ footer {
     font-size: 12px;
     margin-top: 10px;
 }
+.product-card .product-card-body .btn2{
+    border: 1px solid;
+    margin-right: 3px;
+    border-radius: 0px;
+    font-size: 12px;
+    margin-top: 10px;
+}
 /* Product Card End */
 
 /* Product View */
@@ -235,6 +339,18 @@ footer {
     background-color: #2874f0;
     color: #fff;
 }
+
+.product-view .btn2{
+    border: 1px solid;
+    margin-right: 3px;
+    border-radius: 0px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.product-view .btn2:hover{
+    background-color: #f028cf;
+    color: #fff;
+}
 .product-view .input-quantity{
     border: 1px solid #000;
     margin-right: 3px;
@@ -260,8 +376,8 @@ footer {
 .shopping-cart .cart-item{
     background-color: #fff;
     box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
-    padding: 10px 10px;
-    margin-top: 10px;
+    padding: 1px 1px;
+    margin-top: 1px;
 }
 .shopping-cart .cart-item .product-name{
     font-size: 16px;
@@ -287,6 +403,17 @@ footer {
     background-color: #2874f0;
     color: #fff;
 }
+
+.shopping-cart .btn2{
+    border: 1px solid;
+    margin-right: 3px;
+    border-radius: 0px;
+    font-size: 10px;
+}
+.shopping-cart .btn2:hover{
+    background-color: #f0288c;
+    color: #fff;
+}
 .shopping-cart .input-quantity{
     border: 1px solid #000;
     margin-right: 3px;
@@ -295,7 +422,11 @@ footer {
     outline: none;
     text-align: center;
 }
+
+
+
 /* Cart or Wishlist */
+
 
 
 
@@ -323,30 +454,50 @@ footer {
 .underline{
     height: 4px;
     width: 100px;
-    background-color: #2874f0;
+    background-color: #9dffa2;
     margin: 10px 0;
+}
+  /* Define the custom background color */
+  .custom-bg {
+    background-color: lightgreen;
+    border-radius: 10px;
+}
+
+/* Define the hover effect */
+.custom-bg:hover {
+    background-color: orange;
 }
 
 
-
+/* FOOTER */
 .footer-area{
     padding: 40px 0px;
-    background-color: #2874f0;
-    color: #fff;
+    background-color: #ddfdd8;
+    color: #000;
 }
 .footer-area a{
     text-decoration: none;
+    color: #000;
+}
+.footer-area a:hover {
+    color: rgb(15, 128, 0);
+    padding-left: 5px;
+    transition: all 0.3s ease-in-out;
 }
 .footer-area .footer-heading{
-    font-size: 24px;
-    color: #fff;
+    font-size: 30px;
+    color: #000;
+    font-weight: bold;
 }
 .footer-area .footer-underline{
     height: 1px;
     width: 70px;
-    background-color: #ddd;
+    background-color: #5ae6a0;
     margin: 10px 0px;
+    
 }
+
+
 
 .copyright-area{
     padding: 14px 0px;
@@ -364,3 +515,4 @@ footer {
     color: #fff;
     width: 20px;
 }
+

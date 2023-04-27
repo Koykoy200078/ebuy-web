@@ -6,7 +6,7 @@
 
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
 
-        <div class="carousel-inner">
+    <div class="carousel-inner" style="padding-top: 24px;"">
 
         @if (session('message'))
             <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
@@ -14,12 +14,14 @@
         @foreach ($sliders as $key => $sliderItem)
             <div class="carousel-item {{ $key == '0' ? 'active':''}} ">
                 @if ($sliderItem->image)
-                <img src="{{ asset("$sliderItem->image") }} " class="d-block w-100" alt="..."   width="500" height="600">
+                <img src="{{ asset("$sliderItem->image") }} " class="d-block w-100" alt="..."  
+                style="border-radius: 10px;  "   
+                height="600">
                 @endif
 
                     <div class="carousel-caption d-none d-md-block">
                         <div class="custom-carousel-content">
-                            <h1>
+                            {{-- <h1>
                                 {!! $sliderItem->title !!}
                             </h1>
                             <p>{!! $sliderItem->description !!}</p>
@@ -27,45 +29,50 @@
                                 <a href="#" class="btn btn-slider">
                                     Get Now
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
             </div>
         @endforeach
-
-
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+
+    {{-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+    </button> --}}
+    <button class="carousel-button carousel-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <button class="carousel-button carousel-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <i class="fa fa-arrow-right"></i>
+      </button>
+      
+    
+</div>
 
 
   <div class="py-5 bg-white">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h4>Welcome to Ecommerce</h4>
-                <div class="underline mx-auto"></div>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
-
-                </p>
+            <div style="background-color: #e5ffbc; padding: 20px;">
+                <h2 style="font-size: 32px; text-align: center;"><strong>Welcome to Ebuy</strong></h2>
+                <p style="font-size: 20px; text-align: center;">Ebuy is a website where you can buy and sell reusable and recyclable items.</p>
+                <p style="font-size: 20px; text-align: center;">Join our community of environmentally-conscious buyers and sellers today!</p>
             </div>
         </div>
     </div>
   </div>
-
+  
 
   <div class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4>Trending Products</h4>
+                <h4><strong>Trending Products </strong></h4>
                 <div class="underline mb-4"></div>
             </div>
             @if ($trendingProducts)
@@ -75,7 +82,7 @@
                         <div class="item">
                             <div class="product-card">
                                 <div class="product-card-img">
-                                    <label class="stock bg-danger">New</label>
+                                    <label class="stock" style="background-color: rgb(224, 10, 57)">Hot</label>
 
 
                                     @if ($productsItem->productImages->count() > 0)
@@ -89,7 +96,7 @@
                                 <div class="product-card-body">
                                     <p class="product-brand">{{ $productsItem->brand }}</p>
                                     <h5 class="product-name">
-                                        <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}">
+                                        <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}" width="500" height="300">
                                                 {{ $productsItem->name }}
                                         </a>
                                     </h5>
@@ -118,8 +125,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4>New Arrivals
-                    <a href="{{ url('new-arrivals') }}" class="btn btn-warning float-end">View more</a>
+                <h4><strong> New Arrivals </strong>
+                    <a href="{{ url('new-arrivals') }}" class="btn float-end custom-bg rounded-pill">View more</a>
                 </h4>
                 <div class="underline mb-4"></div>
             </div>
@@ -130,12 +137,12 @@
                         <div class="item">
                             <div class="product-card">
                                 <div class="product-card-img">
-                                    <label class="stock bg-danger">New</label>
+                                    <label class="stock bg-success">New</label>
 
 
                                     @if ($productsItem->productImages->count() > 0)
                                     <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}">
-                                        <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}">
+                                        <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}"width="500" height="300">
                                     </a>
 
                                     @endif
@@ -173,8 +180,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4>Featured Products
-                    <a href="{{ url('featured-products') }}" class="btn btn-warning float-end">View more</a>
+                <h4><strong>Featured Products</strong>
+
+                    <a href="{{ url('featured-products') }}" class="btn float-end custom-bg rounded-pill">View more</a>
                 </h4>
                 <div class="underline mb-4"></div>
             </div>
@@ -185,12 +193,12 @@
                         <div class="item">
                             <div class="product-card">
                                 <div class="product-card-img">
-                                    <label class="stock bg-danger">New</label>
+                                    <label class="stock" style="background-color: #FFD700">Featured</label>
 
 
                                     @if ($productsItem->productImages->count() > 0)
                                     <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}">
-                                        <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}">
+                                        <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}width="500" height="300">
                                     </a>
 
                                     @endif
@@ -245,6 +253,37 @@
             }
         }
     });
+
+    $(document).ready(function() {
+    $('.carousel').hover(
+        function() {
+            $('.carousel-button').show();
+        },
+        function() {
+            $('.carousel-button').hide();
+        }
+    );
+});
+
+$(document).ready(function(){
+    $(window).scroll(function(){
+      if($(this).scrollTop() > 50){
+        $('.navbar').addClass('fixed-top');
+      }
+      else{
+        $('.navbar').removeClass('fixed-top');
+      }
+    });
+  });
+  window.addEventListener('scroll', function() {
+  var navbar = document.querySelector('.navbar');
+  if (window.scrollY > 0) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
 </script>
 
 @endsection

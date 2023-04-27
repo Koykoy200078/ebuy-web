@@ -2,14 +2,19 @@
     
     <div class="py-3 py-md-5">
         <div class="container">
-            <h4>My Cart</h4>
+            <div class="mb-50">
+                <h1 class="heading-2 mb-10">Your Cart</h1>
+                <h6 class="text-body">There are <span class="text-brand"><livewire:frontend.cart.cart-count/></span> products in this list</h6>
+            </div>
             <hr>
+            <br>
+            <br>
 
             <div class="row">
                 <div class="col-md-12">
                     <div class="shopping-cart">
-
-                        <div class="cart-header d-none d-sm-none d-mb-block d-lg-block">
+                       
+                        <div class="cart-header d-none d-sm-none d-mb-block d-lg-block" style="background-color: rgb(233, 233, 233); border-top-left-radius: 10px; border-top-right-radius: 10px;">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4>Products</h4>
@@ -28,7 +33,6 @@
                                 </div>
                             </div>
                         </div>
-
                         @forelse ($cart as $cartItem)
                             @if ($cartItem->product)
                             <div class="cart-item">
@@ -39,12 +43,12 @@
 
                                                 @if ($cartItem->product->productImages)
                                                     <img src="{{ asset($cartItem->product->productImages[0]->image) }}"
-                                                    style="width: 50px; height: 50px" alt="">
+                                                    style="width: 100px; height: 100px" alt="">
                                                 @else
-                                                    <img src="" style="width: 50px; height: 50px" alt="">
+                                                    <img src="" style="width: 100px; height: 000px" alt="">
                                                 @endif
 
-                                                {{ $cartItem->product->name }}
+                                                &nbsp;&nbsp;&nbsp;{{ $cartItem->product->name }}
 
                                                 @if ($cartItem->productColor)
                                                     @if ($cartItem->productColor->color)
@@ -110,13 +114,22 @@
                         </h4>
                         <hr>
                         <a href="{{ url('/checkout') }}" class="btn btn-warning w-100">Checkout</a>
+
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
-<br>
-<br>
 
 </div>
+
+@section('script')
+
+<script>
+   
+
+</script>
+
+@endsection
+

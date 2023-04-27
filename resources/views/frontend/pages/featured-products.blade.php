@@ -16,12 +16,13 @@
 
                     <div class="product-card">
                         <div class="product-card-img">
-                            <label class="stock bg-danger">New</label>
+                            <label class="stock" style="background-color: #FFD700">Featured</label>
+
 
 
                             @if ($productsItem->productImages->count() > 0)
                             <a href="{{ url('/collections/'.$productsItem->category->slug.'/'.$productsItem->slug) }}">
-                                <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}">
+                                <img src="{{ asset($productsItem->productImages[0]->image) }}" alt="{{ $productsItem->name }}" width="500" height="300">
                             </a>
 
                             @endif
@@ -48,7 +49,7 @@
             @endforelse
 
             <div class="text-center">
-                <a href="{{ url('/collections') }}" class="btn btn-warning px-3">Shop More</a>
+                <a href="{{ url('/collections') }}" class="btn custom-bg px-3">Shop More</a>
             </div>
         </div>
     </div>

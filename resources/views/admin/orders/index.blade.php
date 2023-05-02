@@ -17,7 +17,9 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Filter by Date</label>
-                                <input type="date" name="date" value="{{ Request::get('date') ?? date('Y-m-d') }}" class="form-control">
+                                <br>
+                                Start Date:<input type="date" name="date" value="{{ Request::get('date') ?? date('Y-m-d') }}" class="form-control">
+                                End Date:<input type="date" name="date2" value="{{ Request::get('date2') ?? date('Y-m-d') }}" class="form-control">
                             </div>
                             <div class="col-md-3">
                                 <label>Filter by Status</label>
@@ -52,9 +54,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $counter = 1;
+                                @endphp
                                 @forelse ($orders as $item)
                                         <tr>
-                                            <td>{{ $item->id }}</td>
+                                            <td>{{ $counter }}</td>
                                             <td>{{ $item->tracking_no }}</td>
                                             <td>{{ $item->fullname }}</td>
                                             <td>{{ $item->payment_mode }}</td>
@@ -62,6 +67,9 @@
                                             <td>{{ $item->status_message }}</td>
                                             <td><a href="{{ url('admin/orders/'.$item->id) }}" class="btn btn-primary btn-sm">View</a></td>
                                         </tr>
+                                        @php
+                                            $counter++;
+                                        @endphp
                                 @empty
                                     <tr>
                                         <td colspan="7">No Orders available</td>

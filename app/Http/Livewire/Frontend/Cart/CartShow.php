@@ -3,14 +3,16 @@
 namespace App\Http\Livewire\Frontend\Cart;
 
 use App\Models\Cart;
+use App\Models\Product;
 use Livewire\Component;
+
 // use Illuminate\Support\Facades\Auth;
 
 class CartShow extends Component
 {
-
+    public $selectedIds = [];
     public $cart, $totalPrice = 0;
-
+    protected $listeners = ['checkBox'];
     public function decrementQuantity(int $cartId)
     {
         $cartData = Cart::where('id', $cartId)->where('user_id', auth()->user()->id)->first();
@@ -137,16 +139,48 @@ class CartShow extends Component
             ]);
         }
     }
-
+        
+    public function checkBox($selectedIds)
+    {
+        // Update the selectedIds array with the new values
+        $this->selectedIds = $selectedIds;
+        
+        // Recalculate the total price based on the selected items
+        $this->totalPrice = 0;
+        foreach ($this->cart as $cartItem) {
+            if (in_array($cartItem->id, $this->selectedIds)) {
+                $this->totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+            }
+        }
+    }
+    
+    
+    
     public function render()
     {
-        $this->cart = Cart::where('user_id', auth()->user()->id)->get();
+        $this->cart = Cart::where('user_id', auth()->user()->id)
+        ->orderBy('product_user_id', 'asc')
+        ->get();
+        $totalPrice = 3;
+        foreach ($this->cart as $cartItem) {
+        if (in_array($cartItem->id, $this->selectedIds)) {
+            $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+            }
+        }
+        $totalPrice = 3;
         return view('livewire.frontend.cart.cart-show', [
-            'cart' => $this->cart
+            'cart' => $this->cart,
+            'totalPrice' => $totalPrice
         ]);
+
+        
     }
-
-
-
+    // public function render()
+    // {
+    //     $this->cart = Cart::where('user_id', auth()->user()->id)->get();
+    //     return view('livewire.frontend.cart.cart-show', [
+    //         'cart' => $this->cart
+    //     ]);
+    // }
 
 }

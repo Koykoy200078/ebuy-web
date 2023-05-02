@@ -99,6 +99,7 @@ class View extends Component
 
     public function addToCart(int $productId)
     {
+        
         if (Auth::check()) {
             $verify = Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
             $Productverify = Product::where('id', $productId)->value('product_user_id');
@@ -121,12 +122,14 @@ class View extends Component
                                     ]);
                                 } else {
                                     $productColor = $this->product->productColors()->where('id', $this->productColorId)->first();
+                                  
                                     if ($productColor->quantity > 0) {
                                         if ($productColor->quantity >= $this->quantityCount) {
                                             // Insert Product to Cart
                                             Cart::create([
                                                 'user_id' => auth()->user()->id,
                                                 'product_id' => $productId,
+                                                'product_user_id' => $Productverify,
                                                 'product_color_id' => $this->productColorId,
                                                 'quantity' => $this->quantityCount
 
@@ -174,6 +177,7 @@ class View extends Component
                                         Cart::create([
                                             'user_id' => auth()->user()->id,
                                             'product_id' => $productId,
+                                            'product_user_id' => $Productverify,
                                             'quantity' => $this->quantityCount
 
                                         ]);

@@ -428,9 +428,61 @@ input[type="search"]:hover {
 /* Cart or Wishlist */
 
 
+/* Checkbox */
+.checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+  }
+  
+  .checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  .checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+  
 
-
-
+/* End Checkbox */
 
 /* CheckOut */
 
@@ -516,3 +568,19 @@ input[type="search"]:hover {
     width: 20px;
 }
 
+/* LOGIN AND REGISTER */
+.card-header {
+    background-color: #38d67f;
+  }
+  .btn-green {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+  }
+  
+  .btn-green:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+    color: #fff;
+  }
+  

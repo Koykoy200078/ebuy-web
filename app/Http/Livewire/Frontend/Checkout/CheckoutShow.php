@@ -10,7 +10,7 @@ use Livewire\Component;
 use App\Mail\PlaceOrderMailable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Arr;
 
 class CheckoutShow extends Component
 {
@@ -22,7 +22,12 @@ class CheckoutShow extends Component
         'validationForAll',
         'transactionEmit' => 'paidOnlineOrder'
     ];
-
+    public function mount()
+    {
+        $selectedIds = json_decode(request()->query('selectedIds'));
+        // $selectedIds will now contain the array of selected IDs from the previous page
+        $this->selectedIds = $selectedIds;
+    }
     public function paidOnlineOrder($value)
     {
         $this->payment_id = $value;
@@ -30,8 +35,10 @@ class CheckoutShow extends Component
 
         $codOrder = $this->placeOrder();
         if ($codOrder) {
-            Cart::where('user_id', auth()->user()->id)->delete();
-
+            $ids = $this->selectedIds;
+            Cart::where('user_id', auth()->user()->id)
+            ->whereIn('id',  Arr::flatten($ids))
+            ->delete();
 
             //
             try {
@@ -135,8 +142,10 @@ class CheckoutShow extends Component
 
         $codOrder = $this->placeOrder();
         if ($codOrder) {
-            Cart::where('user_id', auth()->user()->id)->delete();
-
+            $ids = $this->selectedIds;
+            Cart::where('user_id', auth()->user()->id)
+            ->whereIn('id',  Arr::flatten($ids))
+            ->delete();
             //
             try {
                 $order = Order::findOrFail($codOrder->id);
@@ -165,8 +174,12 @@ class CheckoutShow extends Component
 
     public function totalProductAmount()
     {
+        $ids = $this->selectedIds;
+    //    dd($selectedIds);
         $this->totalProductAmount = 0;
-        $this->carts = Cart::where('user_id', auth()->user()->id)->get();
+        $this->carts = Cart::where('user_id', auth()->user()->id)
+        ->whereIn('id',  Arr::flatten($ids))
+        ->get();
         foreach ($this->carts as $cartItem) {
             $this->totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
         }

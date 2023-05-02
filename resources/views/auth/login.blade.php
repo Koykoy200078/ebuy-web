@@ -7,9 +7,12 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header text-white py-3">
+                    <h4 class="m-0">{{ __('Login') }}</h4>
+                  </div>
 
                 <div class="card-body">
+                    <br>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -55,7 +58,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-green">
                                     {{ __('Login') }}
                                 </button>
 
@@ -67,15 +70,34 @@
                             </div>
                         </div>
                     </form>
+                    <br>
+                    <div class="text-center" style="margin-top: 20px;">
+                        <a href="{{ route('googlelogin') }}">
+                        <button onclick="{{ route('googlelogin') }}" style="background-color: #fff; border: 1px solid #ddd; border-radius: 4px; color: #444; font-size: 16px; font-weight: 1000; height: 40px; line-height: 40px; padding: 0 16px; text-align: center;">
+                            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                            Login with Google
+                        </button>
+                        </a>
+                    </div>
+
+                    <div class="text-center" style="margin-top: 10px;">
+                        <a href="{{ route('googlelogin') }}">
+
+                        <button style="background-color: #333; border: 1px solid #333; border-radius: 4px; color: #fff; font-size: 16px; font-weight: 1000; height: 40px; line-height: 40px; padding: 0 16px; text-align: center;">
+                            <img src="https://img.icons8.com/ios-filled/16/ffffff/github.png" alt="GitHub Logo" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                            Login with GitHub
+                        </button>
+                        </a>
+                    </div>
+                    <br>
+
+                    
                 </div>
             </div>
         </div>
     </div>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
+   
 </div>
 @endsection

@@ -141,7 +141,7 @@
                 <div class="col-md-12">
                     @if ($category)
                     <div class="owl-carousel owl-theme four-carousel">
-                        @foreach ($category->relatedProducts as $relatedProductsItem)
+                        @foreach ($category->relatedProducts()->where('status', 0)->get() as $relatedProductsItem)
                         <div class="item mb-3">
 
                             <div class="product-card">

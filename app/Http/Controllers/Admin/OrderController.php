@@ -15,30 +15,47 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
+    // public function index(Request $request)
+    // {
+
+    //     // $todayData = '2023-01-10';
+    //     // $todayData = Carbon::now();
+    //     // $orders = Order::whereDate('created_at',$todayData)->paginate(10);
+
+    //     $todayData = Carbon::now()->format('Y-m-d');
+    //     $EndDate = Carbon::now()->format('Y-m-d');
+    //     $orders = Order::when($request->date != null, function ($q) use ($request){
+
+    //                         return $q->whereDate('created_at',$request->date);
+    //                     }, function ($q) use($todayData){
+
+    //                         return $q->whereDate('created_at',$todayData);
+    //                     })
+    //                     ->when($request->status != null, function ($q) use ($request){
+
+    //                         return $q->where('status_message',$request->status);
+    //                     })
+    //                     ->paginate(10);
+
+    //     return view('admin.orders.index' , compact('orders'));
+    // }
     public function index(Request $request)
     {
-
-        // $todayData = '2023-01-10';
-        // $todayData = Carbon::now();
-        // $orders = Order::whereDate('created_at',$todayData)->paginate(10);
-
         $todayData = Carbon::now()->format('Y-m-d');
-        $orders = Order::when($request->date != null, function ($q) use ($request){
-
-                            return $q->whereDate('created_at',$request->date);
-                        }, function ($q) use($todayData){
-
-                            return $q->whereDate('created_at',$todayData);
-                        })
-                        ->when($request->status != null, function ($q) use ($request){
-
-                            return $q->where('status_message',$request->status);
-                        })
-                        ->paginate(10);
-
-        return view('admin.orders.index' , compact('orders'));
+        $orders = Order::when($request->date != null, function ($q) use ($request) {
+                $endDate = $request->date2 ?? $request->date;
+                return $q->whereBetween('created_at', [$request->date, $endDate]);
+            }, function ($q) use ($todayData) {
+                return $q->whereDate('created_at', $todayData);
+            })
+            ->when($request->status != null, function ($q) use ($request) {
+                return $q->where('status_message', $request->status);
+            })
+            ->paginate(10);
+    
+        return view('admin.orders.index', compact('orders'));
     }
-
+    
     public function show(int $orderId)
     {
 

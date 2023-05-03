@@ -15,7 +15,7 @@
                     <div class="p-4 shadow bg-white">
                         <h2>LOGO</h2>
                         <h4>Thank You for Shopping with</h4>
-                        <a href="{{ url('collections') }}" class="btn btn-primary">SHOP NOW</a>
+                        <a href="{{ url('collections') }}" class="btn btn-success">SHOP NOW</a>
                     </div>
                 </div>
             </div>

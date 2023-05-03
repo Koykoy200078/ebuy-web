@@ -45,16 +45,6 @@
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
-                            <li class="nav-item">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#addBrandModal" class="nav-link">Add Brands</a>
-                            </li> 
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('githublogin') }}">{{ __('Github Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('googlelogin') }}">{{ __('Goggle Login') }}</a>
-                            </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>

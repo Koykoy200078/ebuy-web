@@ -15,8 +15,12 @@
                     <div class="shopping-cart">
                        
                         <div class="cart-header d-none d-sm-none d-mb-block d-lg-block" style="background-color: rgb(233, 233, 233); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                            
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-1">
+                                    <h4></h4>
+                                </div>
+                                <div class="col-md-5">
                                     <h4>Products</h4>
                                 </div>
                                 <div class="col-md-1">
@@ -33,11 +37,25 @@
                                 </div>
                             </div>
                         </div>
+                            @php
+                                $prevProductUserId = null;
+                            @endphp
                         @forelse ($cart as $cartItem)
                             @if ($cartItem->product)
+                                @if($cartItem->product_user_id !== $prevProductUserId)
+                                <h3>Product User ID: {{ $cartItem->productUser->name }}</h2>
+                                <?php $prevProductUserId = $cartItem->product_user_id; ?>
+                            @endif
+
                             <div class="cart-item">
                                 <div class="row">
-                                    <div class="col-md-6 my-auto">
+                                    <div class="col-md-1 my-auto text-center">
+                                        {{-- <input type="checkbox" name="cart-item-{{ $cartItem->id }}" wire:click="checkBox({{ $cartItem->id }})"
+                                        value="{{ $cartItem->id }}" data-product-user-id="{{ $cartItem->product_user_id }}"> --}}
+                                        <input type="checkbox" name="cart-item-{{ $cartItem->id }}" wire:click="$emit('checkBox', selectedIds)" value="{{ $cartItem->id }}" data-product-user-id="{{ $cartItem->product_user_id }}">
+
+                                    </div>
+                                    <div class="col-md-5 my-auto">
                                         <a href="{{ url('collections/'.$cartItem->product->category->slug.'/'.$cartItem->product->slug) }}">
                                             <label class="product-name">
 
@@ -73,7 +91,7 @@
                                     </div>
                                     <div class="col-md-1 my-auto">
                                         <label class="price">₱{{ $cartItem->product->selling_price * $cartItem->quantity }} </label>
-                                        @php $totalPrice += $cartItem->product->selling_price * $cartItem->quantity @endphp
+                                        {{-- @php $totalPrice += $cartItem->product->selling_price * $cartItem->quantity @endphp --}}
                                     </div>
                                     <div class="col-md-2 col-5 my-auto">
                                         <div class="remove">
@@ -100,6 +118,14 @@
                     </div>
                 </div>
             </div>
+            @php $totalPrice = 0 @endphp
+            @forelse ($cart as $cartItem)
+                @if (in_array($cartItem->id, $selectedIds))
+                    @php $totalPrice += $cartItem->product->selling_price * $cartItem->quantity @endphp
+                @endif
+            @empty
+            @endforelse
+            
 
             <div class="row">
                 <div class="col-md-8 my-md-auto mt-3">
@@ -113,7 +139,7 @@
                             <span class="float-end">₱ {{ $totalPrice }}</span>
                         </h4>
                         <hr>
-                        <a href="{{ url('/checkout') }}" class="btn btn-warning w-100">Checkout</a>
+                        <a href="{{ url('/checkout') }}?selectedIds={{ json_encode($selectedIds) }}" class="btn btn-warning w-100">Checkout</a>
 
                     </div>
                 </div>
@@ -127,9 +153,38 @@
 @section('script')
 
 <script>
-   
+
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+let selectedIds = [];
+
+for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener('click', function() {
+        let product_user_id = this.dataset.productUserId;
+        if (this.checked) {
+            // uncheck other checkboxes with different product_user_id
+            for (let j = 0; j < checkboxes.length; j++) {
+                if (checkboxes[j] !== this && checkboxes[j].dataset.productUserId !== product_user_id) {
+                    checkboxes[j].checked = false;
+                    let index = selectedIds.indexOf(checkboxes[j].value);
+                    if (index !== -1) {
+                        selectedIds.splice(index, 1);
+                    }
+                }
+            }
+            selectedIds.push(this.value);
+        } else {
+            let index = selectedIds.indexOf(this.value);
+            if (index !== -1) {
+                selectedIds.splice(index, 1);
+            }
+        }
+        console.log(selectedIds);
+        Livewire.emit('checkBox', selectedIds);
+    });
+}
+
 
 </script>
 
 @endsection
-
+{{-- @livewireScripts --}}

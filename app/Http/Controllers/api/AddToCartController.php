@@ -165,105 +165,63 @@ class AddToCartController extends Controller
         }
     }
 
-    public function addToCart(Request $request, $productId)
+    public function addToCart(Request $request, int $productId)
     {
-        $verify = Product::where('product_user_id', Auth::id())->value('product_user_id');
-        $Productverify = Product::where('id', $productId)->value('product_user_id');
+        $user = Auth::user();
 
-        if ($Productverify != $verify) {
-            if (Auth::check()) {
-                $product = Product::find($productId);
-                if ($product && $product->status === 0) {
-                    // Check for product color quantity and add to cart
-                    if ($product->productColors()->count() > 1) {
-                        $productColorId = $request->input('product_color_id');
-                        if (!$productColorId) {
-                            return response()->json([
-                                'message' => 'Select Your Product Color'
-                            ], 404);
-                        }
-                        $productColor = $product->productColors()->where('id', $productColorId)->first();
-                        if (!$productColor) {
-                            return response()->json([
-                                'message' => 'Invalid Product Color'
-                            ], 404);
-                        }
-                        if (Cart::where('user_id', Auth::id())
-                            ->where('product_id', $productId)
-                            ->where('product_color_id', $productColorId)
-                            ->exists()
-                        ) {
-                            return response()->json([
-                                'message' => 'Product Already Added to Cart'
-                            ], 200);
-                        }
-                        if ($productColor->quantity > 0) {
-                            if ($productColor->quantity >= $request->input('quantity', 1)) {
-                                // Insert Product to Cart
-                                Cart::create([
-                                    'user_id' => Auth::id(),
-                                    'product_id' => $productId,
-                                    'product_color_id' => $productColorId,
-                                    'quantity' => $request->input('quantity', 1)
-                                ]);
+        if (!$user) {
+            return response()->json(['message' => 'Please Login to Continue'], 401);
+        }
 
-                                return response()->json([
-                                    'message' => 'Product Added to Cart'
-                                ], 200);
-                            } else {
-                                return response()->json([
-                                    'message' => 'Only ' . $productColor->quantity . ' Quantity Available'
-                                ], 404);
-                            }
-                        } else {
-                            return response()->json([
-                                'message' => 'Out of Stock'
-                            ], 404);
-                        }
-                    } else {
-                        if (Cart::where('user_id', Auth::id())->where('product_id', $productId)->exists()) {
-                            return response()->json([
-                                'message' => 'Product Already Added to Cart'
-                            ], 200);
-                        } else {
-                            if ($product->quantity > 0) {
-                                if ($product->quantity >= $request->input('quantity', 1)) {
-                                    // Insert Product to Cart
-                                    Cart::create([
-                                        'user_id' => Auth::id(),
-                                        'product_id' => $productId,
-                                        'quantity' => $request->input('quantity', 1)
-                                    ]);
+        $product = Product::findOrFail($productId);
 
-                                    return response()->json([
-                                        'message' => 'Product Added to Cart'
-                                    ], 200);
-                                } else {
-                                    return response()->json([
-                                        'message' => 'Only ' . $product->quantity . ' Quantity Available'
-                                    ], 404);
-                                }
-                            } else {
-                                return response()->json([
-                                    'message' => 'Out of Stock'
-                                ], 404);
-                            }
-                        }
-                    }
-                } else {
-                    return response()->json([
-                        'message' => 'Product does not exist or is not available'
-                    ], 404);
-                }
-            } else {
-                return response()->json([
-                    'message' => 'Please Login to add to cart'
-                ], 401);
+        if (!$product || $product->status != '0') {
+            return response()->json(['message' => 'Product does not exist or is unavailable'], 404);
+        }
+
+        if ($product->product_user_id == $user->id) {
+            return response()->json(['message' => 'You cannot buy your own product'], 401);
+        }
+
+        $productColorId = $request->input('product_color_id');
+        $quantityCount = $request->input('quantity_count');
+
+        if ($product->productColors()->count() > 1) {
+            if (!$productColorId) {
+                return response()->json(['message' => 'Select Your Product Color'], 404);
+            }
+
+            $productColor = $product->productColors()->where('id', $productColorId)->first();
+
+            if (!$productColor) {
+                return response()->json(['message' => 'Product color does not exist'], 404);
+            }
+
+            if ($productColor->quantity < $quantityCount) {
+                return response()->json(['message' => 'Only ' . $productColor->quantity . ' Quantity Available'], 404);
             }
         } else {
-            return response()->json([
-                'message' => 'You cannot buy your own product'
-            ], 401);
+            if ($product->quantity < $quantityCount) {
+                return response()->json(['message' => 'Only ' . $product->quantity . ' Quantity Available'], 404);
+            }
         }
+
+        if (Cart::where('user_id', $user->id)
+            ->where('product_id', $productId)
+            ->where('product_color_id', $productColorId)
+            ->exists()
+        ) {
+            return response()->json(['message' => 'Product Already Added'], 200);
+        }
+
+        Cart::create([
+            'user_id' => $user->id,
+            'product_id' => $productId,
+            'product_user_id' => $product->product_user_id,
+            'product_color_id' => $productColorId,
+            'quantity' => $quantityCount
+        ]);
+
+        return response()->json(['message' => 'Product Added to Cart'], 200);
     }
 }

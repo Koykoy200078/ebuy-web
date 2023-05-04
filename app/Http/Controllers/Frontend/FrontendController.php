@@ -8,6 +8,8 @@ use App\Models\Slider;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductComment;
+use App\Models\Orderitem;
+
 
 class FrontendController extends Controller
 {

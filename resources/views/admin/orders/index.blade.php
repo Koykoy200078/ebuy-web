@@ -19,9 +19,14 @@
                                 <label>Filter by Date</label>
                                 <br>
                                 Start Date:<input type="date" name="date" value="{{ Request::get('date') ?? date('Y-m-d') }}" class="form-control">
-                                End Date:<input type="date" name="date2" value="{{ Request::get('date2') ?? date('Y-m-d') }}" class="form-control">
+                            </div>
+                    
+                            <div class="col-md-3">
+                                <br>
+                                End Date:<input type="date" id="end-date" name="date2" value="{{ Request::get('date2') ?? date('Y-m-d', strtotime('+5 days')) }}" class="form-control" min="{{ date('Y-m-d', strtotime('+5 days')) }}"readonly>
                             </div>
                             <div class="col-md-3">
+                                <br>
                                 <label>Filter by Status</label>
                                 <select name="status" class="form-select">
                                     <option value="">Select All Status</option>
@@ -32,19 +37,26 @@
                                     <option value="out-for-delivery" {{ Request::get('status') == 'out-for-delivery' ? 'selected':'' }}>Out for Delivery</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <br/>
+                            <div class="col-md-2">
+                                <br>
+                                <label>Search Tracking No.</label>
+                                <input type="text" name="search" value="{{ Request::get('search') }}" class="form-control">
+                            </div>
+                            <div class="col-md-1">
+                                <br>
+                                <br>
                                 <button type="submit" class="btn btn-primary">Filter</button>
                             </div>
                         </div>
                     </form>
+                    
                     <hr>
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
+                                    <th>Number</th>
                                     <th>Tracking No</th>
                                     <th>Username</th>
                                     <th>Payment Mode</th>

@@ -30,8 +30,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('product-status') }}">
-                                <i class="fa fa-cart-plus"></i>  Orders
+                            <a class="nav-link" href="{{ url('product-statuss') }}">
+                                <i class="fa fa-cart-plus"></i>  Delivery
                             </a>
                         </li>
                         <li class="nav-item">

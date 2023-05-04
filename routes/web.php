@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('checkout', [App\Http\Controllers\Frontend\CheckoutController::class, 'index']);
 
     Route::get('orders', [App\Http\Controllers\Frontend\OrderController::class, 'index']);
-    Route::get('orders/{orderId}', [App\Http\Controllers\Frontend\OrderController::class, 'show']);
+    Route::get('orders/{orderId}', [App\Http\Controllers\Frontend\OrderController::class, 'shows']);
 
     Route::get('profile', [App\Http\Controllers\Frontend\UserController::class, 'index']);
     Route::post('profile', [App\Http\Controllers\Frontend\UserController::class, 'UpdateUserDetails']);
@@ -67,6 +67,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('change-password', [App\Http\Controllers\Frontend\UserController::class, 'changePassword']);
 
     Route::get('product-status', [App\Http\Controllers\Frontend\ProductStatusrController::class, 'index']);
+
+
+    Route::controller(App\Http\Controllers\Frontend\OrderController::class)->group(function () {
+        Route::get('product-status', 'index');
+        Route::get('orders/{orderId}', 'show');
+        Route::put('orders/{orderId}', 'updateOrderStatus');
+
+        Route::get('invoice/{orderId}', 'viewInvoice');
+        Route::get('invoice/{orderId}/generate', 'generateInvoice');
+
+        Route::get('invoice/{orderId}/mail', 'mailInvoice');
+
+    });
 
 
     //Product Route For Users

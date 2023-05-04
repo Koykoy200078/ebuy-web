@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\ProductImage;
 use App\Models\ProductColor;
 use App\Models\ProductComment;
+use App\Models\Orderitem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -53,6 +54,12 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'product_user_id', 'id');
 
+    }
+
+    public function confirmComment()
+    {
+        return $this->belongsTo(Orderitem::class, 'product_id', 'id');
+        
     }
 
     public function comments()

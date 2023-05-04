@@ -23,7 +23,12 @@ class Order extends Model
         'address',
         'status_message',
         'payment_mode',
-        'payment_id'
+        'payment_id',
+        'confirm',
+        'seller_fullname',
+        'seller_email',
+        'seller_phone'
+
 
     ];
 

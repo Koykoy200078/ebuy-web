@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\UserDetail;
+use App\Models\Orderitem;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +30,10 @@ class User extends Authenticatable implements JWTSubject
     public function userDetail()
     {
         return $this->hasOne(UserDetail::class, 'user_id', 'id');
+    }
+    public function confirmComment()
+    {
+        return $this->belongsTo(Orderitem::class, 'user_id', 'id');
     }
 
     /**

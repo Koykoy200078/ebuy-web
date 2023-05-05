@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Orderitem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -16,47 +17,24 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ProductStatusrController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
-        $todayData = Carbon::now()->format('Y-m-d');
-        $startDate = $request->date ?? $todayData;
-        $endDate = $request->date2 ?? $startDate;
-        
-        
-        if ($request->search) {
-            $orders = Order::where('tracking_no', $request->search)->paginate(10);
-        } else {
-            $orders = Order::when($request->date || $request->date2, function ($q) use ($startDate, $endDate) {
-                    return $q->whereBetween('created_at', [$startDate, $endDate]);
-                })
-                ->orWhere(function ($q) use ($todayData) {
-                    return $q->whereDate('created_at', $todayData);
-                })
-                ->when($request->status != null, function ($q) use ($request) {
-                    return $q->where('status_message', $request->status);
-                })
-                ->paginate(10);
-        }
-        
-        return view('admin.orders.index', compact('orders'));
-        
-        
-        
+        $orders = Order::where('product_user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
+        // dd($orders);
+        return view('frontend.sellings.index', compact('orders'));
 
+
+        //GEt only the item that you selling
     }
-    
-    public function show(int $orderId)
+
+
+    public function show($orderId)
     {
-
-        $order = Order::where('id', $orderId)->first();
-        if($order)
-        {
-            return view('frontend.orders.view' , compact('order'));
-
-        }
-        else
-        {
-            return redirect('orders')->with('message','Order Id not found');
+        $order = Order::where('product_user_id', Auth::user()->id)->where('id', $orderId)->first();
+        if ($order) {
+            return view('frontend.sellings.view', compact('order'));
+        } else {
+            return redirect()->back()->with('message', 'No Order Found');
         }
     }
 
@@ -86,20 +64,21 @@ class ProductStatusrController extends Controller
         if($order)
         {
             $product_status = Orderitem::where('order_id', $orderId)->get('id');
-            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status]);
-
-
+            $test = Orderitem::whereIn('id', $product_status)->update([
+                'status_message' => $request->order_status == 'completed' ? 'Item Arrive' : ($request->order_status ?? $order->status_message)
+            ]);
+            
 
             $order->update([
-                'status_message' => $request->order_status
+                'status_message' => $request->order_status  ?? $order->status_message
                 
             ]);
 
-            return redirect('admin/orders/'.$orderId)->with('message', 'Order Status Updated');
+            return redirect('product-status/'.$orderId)->with('message', 'Order Status Updated');
         }
         else
         {
-            return redirect('admin/orders/'.$orderId)->with('message','Order Id not found');
+            return redirect('product-status/'.$orderId)->with('message','Order Id not fsound');
         }
 
     }
@@ -107,7 +86,7 @@ class ProductStatusrController extends Controller
     public function viewInvoice(int $orderId)
     {
         $order = Order::findOrfail($orderId);
-        return view('admin.invoice.generate-invoice', compact('order'));
+        return view('frontend.invoice.generate-invoice', compact('order'));
 
 
     }
@@ -118,10 +97,10 @@ class ProductStatusrController extends Controller
         $order = Order::findOrfail($orderId);
         $data = ['order' => $order];
 
-        $pdf = Pdf::loadView('admin.invoice.generate-invoice', $data);
+        $pdf = Pdf::loadView('frontend.invoice.generate-invoice', $data);
 
         $todayDate = Carbon::now()->format('d-m-Y');
-        return $pdf->download('invoice-'.$order->id.'-'.$todayDate.'.pdf');
+        return $pdf->download('frontend.invoice-'.$order->id.'-'.$todayDate.'.pdf');
     }
 
     public function mailInvoice(int $orderId)
@@ -129,15 +108,15 @@ class ProductStatusrController extends Controller
 
         $order = Order::findOrfail($orderId);
         Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-        return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+        return redirect('product-status/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
         try{
             $order = Order::findOrfail($orderId);
             Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-            return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+            return redirect('product-status/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
 
         }catch(\Exception $e){
 
-            return redirect('admin/orders/'.$orderId)->with('message', 'Something went wrong!'.$e);
+            return redirect('product-status/'.$orderId)->with('message', 'Something went wrong!'.$e);
         }
     }
 

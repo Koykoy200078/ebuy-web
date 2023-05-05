@@ -58,7 +58,7 @@ class Product extends Model
 
     public function confirmComment()
     {
-        return $this->belongsTo(Orderitem::class, 'product_id', 'id');
+        return $this->belongsTo(Orderitem::class, 'id', 'product_id');
         
     }
 

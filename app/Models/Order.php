@@ -25,6 +25,7 @@ class Order extends Model
         'payment_mode',
         'payment_id',
         'confirm',
+        'product_user_id',
         'seller_fullname',
         'seller_email',
         'seller_phone'

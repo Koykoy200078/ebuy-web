@@ -118,6 +118,10 @@ class CheckoutShow extends Component
            
             $product_id = $cartItem->product_id, 
             $test =  Product::where('id', $product_id)->value('product_user_id'),
+            'product_user_id' =>  $test,
+
+            $product_id = $cartItem->product_id, 
+            $test =  Product::where('id', $product_id)->value('product_user_id'),
             $test =  User::where('id', $test)->value('name'),
             'seller_fullname' =>  $test,
             $product_id = $cartItem->product_id, 

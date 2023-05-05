@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Slider;
-use App\Models\Category;
+// use App\Models\Slider;
+// use App\Models\Category;
+// use App\Models\ProductComment;
 use App\Models\Product;
-use App\Models\ProductComment;
 use App\Models\Orderitem;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Carbon;
+use App\Mail\InvoiceOrderMailable;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -59,12 +63,12 @@ class OrderController extends Controller
         if($order)
         {
             $product_status = Orderitem::where('order_id', $orderId)->get('id');
-            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status]);
+            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => 'completed']);
 
 
 
             $order->update([
-                'status_message' => $request->order_status
+                'confirm' => 'Delivery Complete'
                 
             ]);
 
@@ -80,7 +84,7 @@ class OrderController extends Controller
     public function viewInvoice(int $orderId)
     {
         $order = Order::findOrfail($orderId);
-        return view('invoice.generate-invoice', compact('order'));
+        return view('frontend.invoice.generate-invoice', compact('order'));
 
 
     }
@@ -91,7 +95,7 @@ class OrderController extends Controller
         $order = Order::findOrfail($orderId);
         $data = ['order' => $order];
 
-        $pdf = Pdf::loadView('invoice.generate-invoice', $data);
+        $pdf = Pdf::loadView('frontend.invoice.generate-invoice', $data);
 
         $todayDate = Carbon::now()->format('d-m-Y');
         return $pdf->download('invoice-'.$order->id.'-'.$todayDate.'.pdf');
@@ -101,12 +105,14 @@ class OrderController extends Controller
     {
 
         $order = Order::findOrfail($orderId);
-        Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-        return redirect('orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+        // Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
+        Mail::to("$order->seller_email")->send(new InvoiceOrderMailable($order));
+
+        return redirect('orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->seller_email);
         try{
             $order = Order::findOrfail($orderId);
-            Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-            return redirect('orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+            Mail::to("$order->seller_email")->send(new InvoiceOrderMailable($order));
+            return redirect('orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->seller_email);
 
         }catch(\Exception $e){
 

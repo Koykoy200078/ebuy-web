@@ -238,10 +238,11 @@ class View extends Component
         }
     }
 
-    public function mount($category, $product)
+    public function mount($category, $product, $comment)
     {
         $this->category = $category;
         $this->product = $product;
+        $this->comment = $comment;
     }
 
     public function render()
@@ -249,6 +250,7 @@ class View extends Component
         return view('livewire.frontend.product.view', [
             'product' => $this->product,
             'category' => $this->category,
+            'comment' => $this->comment,
         ]);
     }
 }

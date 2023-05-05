@@ -188,16 +188,16 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    @if ($product->confirmComment == 'completed')
-                            
+                    @if ($comment == 'completed')
                         <h6>Leave a Comment</h6>
+                            
                         <form action="{{ url('/comments') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id" value="{{ $product->id }}">
                             <textarea name="comment_body" class="form-control" rows="3"></textarea>
                             <button type="submit" class="btn btn-primary mt-3">Submit</button>
                         </form>
-                        @endif
+                    @endif
 
                 </div>
                 @forelse ($product->comments as $comment)

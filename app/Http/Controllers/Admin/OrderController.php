@@ -109,12 +109,12 @@ class OrderController extends Controller
         if($order)
         {
             $product_status = Orderitem::where('order_id', $orderId)->get('id');
-            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status]);
+            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status  ?? $order->status_message]);
 
 
 
             $order->update([
-                'status_message' => $request->order_status
+                'status_message' => $request->order_status ?? $order->status_message
                 
             ]);
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'My Order Details')
+@section('title', 'My Delivery Details')
 
 @section('content')
 
@@ -15,7 +15,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3>My Orders Details
+                            <h3>My Delivery Details
                                 {{-- <i class="fa fa-shopping-cart text-dark"></i> My Order Details --}}
                                 <a href="{{ url('product-status') }}" class="btn btn-danger btn-sm float-end">
                                     <span class="fa fa-arrow-left"></span> Back

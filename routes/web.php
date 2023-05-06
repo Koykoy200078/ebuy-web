@@ -19,7 +19,7 @@ use App\Http\Controllers\authcontroller;
 // });
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // Route::get('/',[App\Http\Controllers\Frontend\FrontendController::class, 'index']);
 // Route::get('/collections', [App\Http\Controllers\Frontend\FrontendController::class, 'categories']);
@@ -52,7 +52,7 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
 
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index']);
     Route::get('cart', [App\Http\Controllers\Frontend\CartController::class, 'index']);
     Route::get('checkout', [App\Http\Controllers\Frontend\CheckoutController::class, 'index']);
@@ -111,7 +111,7 @@ Route::get('thank-you', [App\Http\Controllers\Frontend\FrontendController::class
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Admin Route
-Route::prefix('admin')->middleware(['auth', 'IsAdmin'])->group(function (){
+Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(function (){
 
     Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
 
@@ -149,6 +149,10 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin'])->group(function (){
 
         Route::post('product-color/{prod_color_id}', 'updateProdColorQty');
         Route::get('product-color/{prod_color_id}/delete', 'deleteProdColor');
+
+        Route::get('/admin/products', 'index')->name('admin.products.index');
+
+
     });
     //Brand Route
     Route::get('/brands', App\Http\Livewire\Admin\Brand\Index::class);

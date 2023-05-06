@@ -17,11 +17,20 @@ use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('admin.products.index', compact('products'));
+        $verifiedOnly = $request->input('verifiedOnly', false);
+    
+        if ($verifiedOnly) {
+            $products = Product::where('status', 1)->get();
+        } else {
+            $products = Product::all();
+        }
+    
+        return view('admin.products.index', compact('products', 'verifiedOnly'));
     }
+    
+    
 
     public function create()
     {

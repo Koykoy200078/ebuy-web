@@ -43,7 +43,9 @@
                         @forelse ($cart as $cartItem)
                             @if ($cartItem->product)
                                 @if($cartItem->product_user_id !== $prevProductUserId)
-                                <h3>Product User ID: {{ $cartItem->productUser->name }}</h2>
+                                <div style="background-color: #9cf3ab; padding: 10px;">
+                                    <h3 style="margin: 0;">Store of:{{ $cartItem->productStoreUser->storename ?? $cartItem->productUser->name }}</h3>
+                                </div>
                                 <?php $prevProductUserId = $cartItem->product_user_id; ?>
                             @endif
 

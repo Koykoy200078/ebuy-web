@@ -23,7 +23,7 @@
                     
                             <div class="col-md-3">
                                 <br>
-                                End Date:<input type="date" id="end-date" name="date2" value="{{ Request::get('date2') ?? date('Y-m-d', strtotime('+5 days')) }}" class="form-control" min="{{ date('Y-m-d', strtotime('+5 days')) }}"readonly>
+                                Current Date:<input type="date" id="end-date" name="date2" value="{{ Request::get('date2') ?? date('Y-m-d', strtotime('+5 days')) }}" class="form-control" min="{{ date('Y-m-d', strtotime('+5 days')) }}"readonly>
                             </div>
                             <div class="col-md-3">
                                 <br>

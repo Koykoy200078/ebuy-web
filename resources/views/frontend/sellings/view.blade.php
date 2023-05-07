@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'My Order Details')
+@section('title', 'My Delivery Details')
 
 @section('content')
 
@@ -15,20 +15,20 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3>My Orders Details
+                            <h3>My Delivery Details
                                 {{-- <i class="fa fa-shopping-cart text-dark"></i> My Order Details --}}
-                                <a href="{{ url('orders') }}" class="btn btn-danger btn-sm float-end">
+                                <a href="{{ url('product-status') }}" class="btn btn-danger btn-sm float-end">
                                     <span class="fa fa-arrow-left"></span> Back
                                 </a>
-                                <a href="{{ url('invoice/'.$order->id.'/generate') }}" class="btn btn-primary btn-sm float-end mx-1">
+                                <a href="{{ url('product-status/invoice/'.$order->id.'/generate') }}" class="btn btn-primary btn-sm float-end mx-1">
                                     <span class="fa fa-download"></span> Download Invoice
                                 </a>
-                                <a href="{{ url('invoice/'.$order->id) }}" target="_blank" class="btn btn-warning btn-sm float-end mx-1">
+                                <a href="{{ url('product-status/invoice/'.$order->id) }}" target="_blank" class="btn btn-warning btn-sm float-end mx-1">
                                     <span class="fa fa-eye"></span> View Invoice
                                 </a>
-                                {{-- <a href="{{ url('invoice/'.$order->id.'/mail') }}" class="btn btn-info btn-sm float-end mx-1">
+                                <a href="{{ url('product-status/invoice/'.$order->id.'/mail') }}" class="btn btn-info btn-sm float-end mx-1">
                                     <span class="fa fa-eye"></span> Send Invoice Via Mail
-                                </a> --}}
+                                </a>
                             </h3>
                         </div>
                         <div class="card-body">
@@ -151,22 +151,27 @@
 
                     <div class="card">
                         <div class="card-body">
+                            <h4>Order Process (Order Status Updates)</h4>
+                            <hr>
                             <div class="row">
                                 <div class="col-md-5">
-                                    
-                                    @if ($order->status_message == "completed")
-                                    <form action="{{ url('orders/'.$order->id) }}" method="POST">
+                                    <form action="{{ url('product-status/'.$order->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
 
+                                        <label>Update Your Order Status</label>
                                         <div class="input-group">
-                                            <h5>Click here once you got your pakage-></h5><button type="submit" class="btn btn-primary text-white">Item Delivered</button>
+                                            <select name="order_status" class="form-select">
+                                                <option value="">Select Order Status</option>
+                                                <option value="in progress" {{ Request::get('status') == 'in progress' ? 'selected':'' }}>In Progress</option>
+                                                <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Completed</option>
+                                                <option value="pending" {{ Request::get('status') == 'pending' ? 'selected':'' }}>Pending</option>
+                                                <option value="cancelled" {{ Request::get('status') == 'cancelled' ? 'selected':'' }}>Cancelled</option>
+                                                <option value="out-for-delivery" {{ Request::get('status') == 'out-for-delivery' ? 'selected':'' }}>Out for Delivery</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary text-white">Update</button>
                                         </div>
                                     </form>
-                                    @endif
-
-
-                                   
                                 </div>
                                 <div class="col-md-7">
                                     <br/>

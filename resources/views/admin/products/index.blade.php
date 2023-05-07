@@ -17,6 +17,17 @@
                 </h3>
             </div>
             <div class="card-body">
+                <form action="{{ route('admin.products.index') }}" method="GET">
+                    <div class="form-switch">
+                        <input class="form-check-input" type="checkbox" id="verifiedOnly" name="verifiedOnly" {{ $verifiedOnly ? 'checked' : '' }}>
+                        <label class="form-check-label" for="verifiedOnly">Show not verified products only</label>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                
+                
+                
                 <table class="table table-borderd table-striped">
                     <thead>
                         <tr>

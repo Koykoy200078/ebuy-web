@@ -43,7 +43,9 @@
                         @forelse ($cart as $cartItem)
                             @if ($cartItem->product)
                                 @if($cartItem->product_user_id !== $prevProductUserId)
-                                <h3>Product User ID: {{ $cartItem->productUser->name }}</h2>
+                                <div style="background-color: #9cf3ab; padding: 10px;">
+                                    <h3 style="margin: 0;">Store of:{{ $cartItem->productStoreUser->storename ?? $cartItem->productUser->name }}</h3>
+                                </div>
                                 <?php $prevProductUserId = $cartItem->product_user_id; ?>
                             @endif
 
@@ -154,34 +156,95 @@
 
 <script>
 
+// let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+// let selectedIds = [];
+
+// for (let i = 0; i < checkboxes.length; i++) {
+//     checkboxes[i].addEventListener('click', function() {
+//         let product_user_id = this.dataset.productUserId;
+//         if (this.checked) {
+//             // uncheck other checkboxes with different product_user_id
+//             for (let j = 0; j < checkboxes.length; j++) {
+//                 if (checkboxes[j] !== this && checkboxes[j].dataset.productUserId !== product_user_id) {
+//                     checkboxes[j].checked = false;
+//                     let index = selectedIds.indexOf(checkboxes[j].value);
+//                     if (index !== -1) {
+//                         selectedIds.splice(index, 1);
+//                     }
+//                 }
+//             }
+//             selectedIds.push(this.value);
+//         } else {
+//             let index = selectedIds.indexOf(this.value);
+//             if (index !== -1) {
+//                 selectedIds.splice(index, 1);
+//             }
+//         }
+//         console.log(selectedIds);
+//         Livewire.emit('checkBox', selectedIds);
+//     });
+// }
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let selectedIds = [];
 
+// Restore checkbox state from localStorage
 for (let i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].addEventListener('click', function() {
-        let product_user_id = this.dataset.productUserId;
-        if (this.checked) {
-            // uncheck other checkboxes with different product_user_id
-            for (let j = 0; j < checkboxes.length; j++) {
-                if (checkboxes[j] !== this && checkboxes[j].dataset.productUserId !== product_user_id) {
-                    checkboxes[j].checked = false;
-                    let index = selectedIds.indexOf(checkboxes[j].value);
-                    if (index !== -1) {
-                        selectedIds.splice(index, 1);
-                    }
-                }
-            }
-            selectedIds.push(this.value);
-        } else {
-            let index = selectedIds.indexOf(this.value);
-            if (index !== -1) {
-                selectedIds.splice(index, 1);
-            }
-        }
-        console.log(selectedIds);
-        Livewire.emit('checkBox', selectedIds);
-    });
+  let checkbox = checkboxes[i];
+  let productId = checkbox.value;
+  let checked = localStorage.getItem(productId) === 'true';
+  checkbox.checked = checked;
+  if (checked) {
+    selectedIds.push(productId);
+  }
 }
+
+// Listen for checkbox change event and update localStorage and Livewire
+for (let i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function() {
+    let product_user_id = this.dataset.productUserId;
+    if (this.checked) {
+      // uncheck other checkboxes with different product_user_id
+      for (let j = 0; j < checkboxes.length; j++) {
+        if (checkboxes[j] !== this && checkboxes[j].dataset.productUserId !== product_user_id) {
+          checkboxes[j].checked = false;
+          let index = selectedIds.indexOf(checkboxes[j].value);
+          if (index !== -1) {
+            selectedIds.splice(index, 1);
+            localStorage.removeItem(checkboxes[j].value);
+          }
+        }
+      }
+      selectedIds.push(this.value);
+      localStorage.setItem(this.value, 'true');
+    } else {
+      let index = selectedIds.indexOf(this.value);
+      if (index !== -1) {
+        selectedIds.splice(index, 1);
+        localStorage.removeItem(this.value);
+      }
+    }
+    console.log(selectedIds);
+    Livewire.emit('checkBox', selectedIds);
+  });
+}
+
+// Listen for page unload event and store checkbox state in localStorage
+window.addEventListener('unload', function() {
+  for (let i = 0; i < checkboxes.length; i++) {
+    let checkbox = checkboxes[i];
+    let productId = checkbox.value;
+    localStorage.setItem(productId, checkbox.checked ? 'true' : 'false');
+  }
+});
+
+// Listen for page show event and uncheck all checkboxes
+window.addEventListener('pageshow', function(event) {
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = false;
+  }
+  selectedIds = [];
+  localStorage.clear();
+});
 
 
 </script>

@@ -37,10 +37,10 @@
                     <hr> --}}
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <h5>Order Delais</h5>
+                        <div class="col-md-4">
+                            <h5>Order Details</h5>
                             <hr>
-                            <h6>Order Id: {{ $order->id }}</h6>
+                            {{-- <h6>Order Id: {{ $order->id }}</h6> --}}
                             <h6>Tracking Id/No.: {{ $order->tracking_no }}</h6>
                             <h6>Order Date: {{ $order->created_at->format('d-m-Y h:i A') }}</h6>
                             <h6>Payment Mode: {{ $order->payment_mode }}</h6>
@@ -48,15 +48,27 @@
                                 Order Status Message:
                                 <span class="text-uppercase">{{ $order->status_message }}</span>
                             </h6>
+                            <h6 class="border p-2 text-success">
+                                Delivery status:
+                                <span class="text-uppercase">{{ $order->confirm }}</span>
+                            </h6>
                         </div>
-                        <div class="col-md-6">
-                            <h5>User Delais</h5>
+                        <div class="col-md-4">
+                            <h5>User Details</h5>
                             <hr>
                             <h6>Full Name: {{ $order->fullname }}</h6>
                             <h6>Email Id: {{ $order->email }}</h6>
                             <h6>Phone: {{ $order->phone }}</h6>
                             <h6>Address: {{ $order->address }}</h6>
                             <h6>Pin code: {{ $order->pincode }}</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Seller Details</h5>
+                            <hr>
+                            <h6>Full Name: {{ $order->seller_fullname }}</h6>
+                            <h6>Email Id: {{ $order->seller_email }}</h6>
+                            <h6>Phone: {{ $order->seller_phone ?? 'N/A'}}</h6>
+                         
                         </div>
                     </div>
 
@@ -78,10 +90,12 @@
                             <tbody>
                                 @php
                                     $totalPrice = 0;
+                                    $counter = 1;
                                 @endphp
+                                
                                 @foreach ($order->orderItems as $orderItem)
                                 <tr>
-                                    <td width="10%">{{ $orderItem->id }}</td>
+                                    <td width="10%">{{ $counter }}</td>
                                     <td width="10%">
                                         @if ($orderItem->product->productImages)
                                             <img src="{{ asset($orderItem->product->productImages[0]->image) }}"
@@ -114,6 +128,9 @@
                                         $totalPrice += $orderItem->quantity * $orderItem->price;
                                     @endphp
                                 </tr>
+                                @php
+                                    $counter++;
+                                @endphp
                                 @endforeach
                                 <tr>
                                     <td colspan="5" class="fw-bold">Total Amount:</td>

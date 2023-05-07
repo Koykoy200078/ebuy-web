@@ -8,6 +8,8 @@ use App\Models\Slider;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductComment;
+use App\Models\Orderitem;
+
 
 class FrontendController extends Controller
 {
@@ -68,12 +70,23 @@ class FrontendController extends Controller
     {
         $category = Category::where('slug',$category_slug)->first();
 
+       
         if($category){
 
             $product = $category->products()->where('slug', $product_slug)->where('status', '0')->first();
             if($product)
             {
-                return view('frontend.collections.products.view', compact('product', 'category'));
+                $userId = auth()->user()->id;
+                $productId = $product->id;
+        
+                // return view ($productId );
+                $comment = Orderitem::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->where('status_message', 'completed')
+                ->value('status_message');
+                // return view ($comment );
+
+                return view('frontend.collections.products.view', compact('product', 'category', 'comment'));
 
             }else{
                 return redirect()->back();

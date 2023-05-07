@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Frontend\Checkout;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\User;
+use App\Models\UserDetail;
 use App\Models\Product;
 use App\Models\Orderitem;
 use Livewire\Component;
@@ -93,9 +95,12 @@ class CheckoutShow extends Component
         //     $test =  Product::where('id', $product_id)->pluck('product_user_id');
         // }
         // return view($test);
-
-
+        
         $this->validate();
+        foreach ($this->carts as $cartItem) {
+            $cartItem = $cartItem;
+        }
+       
 
         $order = Order::create([
             'user_id' => auth()->user()->id,
@@ -108,11 +113,32 @@ class CheckoutShow extends Component
             'status_message' => 'in progress',
             'payment_mode' => $this->payment_mode,
             'payment_id' => $this->payment_id,
+
+            'confirm' => 'pending',
+           
+            $product_id = $cartItem->product_id, 
+            $test =  Product::where('id', $product_id)->value('product_user_id'),
+            'product_user_id' =>  $test,
+
+            $product_id = $cartItem->product_id, 
+            $test =  Product::where('id', $product_id)->value('product_user_id'),
+            $test =  User::where('id', $test)->value('name'),
+            'seller_fullname' =>  $test,
+            $product_id = $cartItem->product_id, 
+            $test =  Product::where('id', $product_id)->value('product_user_id'),
+            $test =  User::where('id', $test)->value('email'),
+            'seller_email' =>  $test,
+            $product_id = $cartItem->product_id,
+            $test =  Product::where('id', $product_id)->value('product_user_id'),
+            $test =  UserDetail::where('user_id', $test)->value('phone'),
+            'seller_phone' =>  $test,
+
         ]);
 
         foreach ($this->carts as $cartItem) {
             $orderItems = Orderitem::create([
                 'order_id' => $order->id,
+                'user_id' => auth()->user()->id,
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,
                 $product_id = $cartItem->product_id,
@@ -120,8 +146,8 @@ class CheckoutShow extends Component
                 'product_user_id' =>  $test,
                 'quantity' => $cartItem->quantity,
                 'price' => $cartItem->product->selling_price,
-                'status_message' => 'pending'
-
+                'status_message' => 'pending',
+              
             ]);
 
             if ($cartItem->product_color_id != NULL) {
@@ -150,6 +176,7 @@ class CheckoutShow extends Component
             try {
                 $order = Order::findOrFail($codOrder->id);
                 Mail::to("$order->email")->send(new PlaceOrderMailable($order));
+                Mail::to("$order->seller_email")->send(new PlaceOrderMailable($order));
                 // Mail sent successfully
             } catch (\Exception $e) {
                 // Something went wrong

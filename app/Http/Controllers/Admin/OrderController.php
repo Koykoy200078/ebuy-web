@@ -42,18 +42,30 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $todayData = Carbon::now()->format('Y-m-d');
-        $orders = Order::when($request->date != null, function ($q) use ($request) {
-                $endDate = $request->date2 ?? $request->date;
-                return $q->whereBetween('created_at', [$request->date, $endDate]);
-            }, function ($q) use ($todayData) {
-                return $q->whereDate('created_at', $todayData);
-            })
-            ->when($request->status != null, function ($q) use ($request) {
-                return $q->where('status_message', $request->status);
-            })
-            ->paginate(10);
-    
+        $startDate = $request->date ?? $todayData;
+        $endDate = $request->date2 ?? $startDate;
+        
+        
+        if ($request->search) {
+            $orders = Order::where('tracking_no', $request->search)->paginate(10);
+        } else {
+            $orders = Order::when($request->date || $request->date2, function ($q) use ($startDate, $endDate) {
+                    return $q->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->orWhere(function ($q) use ($todayData) {
+                    return $q->whereDate('created_at', $todayData);
+                })
+                ->when($request->status != null, function ($q) use ($request) {
+                    return $q->where('status_message', $request->status);
+                })
+                ->paginate(10);
+        }
+        
         return view('admin.orders.index', compact('orders'));
+        
+        
+        
+
     }
     
     public function show(int $orderId)
@@ -97,12 +109,12 @@ class OrderController extends Controller
         if($order)
         {
             $product_status = Orderitem::where('order_id', $orderId)->get('id');
-            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status]);
+            $test = Orderitem::whereIn('id', $product_status)->update(['status_message' => $request->order_status  ?? $order->status_message]);
 
 
 
             $order->update([
-                'status_message' => $request->order_status
+                'status_message' => $request->order_status ?? $order->status_message
                 
             ]);
 
@@ -140,11 +152,12 @@ class OrderController extends Controller
 
         $order = Order::findOrfail($orderId);
         Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-        return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+        Mail::to("$order->seller_email")->send(new InvoiceOrderMailable($order));
+        return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email.' and '.$order->seller_email);
         try{
             $order = Order::findOrfail($orderId);
             Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-            return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email);
+            return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email.' and '.$order->seller_email);
 
         }catch(\Exception $e){
 

@@ -72,7 +72,7 @@
                                                 </span>
                                                 <span wire:loading wire:target="codOrder">
 
-                                                    Placeing Order
+                                                    Placing Order
                                                 </span>
                                             </button>
 
@@ -97,7 +97,7 @@
             </div>
             @else
                 <div class="card card-body shadow text-center p-md-5">
-                    <h4>No item in cart to checkout</h4>
+                    <h4>No item in cart selected to checkout</h4>
                     <a href="{{ url('collection') }}" class="btn btn-warning">Shop now</a>
                 </div>
             @endif

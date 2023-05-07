@@ -25,6 +25,12 @@ return new class extends Migration
             $table->string('status_message');
             $table->string('payment_mode');
             $table->string('payment_id')->nullable();
+            $table->string('confirm');
+
+            $table->integer('product_user_id');
+            $table->string('seller_fullname');
+            $table->string('seller_email');
+            $table->string('seller_phone')->nullable();
             $table->timestamps();
         });
     }

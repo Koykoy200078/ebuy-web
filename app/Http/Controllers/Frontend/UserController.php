@@ -20,6 +20,7 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string'],
+            'storename' => ['required', 'string'],
             'phone' => ['required', 'min:10', 'max:11'],
             'pin_code' => ['required', 'max:4'],
             'address' => ['required', 'string', 'max:500'],
@@ -35,6 +36,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ],
             [
+                'storename' => $request->storename,
                 'phone' => $request->phone,
                 'pin_code' => $request->pin_code,
                 'address' => $request->address,

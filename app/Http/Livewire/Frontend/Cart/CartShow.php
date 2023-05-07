@@ -161,13 +161,13 @@ class CartShow extends Component
         $this->cart = Cart::where('user_id', auth()->user()->id)
         ->orderBy('product_user_id', 'asc')
         ->get();
-        $totalPrice = 3;
+        $totalPrice = 0;
         foreach ($this->cart as $cartItem) {
         if (in_array($cartItem->id, $this->selectedIds)) {
             $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
             }
         }
-        $totalPrice = 3;
+        $totalPrice = 0;
         return view('livewire.frontend.cart.cart-show', [
             'cart' => $this->cart,
             'totalPrice' => $totalPrice

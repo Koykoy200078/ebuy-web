@@ -1,7 +1,6 @@
 <div>
     <div class="py-3 py-md-5 bg-light">
         <div class="container">
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="shopping-cart">
@@ -67,12 +66,11 @@
                         <h4>No Wishlist Added</h4>
                         @endforelse
                     </div>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<br>
-
 </div>

@@ -50,6 +50,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
+                                        <label>Store Name</label>
+                                        <input type="text" name="storename" value="{{ Auth::user()->userDetail->storename ?? '' }}" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
                                         <label>Phone Number</label>
                                         <input type="text" name="phone" value="{{ Auth::user()->userDetail->phone ?? '' }}" class="form-control"/>
                                     </div>

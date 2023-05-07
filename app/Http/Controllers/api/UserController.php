@@ -30,7 +30,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string'],
             'phone' => ['required', 'min:10', 'max:11'],
-            'pin_code' => ['required', 'min:4', 'max:6'],
+            'pin_code' => ['required', 'max:4'],
             'address' => ['required', 'string', 'max:500'],
         ]);
 

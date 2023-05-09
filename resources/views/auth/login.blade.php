@@ -79,7 +79,7 @@
                         </button>
                         </a>
                     </div>
-
+{{-- 
                     <div class="text-center" style="margin-top: 10px;">
                         <a href="{{ route('googlelogin') }}">
 
@@ -88,7 +88,7 @@
                             Login with GitHub
                         </button>
                         </a>
-                    </div>
+                    </div> --}}
                     <br>
 
                     

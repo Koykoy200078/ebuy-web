@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>Users
-                    <a href="{{ url('admin/users/create') }}" class="btn btn-primary btn-sm text-white float-end">
+                    <a href="{{ url('admin/users/create2') }}" class="btn btn-primary btn-sm text-white float-end">
                         Add User
                     </a>
                 </h3>

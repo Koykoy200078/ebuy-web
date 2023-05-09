@@ -131,7 +131,7 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
     //Category Route
     Route::controller(App\Http\Controllers\Admin\CategoryController::class)->group(function () {
         Route::get('/category', 'index');
-        Route::get('/category/create', 'create');
+        Route::get('/category/create4', 'create');
         Route::post('/category', 'store');
         Route::get('/category/{category}/edit', 'edit');
         Route::put('/category/{category}', 'update');
@@ -140,7 +140,7 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
     //Product Route
     Route::controller(App\Http\Controllers\Admin\ProductController::class)->group(function () {
         Route::get('/products', 'index');
-        Route::get('/products/create ', 'create');
+        Route::get('/products/create3 ', 'create');
         Route::post('/products', 'store');
         Route::get('/products/{product}/edit', 'edit');
         Route::put('/products/{product}', 'update');
@@ -182,7 +182,7 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
 
     Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function () {
         Route::get('/users', 'index');
-        Route::get('/users/create', 'create');
+        Route::get('/users/create2', 'create');
         Route::post('/users', 'store');
         Route::get('/users/{user_id}/edit', 'edit');
         Route::put('/users/{user_id}', 'update');

@@ -23,18 +23,70 @@ class AddToCartController extends Controller
         return response()->json(['cart_count' => $cartCount], 200);
     }
 
+    // public function cartShow(Request $request)
+    // {
+    //     $cart = Cart::where('user_id', $request->user()->id)->get();
+    //     $totalPrice = 0;
+    //     $cartData = [];
+
+    //     foreach ($cart as $cartItem) {
+    //         $product = $cartItem->product;
+    //         $image_url = url($product->productImages[0]->image);
+    //         $item_name = $product->name;
+    //         $product_price = $product->selling_price * $cartItem->quantity;
+    //         $totalPrice += $product->selling_price * $cartItem->quantity;
+
+    //         // Get product color information
+    //         $productColors = $product->productColors->map(function ($item) use ($cartItem) {
+    //             if ($item->id === $cartItem->product_color_id) {
+    //                 return [
+    //                     'product_color_id' => $item->id,
+    //                     'color_name' => $item->color->name,
+    //                     'quantity' => $item->quantity,
+    //                 ];
+    //             }
+    //         })->filter();
+
+    //         $productColors = collect($productColors)->values()->first();
+
+
+    //         // Add product color information to cart data
+    //         $cartData[] = [
+    //             'cart_id' => $cartItem->id,
+    //             'user_id' => $cartItem->user_id,
+    //             'product_id' => $cartItem->product_id,
+    //             'product_color_id' => $cartItem->product_color_id,
+    //             'quantity' => $cartItem->quantity,
+    //             'created_at' => $cartItem->created_at,
+    //             'updated_at' => $cartItem->updated_at,
+    //             'item_name' => $item_name,
+    //             'image_url' => $image_url,
+    //             'product_price' => $product_price,
+    //             'product_colors' => $productColors,
+    //         ];
+    //     }
+
+    //     return response()->json([
+    //         'cart' => $cartData,
+    //         'totalPrice' => $totalPrice
+    //     ]);
+    // }
+
     public function cartShow(Request $request)
     {
-        $cart = Cart::where('user_id', $request->user()->id)->get();
+        $cart = Cart::where('user_id', auth()->user()->id)
+            ->orderBy('product_user_id', 'asc')
+            ->get();
+        $selectedIds = $request->get('selectedIds', []);
         $totalPrice = 0;
-        $cartData = [];
-
         foreach ($cart as $cartItem) {
             $product = $cartItem->product;
-            $image_url = url($product->productImages[0]->image);
             $item_name = $product->name;
-            $product_price = $product->selling_price * $cartItem->quantity;
-            $totalPrice += $product->selling_price * $cartItem->quantity;
+            $image_url = url($product->productImages[0]->image);
+            $product_price = $product->selling_price;
+            if (in_array($cartItem->id, $selectedIds)) {
+                $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+            }
 
             // Get product color information
             $productColors = $product->productColors->map(function ($item) use ($cartItem) {
@@ -49,16 +101,12 @@ class AddToCartController extends Controller
 
             $productColors = collect($productColors)->values()->first();
 
-
-            // Add product color information to cart data
             $cartData[] = [
                 'cart_id' => $cartItem->id,
                 'user_id' => $cartItem->user_id,
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,
                 'quantity' => $cartItem->quantity,
-                'created_at' => $cartItem->created_at,
-                'updated_at' => $cartItem->updated_at,
                 'item_name' => $item_name,
                 'image_url' => $image_url,
                 'product_price' => $product_price,
@@ -68,7 +116,6 @@ class AddToCartController extends Controller
 
         return response()->json([
             'cart' => $cartData,
-            'totalPrice' => $totalPrice
         ]);
     }
 

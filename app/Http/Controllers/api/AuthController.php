@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyEmail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -43,26 +48,58 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'Validation errors',
                 'errors' => $validator->errors()
-            ], 422);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$token = auth()->guard('api')->attempt($validator->validated())) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Login failed',
                 'errors' => ['email' => 'These credentials do not match our records.']
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
+
+        if (!$user->email_verified_at) {
+            $verificationUrl = URL::temporarySignedRoute(
+                'verification.verify',
+                now()->addMinutes(60),
+                ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+            );
+
+            Mail::to($user->email)->send(new VerifyEmail($user, $verificationUrl));
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Email not verified',
+                'errors' => [
+                    'email' => 'Please verify your email first, we have sent you a verification email',
+                    'verification_url' => $verificationUrl
+                ]
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login failed',
+                'errors' => ['email' => 'These credentials do not match our records.']
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $token = JWTAuth::fromUser($user);
 
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->guard('api')->factory()->getTTL() * 86400,
-            'user' => auth()->guard('api')->user()
+            'expires_in' => JWTAuth::factory()->getTTL() * 1440,
         ])->header('Content-Type', 'application/json');
     }
+
+
 
 
     /**

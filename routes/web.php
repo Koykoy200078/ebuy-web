@@ -37,18 +37,17 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::post('/comments', [App\Http\Controllers\Frontend\CommentProductController::class, 'store']);
     Route::post('/delete-comment', [App\Http\Controllers\Frontend\CommentProductController::class, 'destroy']);
 
-    Route::get('/new-arrivals', 'newArrival' );
-    Route::get('/featured-products', 'featuredProducts' );
+    Route::get('/new-arrivals', 'newArrival');
+    Route::get('/featured-products', 'featuredProducts');
 
-    Route::get('/search' ,'searchProducts');
-
+    Route::get('/search', 'searchProducts');
 });
 
-    Route::get("/auth/github/redirect", [App\Http\Controllers\authcontroller::class, 'githubredirect'])->name('githublogin');
-    Route::get("/auth/github/callback", [App\Http\Controllers\authcontroller::class, 'githubcallback']);
+Route::get("/auth/github/redirect", [App\Http\Controllers\authcontroller::class, 'githubredirect'])->name('githublogin');
+Route::get("/auth/github/callback", [App\Http\Controllers\authcontroller::class, 'githubcallback']);
 
-    Route::get("/auth/google/redirect", [App\Http\Controllers\authcontroller::class, 'googleredirect'])->name('googlelogin');
-    Route::get("/auth/google/callback", [App\Http\Controllers\authcontroller::class, 'googlecallback']);
+Route::get("/auth/google/redirect", [App\Http\Controllers\authcontroller::class, 'googleredirect'])->name('googlelogin');
+Route::get("/auth/google/callback", [App\Http\Controllers\authcontroller::class, 'googlecallback']);
 
 
 
@@ -66,7 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('product-status/invoice/{orderId}/generate', 'generateInvoice');
 
         Route::get('product-status/invoice/{orderId}/mail', 'mailInvoice');
-
     });
     Route::get('profile', [App\Http\Controllers\Frontend\UserController::class, 'index']);
     Route::post('profile', [App\Http\Controllers\Frontend\UserController::class, 'UpdateUserDetails']);
@@ -86,7 +84,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('invoice/{orderId}/generate', 'generateInvoice');
 
         Route::get('invoice/{orderId}/mail', 'mailInvoice');
-
     });
 
 
@@ -98,12 +95,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/products/{product}/edit', 'edit');
         Route::put('/products/{product}', 'update');
         Route::get('products/{product_id}/delete', 'destroy');
-        Route::get('product-image/{product_image_id}/delete','destroyImage');
+        Route::get('product-image/{product_image_id}/delete', 'destroyImage');
 
         Route::post('product-color/{prod_color_id}', 'updateProdColorQty');
         Route::get('product-color/{prod_color_id}/delete', 'deleteProdColor');
     });
-
 });
 
 Route::get('thank-you', [App\Http\Controllers\Frontend\FrontendController::class, 'thankyou']);
@@ -111,7 +107,7 @@ Route::get('thank-you', [App\Http\Controllers\Frontend\FrontendController::class
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Admin Route
-Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(function (){
+Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(function () {
 
     Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
 
@@ -125,7 +121,6 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::get('/sliders/{slider}/edit', 'edit');
         Route::put('/sliders/{slider}', 'update');
         Route::get('/sliders/{slider}/delete', 'destroy');
-
     });
 
     //Category Route
@@ -145,14 +140,12 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::get('/products/{product}/edit', 'edit');
         Route::put('/products/{product}', 'update');
         Route::get('products/{product_id}/delete', 'destroy');
-        Route::get('product-image/{product_image_id}/delete','destroyImage');
+        Route::get('product-image/{product_image_id}/delete', 'destroyImage');
 
         Route::post('product-color/{prod_color_id}', 'updateProdColorQty');
         Route::get('product-color/{prod_color_id}/delete', 'deleteProdColor');
 
         Route::get('/admin/products', 'index')->name('admin.products.index');
-
-
     });
     //Brand Route
     Route::get('/brands', App\Http\Livewire\Admin\Brand\Index::class);
@@ -164,7 +157,6 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::get('/colors/{color}/edit', 'edit');
         Route::put('/colors/{color_id}', 'update');
         Route::get('/colors/{color_id}/delete', 'destroy');
-
     });
 
     //Order Route
@@ -177,7 +169,6 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::get('/invoice/{orderId}/generate', 'generateInvoice');
 
         Route::get('/invoice/{orderId}/mail', 'mailInvoice');
-
     });
 
     Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function () {
@@ -188,9 +179,5 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::put('/users/{user_id}', 'update');
 
         Route::get('/users/{user_id}/delete', 'destroy');
-
-
-
     });
-
 });

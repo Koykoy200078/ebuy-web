@@ -29,7 +29,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Category
-                        <a href="{{ url('admin/category/create') }}" class="btn btn-primary btn-sm float-end">Add Category</a>
+                        <a href="{{ url('admin/category/create4') }}" class="btn btn-primary btn-sm float-end">Add Category</a>
                     </h3>
                 </div>
                 <div class="card-body">

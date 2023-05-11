@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Orderitem;
 use App\Models\Product;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -100,10 +101,14 @@ class AddToCartController extends Controller
             })->filter();
 
             $productColors = collect($productColors)->values()->first();
+            // Retrieve the user's details and add the store name to the cart data
+            $userDetails = UserDetail::where('user_id', $cartItem->user_id)->first();
+            $storeName = $userDetails ? $userDetails->storename : null;
 
             $cartData[] = [
                 'cart_id' => $cartItem->id,
                 'user_id' => $cartItem->user_id,
+                'store_name' => $storeName,
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,
                 'quantity' => $cartItem->quantity,
@@ -116,6 +121,7 @@ class AddToCartController extends Controller
 
         return response()->json([
             'cart' => $cartData,
+            'totalPrice' => $totalPrice
         ]);
     }
 

@@ -3,57 +3,57 @@
 @section('title', 'Home Page')
 
 @section('content')
+    <div class="container">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
 
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner" style="padding-top: 24px;"">
 
-    <div class="carousel-inner" style="padding-top: 24px;"">
-
-        @if (session('message'))
-            <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
-        @endif
-        @foreach ($sliders as $key => $sliderItem)
-            <div class="carousel-item {{ $key == '0' ? 'active':''}} ">
-                @if ($sliderItem->image)
-                <img src="{{ asset("$sliderItem->image") }} " class="d-block w-100" alt="..."  
-                style="border-radius: 10px;  "   
-                height="600">
+                @if (session('message'))
+                    <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
                 @endif
+                @foreach ($sliders as $key => $sliderItem)
+                    <div class="carousel-item {{ $key == '0' ? 'active':''}} ">
+                        @if ($sliderItem->image)
+                        <img src="{{ asset("$sliderItem->image") }} " class="d-block w-100" alt="..."  
+                        style="border-radius: 10px;  "   
+                        height="600">
+                        @endif
 
-                    <div class="carousel-caption d-none d-md-block">
-                        <div class="custom-carousel-content">
-                            {{-- <h1>
-                                {!! $sliderItem->title !!}
-                            </h1>
-                            <p>{!! $sliderItem->description !!}</p>
-                            <div>
-                                <a href="#" class="btn btn-slider">
-                                    Get Now
-                                </a>
-                            </div> --}}
-                        </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <div class="custom-carousel-content">
+                                    {{-- <h1>
+                                        {!! $sliderItem->title !!}
+                                    </h1>
+                                    <p>{!! $sliderItem->description !!}</p>
+                                    <div>
+                                        <a href="#" class="btn btn-slider">
+                                            Get Now
+                                        </a>
+                                    </div> --}}
+                                </div>
+                            </div>
                     </div>
+                @endforeach
             </div>
-        @endforeach
+
+            {{-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+            </button> --}}
+            <button class="carousel-button carousel-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+            <button class="carousel-button carousel-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <i class="fa fa-arrow-right"></i>
+            </button>
+            
+            
+        </div>
     </div>
-
-    {{-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button> --}}
-    <button class="carousel-button carousel-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <i class="fa fa-arrow-left"></i>
-      </button>
-      <button class="carousel-button carousel-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <i class="fa fa-arrow-right"></i>
-      </button>
-      
-    
-</div>
-
 
   <div class="py-5 bg-white">
     <div class="container">

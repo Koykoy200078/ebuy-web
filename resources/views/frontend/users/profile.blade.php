@@ -57,7 +57,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label>Phone Number</label>
-                                        <input type="text" name="phone" value="{{ Auth::user()->userDetail->phone ?? '' }}" class="form-control"/>
+                                        <input type="text" name="phone" value="{{ Auth::user()->userDetail->phone ?? Auth::user()->phone }}" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -69,7 +69,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label>Adress</label>
-                                        <textarea name="address"  class="form-control" rows="3">{{ Auth::user()->userDetail->address ?? '' }}</textarea>
+                                        <textarea name="address"  class="form-control" rows="3">{{ Auth::user()->userDetail->address ?? Auth::user()->address }}</textarea>
                                     </div>
                                 </div>
                             </div>

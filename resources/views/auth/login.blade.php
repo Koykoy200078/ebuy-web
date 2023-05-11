@@ -16,10 +16,24 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
+
                         <div class="row mb-3">
+                             
+                                @if(session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                @if(session('success'))
+                                    <div class="alert alert-danger">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
+                              
+
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')

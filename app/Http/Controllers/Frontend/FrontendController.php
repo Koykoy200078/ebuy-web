@@ -9,7 +9,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductComment;
 use App\Models\Orderitem;
-
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -37,12 +38,30 @@ class FrontendController extends Controller
 
     public function newArrival()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = 'User ' . $user->name . ' clicked on New Arrival';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $newArrivalProducts = Product::latest()->where("status", "0")->take(16)->get();
         return view ('frontend.pages.new-arrival', compact('newArrivalProducts'));
 
     }
     public function featuredProducts()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = 'User ' . $user->name . ' clicked on Featured Product';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $featuredProducts = Product::where('featured', '1')->latest()->get();
         return view ('frontend.pages.featured-products', compact('featuredProducts'));
 
@@ -50,13 +69,32 @@ class FrontendController extends Controller
 
     public function categories()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = 'User ' . $user->name . ' clicked on Category';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $categories = Category::where('status','0')->get();
         return view('frontend.collections.category.index', compact('categories'));
     }
 
     public function products($category_slug)
     {
+        
         $category = Category::where('slug',$category_slug)->first();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = 'User ' . $user->name . ' clicked on New Arrival';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         if($category){
 
             return view('frontend.collections.products.index' , compact('category'));
@@ -76,6 +114,8 @@ class FrontendController extends Controller
             $product = $category->products()->where('slug', $product_slug)->where('status', '0')->first();
             if($product)
             {
+                if(auth()->user())
+                {
                 $userId = auth()->user()->id;
                 $productId = $product->id;
         
@@ -85,7 +125,16 @@ class FrontendController extends Controller
                 ->where('status_message', 'completed')
                 ->value('status_message');
                 // return view ($comment );
-
+                }
+                else{
+                    $productId = $product->id;
+        
+                    // return view ($productId );
+                    $comment = Orderitem::where('user_id', 0)
+                    ->where('product_id', $productId)
+                    ->where('status_message', 'completed')
+                    ->value('status_message');
+                }
                 return view('frontend.collections.products.view', compact('product', 'category', 'comment'));
 
             }else{

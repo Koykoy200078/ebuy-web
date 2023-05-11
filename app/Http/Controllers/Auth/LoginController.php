@@ -35,7 +35,15 @@ class LoginController extends Controller
             return redirect('/admin/dashboard')->with('message', 'Welcome to Dashboard');
         }
         else{
+            if(Auth::user()->email_verified_at)
+            {
             return redirect('/home')->with('status', 'Logged In Successfuly');
+            }
+            else
+            {
+                Auth::logout();
+                return redirect()->route('login')->with('error', 'Your account is not verified. Please verify your email.');
+            }
         }
     }
 

@@ -76,6 +76,12 @@
           <span class="menu-title">Setting</span>
         </a>
       </li>
+      <li class="nav-item {{ Request::is('admin/activity-logs') ? 'active':''}}">
+        <a class="nav-link" href="{{ url('admin/activity-logs')}}">
+          <i class="mdi mdi-settings menu-icon"></i>
+          <span class="menu-title">Activity Logs</span>
+        </a>
+      </li>
       {{-- <li class="nav-item">
         <a class="nav-link" href="documentation/documentation.html">
           <i class="mdi mdi-file-document-box-outline menu-icon"></i>

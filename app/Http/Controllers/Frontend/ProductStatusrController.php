@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\InvoiceOrderMailable;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\SellerInvoiceOrderMailable;
+
 
 
 class ProductStatusrController extends Controller
@@ -86,7 +88,7 @@ class ProductStatusrController extends Controller
     public function viewInvoice(int $orderId)
     {
         $order = Order::findOrfail($orderId);
-        return view('frontend.invoice.generate-invoice', compact('order'));
+        return view('frontend.sellerInvoice.generate-invoice', compact('order'));
 
 
     }
@@ -97,10 +99,10 @@ class ProductStatusrController extends Controller
         $order = Order::findOrfail($orderId);
         $data = ['order' => $order];
 
-        $pdf = Pdf::loadView('frontend.invoice.generate-invoice', $data);
+        $pdf = Pdf::loadView('frontend.sellerInvoice.generate-invoice', $data);
 
         $todayDate = Carbon::now()->format('d-m-Y');
-        return $pdf->download('frontend.invoice-'.$order->id.'-'.$todayDate.'.pdf');
+        return $pdf->download('frontend.sellerInvoice-'.$order->id.'-'.$todayDate.'.pdf');
     }
 
     public function mailInvoice(int $orderId)

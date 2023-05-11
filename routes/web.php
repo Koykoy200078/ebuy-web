@@ -152,7 +152,7 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
 
     Route::controller(App\Http\Controllers\Admin\ColorController::class)->group(function () {
         Route::get('/colors', 'index');
-        Route::get('/colors/create', 'create');
+        Route::get('/colors/create1', 'create');
         Route::post('/colors/create', 'store');
         Route::get('/colors/{color}/edit', 'edit');
         Route::put('/colors/{color_id}', 'update');
@@ -179,5 +179,13 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
         Route::put('/users/{user_id}', 'update');
 
         Route::get('/users/{user_id}/delete', 'destroy');
+    });
+
+    Route::controller(App\Http\Controllers\Admin\ActivityLogController::class)->group(function () {
+        Route::get('/activity-logs', 'index');
+    
+
+
+
     });
 });

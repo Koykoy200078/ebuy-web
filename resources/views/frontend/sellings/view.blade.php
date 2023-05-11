@@ -135,9 +135,30 @@
                                         @endphp
                                         @endforeach
                                         <tr>
+                                            <td colspan="5" class="fw-bold">Subtotal Earnings:</td>
+                                            <td colspan="1" class="fw-bold">₱ {{ $totalPrice }}</td>
+                                            
+                                        </tr>
+                                        @php
+
+                                        $percent5 = $totalPrice* 0.05;
+                                        $totalPrice = $totalPrice-$percent5;
+
+                                        @endphp
+
+                                        
+                                        <tr>
+                                            <td colspan="5" class="fw-bold">5% Commission:</td>
+                                            <td colspan="1" class="fw-bold">₱ {{ $percent5 }}</td>
+                                            
+                                        </tr>
+                                        <tr>
                                             <td colspan="5" class="fw-bold">Total Amount:</td>
                                             <td colspan="1" class="fw-bold">₱ {{ $totalPrice }}</td>
+
+                                            
                                         </tr>
+                                        
                                     </tbody>
                                 </table>
 
@@ -155,6 +176,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-5">
+                                    @if($order->status_message != 'completed')
                                     <form action="{{ url('product-status/'.$order->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
@@ -163,15 +185,13 @@
                                         <div class="input-group">
                                             <select name="order_status" class="form-select">
                                                 <option value="">Select Order Status</option>
-                                                <option value="in progress" {{ Request::get('status') == 'in progress' ? 'selected':'' }}>In Progress</option>
-                                                <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Completed</option>
-                                                <option value="pending" {{ Request::get('status') == 'pending' ? 'selected':'' }}>Pending</option>
+                                                <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Approved</option>
                                                 <option value="cancelled" {{ Request::get('status') == 'cancelled' ? 'selected':'' }}>Cancelled</option>
-                                                <option value="out-for-delivery" {{ Request::get('status') == 'out-for-delivery' ? 'selected':'' }}>Out for Delivery</option>
                                             </select>
                                             <button type="submit" class="btn btn-primary text-white">Update</button>
                                         </div>
                                     </form>
+                                    @endif
                                 </div>
                                 <div class="col-md-7">
                                     <br/>

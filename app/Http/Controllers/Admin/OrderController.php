@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\InvoiceOrderMailable;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\SellerInvoiceOrderMailable;
 
 class OrderController extends Controller
 {
@@ -152,11 +153,12 @@ class OrderController extends Controller
 
         $order = Order::findOrfail($orderId);
         Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
-        Mail::to("$order->seller_email")->send(new InvoiceOrderMailable($order));
+        Mail::to("$order->seller_email")->send(new SellerInvoiceOrderMailable($order));
         return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email.' and '.$order->seller_email);
         try{
             $order = Order::findOrfail($orderId);
             Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
+            Mail::to("$order->seller_email")->send(new SellerInvoiceOrderMailable($order));
             return redirect('admin/orders/'.$orderId)->with('message', 'Invoice has been sent to '.$order->email.' and '.$order->seller_email);
 
         }catch(\Exception $e){

@@ -8,7 +8,7 @@ use App\Models\Product;
 use Livewire\Component;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\ActivityLog;
 class View extends Component
 {
 
@@ -31,6 +31,15 @@ class View extends Component
                         ]);
                         return false;
                     } else {
+                        if (Auth::check()) {
+                            $user = Auth::user();
+                            $description = '' . $user->name . ' added Product id:'. $productId . ' to the Wishlist';
+                            
+                            ActivityLog::create([
+                                'user_id' => $user->id,
+                                'description' => $description,
+                            ]);
+                        }
                         Wishlist::create([
                             'user_id' => auth()->user()->id,
                             'product_id' => $productId,

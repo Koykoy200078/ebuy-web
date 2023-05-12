@@ -161,11 +161,9 @@
                                 <div class="input-group">
                                     <select name="order_status" class="form-select">
                                         <option value="">Select Order Status</option>
-                                        <option value="in progress" {{ Request::get('status') == 'in progress' ? 'selected':'' }}>In Progress</option>
-                                        <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Completed</option>
-                                        <option value="pending" {{ Request::get('status') == 'pending' ? 'selected':'' }}>Pending</option>
+                                        <option value="">Select Order Status</option>
+                                        <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Approved</option>
                                         <option value="cancelled" {{ Request::get('status') == 'cancelled' ? 'selected':'' }}>Cancelled</option>
-                                        <option value="out-for-delivery" {{ Request::get('status') == 'out-for-delivery' ? 'selected':'' }}>Out for Delivery</option>
                                     </select>
                                     <button type="submit" class="btn btn-primary text-white">Update</button>
                                 </div>

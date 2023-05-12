@@ -51,6 +51,7 @@
                             </li>
                         @endif
                     @else
+                        @if(Auth::user()->email_verified_at)
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -78,6 +79,9 @@
                             </li>
                             </ul>
                         </li>
+
+                        @endif
+
                         @endguest
                     </ul>
                 </div>

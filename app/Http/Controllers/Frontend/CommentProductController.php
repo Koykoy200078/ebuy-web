@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\ProductComment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\ActivityLog;
 
 class CommentProductController extends Controller
 {
@@ -18,7 +18,7 @@ class CommentProductController extends Controller
         if(Auth::check())
         {
             $validator = Validator::make($request->all(), [
-                'comment_body' => 'string',
+                'comment_body' => 'string|max:30',
             ]);
 
             if($validator->fails())
@@ -29,6 +29,15 @@ class CommentProductController extends Controller
             
             if($product)
             {
+                if (Auth::check()) {
+                    $user = Auth::user();
+                    $description = '' . $user->name . ' commenting on Product Id '. $product->id. 'Comment:'.$request->comment_body;
+                    
+                    ActivityLog::create([
+                        'user_id' => $user->id,
+                        'description' => $description,
+                    ]);
+                }
                 ProductComment::create([
                     'product_id' => $product->id,
                     'user_id' => Auth::user()->id,
@@ -53,38 +62,39 @@ class CommentProductController extends Controller
 
     public function destroy(Request $request)
     {
-        if(Auth::check())
-        {   
-            $cooment = ProductComment::where('id', $request->comment_id)
-                ->where('user_id',Auth::user()->id)
+        if (Auth::check()) {
+            $user = Auth::user();
+            $comment = ProductComment::where('id', $request->comment_id)
+                ->where('user_id', $user->id)
                 ->first();
-
-            if($comment)
-            {   
-                $cooment->delete();
+    
+            if ($comment) {
+    
+                $description = '' . $user->name . ' deleting comment. Comment Id: ' . $comment->id;
+    
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+                $comment->delete();
+    
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Comment Deleted Succesfully'
+                    'message' => 'Comment Deleted Successfully'
                 ]);
-    
-
-            }
-            else{
+            } else {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Something Went Wrong'
                 ]);
             }
-          
-        }
-        else
-        {
+        } else {
             return response()->json([
                 'status' => 401,
                 'message' => 'Login to Delete this comment'
             ]);
-
         }
     }
+    
     
 }

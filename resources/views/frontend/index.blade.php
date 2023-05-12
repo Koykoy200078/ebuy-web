@@ -3,6 +3,9 @@
 @section('title', 'Home Page')
 
 @section('content')
+<div class="container">
+    <div class="background background-left"></div>
+    <div class="background background-right"></div>
     <div class="container">
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
 
@@ -55,7 +58,7 @@
         </div>
     </div>
 
-  <div class="py-5 bg-white">
+  <div class="py-5 ">
     <div class="container">
         <div class="row justify-content-center">
             <div style="background-color: #e5ffbc; padding: 20px;">
@@ -70,9 +73,9 @@
 
   <div class="py-5">
     <div class="container">
-        <div class="row">
+        <div class="row" >
             <div class="col-md-12">
-                <h4><strong>Trending Products </strong></h4>
+                <h4><strong>Most Sale </strong></h4>
                 <div class="underline mb-4"></div>
             </div>
             @if ($trendingProducts)
@@ -113,7 +116,7 @@
             @else
             <div class="col-md-12">
                 <div class="p-2">
-                    <h4>No Products Available</h4>
+                    <h4>No Most Sale Available</h4>
                 </div>
             </div>
             @endif
@@ -121,11 +124,11 @@
     </div>
   </div>
 
-  <div class="py-5 bg-white">
+  <div class="py-5 ">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4><strong> New Arrivals </strong>
+                <h4><strong> Recent Posted Item </strong>
                     <a href="{{ url('new-arrivals') }}" class="btn float-end custom-bg rounded-pill">View more</a>
                 </h4>
                 <div class="underline mb-4"></div>
@@ -168,7 +171,7 @@
             @else
             <div class="col-md-12">
                 <div class="p-2">
-                    <h4>No New Arrivals Available</h4>
+                    <h4>No Recent Posted Item Available</h4>
                 </div>
             </div>
             @endif
@@ -231,6 +234,7 @@
         </div>
     </div>
   </div>
+</div>
 
 @endsection
 

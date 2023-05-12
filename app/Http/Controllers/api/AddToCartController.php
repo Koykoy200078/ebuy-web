@@ -103,7 +103,7 @@ class AddToCartController extends Controller
             $productColors = collect($productColors)->values()->first();
             // Retrieve the user's details and add the store name to the cart data
             $userDetails = UserDetail::where('user_id', $cartItem->user_id)->first();
-            $storeName = $userDetails ? $userDetails->storename : null;
+            $storeName = $userDetails ? $userDetails->storename : $userDetails->user->name;
 
             $cartData[] = [
                 'cart_id' => $cartItem->id,

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->unique();
             $table->string('storename');
             $table->string('phone');
-            $table->string('pin_code');
-            $table->string('address', 500);
+            $table->string('pin_code')->nullable();
+            $table->string('address', 500)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

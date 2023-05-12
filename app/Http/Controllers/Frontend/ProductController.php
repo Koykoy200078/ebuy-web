@@ -13,12 +13,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 class ProductController extends Controller
 {
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on Sell ';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $products = Product::where('product_user_id', auth()->user()->id)->get();
         return view('frontend.products.index', compact('products'));
     }
@@ -82,11 +92,32 @@ class ProductController extends Controller
                 ]);
             }
         }
+                
+        $product_id = $product->id;
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' added on Selliing Product item Id: '. $product_id;
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         return redirect('/products')->with('message', 'Product Added Succesfully');
     }
 
     public function edit(int $product_id)
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on Product edit Id: '. $product_id;
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $categories = Category::all();
         $brands = Brand::all();
         $product = Product::findOrFail($product_id);
@@ -229,7 +260,15 @@ class ProductController extends Controller
                         ]);
                     }
                 }
-
+                if (Auth::check()) {
+                    $user = Auth::user();
+                    $description = '' . $user->name . ' update on Product Id: '. $product_id;
+                    
+                    ActivityLog::create([
+                        'user_id' => $user->id,
+                        'description' => $description,
+                    ]);
+                }
                 return redirect('/products')->with('message', 'Product Updated Succesfully');
             } else {
                 return redirect('/products')->with('message', 'No Such Product Id Found');
@@ -242,6 +281,7 @@ class ProductController extends Controller
     public function destroyImage(int $product_image_id)
     {
         $productImage = ProductImage::findOrFail($product_image_id);
+        
         if (File::exists($productImage->image)) {
             File::delete($productImage->image);
         }

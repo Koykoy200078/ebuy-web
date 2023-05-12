@@ -58,7 +58,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:11','min:10'],
             'birthday' => ['required', 'date'],
             'gender' => ['required', 'string', 'in:male,female'],
             
@@ -73,7 +73,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']),
+        //     'address' => $data['address'],
+        //     'phone' => $data['phone'],
+        //     'birthday' => $data['birthday'],
+        //     'gender' => $data['gender'],
+        // ]);
+
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -82,7 +92,16 @@ class RegisterController extends Controller
             'birthday' => $data['birthday'],
             'gender' => $data['gender'],
         ]);
-
+        
+        $otherUserId = $user->id; // Replace 1 with the actual ID of the other user
+        $otherUser = User::findOrFail($otherUserId);
+        $otherUser->userDetail()->updateOrCreate(
+            ['user_id' => $otherUser->id],
+            ['phone' => $user->phone, 'address' => $user->address, 'storename' => $user->name, 'pin_code' => '' ]
+        );
+        
+        return $user;
+        
     }
 
     protected function registered(Request $request, $user)

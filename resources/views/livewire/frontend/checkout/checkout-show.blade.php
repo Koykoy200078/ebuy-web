@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Phone Number</label>
-                                <input type="number" wire:model.defer="phone" id="phone" class="form-control" placeholder="Enter Phone Number" />
+                                <input type="number" wire:model.defer="phone" id="phone" class="form-control"  placeholder="Enter Phone Number" value="{{ Auth::user()->phone }}"/>
                                 @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
 
                             </div>

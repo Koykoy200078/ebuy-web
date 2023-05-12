@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Arr;
 use App\Mail\SellerInvoiceOrderMailable;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutShow extends Component
 {

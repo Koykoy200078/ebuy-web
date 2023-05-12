@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\ActivityLog;
 
 class LoginController extends Controller
 {
@@ -32,10 +33,27 @@ class LoginController extends Controller
     protected function authenticated()
     {
         if(Auth::user()->role_as == '2'){
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' Login';
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('/admin/dashboard')->with('message', 'Welcome to Dashboard');
         }
         else{
-       
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' Login';
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('/home')->with('status', 'Logged In Successfuly');
           
         }

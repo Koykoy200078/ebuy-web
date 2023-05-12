@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// use App\Models\Slider;
-// use App\Models\Category;
-// use App\Models\ProductComment;
 use App\Models\Product;
 use App\Models\Orderitem;
 use App\Models\Order;
@@ -15,12 +12,22 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 use App\Mail\InvoiceOrderMailable;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ActivityLog;
 
 class OrderController extends Controller
 {
 
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on My Order';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $orders = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         // dd($orders);
         return view('frontend.orders.index', compact('orders'));
@@ -31,6 +38,15 @@ class OrderController extends Controller
     {
         $order = Order::where('user_id', Auth::user()->id)->where('id', $orderId)->first();
         if ($order) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' clicked on view order Id: '. $order->id ;
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return view('frontend.orders.view', compact('order'));
         } else {
             return redirect()->back()->with('message', 'No Order Found');
@@ -83,6 +99,16 @@ class OrderController extends Controller
 
     public function viewInvoice(int $orderId)
     {
+        $order = Order::where('user_id', Auth::user()->id)->where('id', $orderId)->first();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on view invoice order Id: '. $order->id ;
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $order = Order::findOrfail($orderId);
         return view('frontend.invoice.generate-invoice', compact('order'));
 

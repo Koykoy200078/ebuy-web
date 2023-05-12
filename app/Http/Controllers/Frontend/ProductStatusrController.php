@@ -93,7 +93,15 @@ class ProductStatusrController extends Controller
                 'status_message' => $request->order_status  ?? $order->status_message
                 
             ]);
-
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' update on Delivery Id:'.$order->id. '.Delivery Status: '. $request->order_status  ?? $order->status_message;
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('product-status/'.$orderId)->with('message', 'Order Status Updated');
         }
         else

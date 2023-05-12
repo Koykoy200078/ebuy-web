@@ -87,7 +87,15 @@ class OrderController extends Controller
                 'confirm' => 'Delivery Complete'
                 
             ]);
-
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' update on Delivery Id:'.$order->id. '.Delivery Status: Completed ';
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('orders/'.$orderId)->with('message', 'Order Status Updated');
         }
         else

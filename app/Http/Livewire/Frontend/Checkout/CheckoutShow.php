@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Arr;
 use App\Mail\SellerInvoiceOrderMailable;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 class CheckoutShow extends Component
 {
@@ -89,7 +90,10 @@ class CheckoutShow extends Component
 
     public function placeOrder()
     {
-        
+        $ids2 = $this->selectedIds;
+        $activitylog = Cart::where('user_id', auth()->user()->id)
+            ->whereIn('id',  Arr::flatten($ids2))->get('id');
+       
         // foreach ($this->carts as $cartItem) {
         //     $product_id = $cartItem->product_id;
         // // return view($product_id);
@@ -136,7 +140,7 @@ class CheckoutShow extends Component
             'seller_phone' =>  $test,
 
         ]);
-
+      
         foreach ($this->carts as $cartItem) {
             $orderItems = Orderitem::create([
                 'order_id' => $order->id,
@@ -159,7 +163,15 @@ class CheckoutShow extends Component
                 $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
             }
         }
-
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' Order Id:'.  $order->id. ". Product id ordered: [".$activitylog."]";
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         return $order;
     }
 

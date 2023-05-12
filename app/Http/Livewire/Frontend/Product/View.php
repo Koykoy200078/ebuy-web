@@ -31,6 +31,11 @@ class View extends Component
                         ]);
                         return false;
                     } else {
+                      
+                        Wishlist::create([
+                            'user_id' => auth()->user()->id,
+                            'product_id' => $productId,
+                        ]);
                         if (Auth::check()) {
                             $user = Auth::user();
                             $description = '' . $user->name . ' added Product id:'. $productId . ' to the Wishlist';
@@ -40,10 +45,6 @@ class View extends Component
                                 'description' => $description,
                             ]);
                         }
-                        Wishlist::create([
-                            'user_id' => auth()->user()->id,
-                            'product_id' => $productId,
-                        ]);
                         $this->emit('wishlistAddedUpdated');
                         session()->flash('message', 'Wishlist added successfully');
                         $this->dispatchBrowserEvent('message', [
@@ -143,7 +144,15 @@ class View extends Component
                                                 'quantity' => $this->quantityCount
 
                                             ]);
-
+                                            if (Auth::check()) {
+                                                $user = Auth::user();
+                                                $description = '' . $user->name . ' added Product id:'. $productId . ' to the Cart';
+                                                
+                                                ActivityLog::create([
+                                                    'user_id' => $user->id,
+                                                    'description' => $description,
+                                                ]);
+                                            }
                                             $this->emit('CartAddedUpdated');
                                             $this->dispatchBrowserEvent('message', [
                                                 'text' => 'Product Added to Cart',
@@ -190,7 +199,15 @@ class View extends Component
                                             'quantity' => $this->quantityCount
 
                                         ]);
-
+                                        if (Auth::check()) {
+                                            $user = Auth::user();
+                                            $description = '' . $user->name . ' added Product id:'. $productId . ' to the Cart ';
+                                            
+                                            ActivityLog::create([
+                                                'user_id' => $user->id,
+                                                'description' => $description,
+                                            ]);
+                                        }
                                         $this->emit('CartAddedUpdated');
                                         $this->dispatchBrowserEvent('message', [
                                             'text' => 'Product Added to Cart',

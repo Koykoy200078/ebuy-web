@@ -49,6 +49,7 @@ class CheckoutShow extends Component
             try {
                 $order = Order::findOrFail($codOrder->id);
                 Mail::to("$order->email")->send(new PlaceOrderMailable($order));
+                Mail::to("$order->seller_email")->send(new SellerInvoiceOrderMailable($order));
                 // Mail sent successfully
             } catch (\Exception $e) {
                 // Something went wrong

@@ -161,7 +161,6 @@
                                 <div class="input-group">
                                     <select name="order_status" class="form-select">
                                         <option value="">Select Order Status</option>
-                                        <option value="">Select Order Status</option>
                                         <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Approved</option>
                                         <option value="cancelled" {{ Request::get('status') == 'cancelled' ? 'selected':'' }}>Cancelled</option>
                                     </select>

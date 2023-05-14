@@ -1,7 +1,6 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: rgba(199, 255, 160, 0.5); /* Adjust the opacity as per your preference */
 
 }
 
@@ -14,7 +13,10 @@ body {
     top: 0;
     bottom: 0;
     z-index: -1;
+    /* background-color: rgba(199, 255, 160, 0.5);  */
+
     width: 100%;
+
 }
 
 .background-left {
@@ -60,7 +62,7 @@ footer {
 .product-card {
   background-color: #c7ffa0;
   border-radius: 20px; /* Adjust the value as per your preference */
-  padding: 5px; /* Add padding to create space between cards */
+  padding: 0px; /* Add padding to create space between cards */
 }
 
 .product-card-img img {
@@ -570,7 +572,7 @@ input[type="search"]:hover {
 /* FOOTER */
 .footer-area{
     padding: 40px 0px;
-    background-color: #ddfdd8;
+    background-color: #91ff80;
     color: #000;
 }
 .footer-area a{

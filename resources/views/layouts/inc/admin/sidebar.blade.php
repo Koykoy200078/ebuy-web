@@ -82,6 +82,13 @@
           <span class="menu-title">Activity Logs</span>
         </a>
       </li>
+      <li class="nav-item {{ Request::is('admin/save-transaction') ? 'active':''}}">
+        <a class="nav-link" href="{{ url('admin/save-transaction')}}">
+          <i class="mdi mdi-content-save menu-icon"></i>
+
+          <span class="menu-title">Save Transaction</span>
+        </a>
+      </li>
       {{-- <li class="nav-item">
         <a class="nav-link" href="documentation/documentation.html">
           <i class="mdi mdi-file-document-box-outline menu-icon"></i>

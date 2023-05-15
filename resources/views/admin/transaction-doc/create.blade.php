@@ -35,7 +35,7 @@
                                 <div class="col-md-6 mb-4"> </div>
                                
                                 <div class="col-md-6 mb-3 offset-md-3 text-center">
-                                    <label>Payment Id</label>
+                                    <label>Transaction ID</label>
                                     <input type="text" name="payment_id" class="form-control" />
                                     @error('payment_id') <small class="text-danger">{{$message}}</small> @enderror
                                 </div>

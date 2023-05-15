@@ -27,7 +27,7 @@
                                 <tr>
                                     <th>Number</th>
                                     <th>Tracking No</th>
-                                    <th>Payment Id</th>
+                                    <th>Transaction ID</th>
                                     <th>Payment Date</th>
                                     <th>Action</th>
                                 </tr>

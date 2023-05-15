@@ -40,11 +40,11 @@ class TransactionController extends Controller
         $trackingOrder = Order::where('tracking_no', $validatedData['tracking_number'])->first();
         $paymentOrder = Order::where('payment_id', $validatedData['payment_id'])->first();
         
-        if (!$trackingOrder || !$paymentOrder || $trackingOrder->id !== $paymentOrder->id) {
-            // Orders don't match or not found, so ignore the process
-            return redirect()->back()->with('message', 'The tracking number and payment ID do not match.');
-        
+        if (!$trackingOrder) {
+            // Tracking number not found, so ignore the process
+            return redirect()->back()->with('message', 'Invalid tracking number.');
         }
+        
         
         // Continue with the rest of your code to create the Transaction record
         // ...

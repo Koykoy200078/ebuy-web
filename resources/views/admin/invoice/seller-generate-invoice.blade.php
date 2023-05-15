@@ -153,8 +153,7 @@
                 <td>Address:</td>
                 <td>{{$order->address}}</td>
 
-                <td>Payment Id:</td>
-                <td>{{$order->payment_id}}</td>
+             
              
             </tr>
             <tr>
@@ -167,21 +166,10 @@
                 <td>Pin code:</td>
                 <td>{{$order->pincode}}</td>
 
-                
-
-                <td>Payment Id:</td>
-                <td>{{$order->payment_id}}</td>
+           
                 
             </tr>
-            <tr>
-               
-
-                
-
-                <td>Payment Id:</td>
-                <td>{{$order->payment_id ?? 'N/A'}}</td>
-                
-            </tr>
+           
         </tbody>
     </table>
 

@@ -11,6 +11,7 @@
                         <h4 class="text-primary">
                             Item Total Amount :
                             <span class="float-end">₱{{ $this->totalProductAmount }}</span>
+                            {{-- <span class="float-end">₱{{ $carts->id }}</span> --}}
                         </h4>
                         <hr>
                         <small>* Items will be delivered in 3 - 5 days.</small>
@@ -138,13 +139,19 @@
           // Sets up the transaction when a payment button is clicked
           createOrder: (data, actions) => {
             return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  value: '{{ $this->totalProductAmount }}' // Can also reference a variable or function
-                }
-              }]
+                purchase_units: [
+                {
+                    amount: {
+                    value: '{{ $this->totalProductAmount }}',
+                    },
+                    description: '{{ $trackingNo }}', // Add the description for the entire order
+            
+                },
+                ],
             });
-          },
+            },
+
+
           // Finalize the transaction after payer approval
           onApprove: (data, actions) => {
             return actions.order.capture().then(function(orderData) {
@@ -156,7 +163,9 @@
                 Livewire.emit('transactionEmit', transaction.id);
 
             }
-            //   alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+            console.log('Transaction ID:', transaction.id); // Access the transaction ID here
+
+              alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
 
 
             });

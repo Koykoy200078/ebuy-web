@@ -46,6 +46,8 @@
                                     <h6>Tracking Id/No.: {{ $order->tracking_no }}</h6>
                                     <h6>Order Date: {{ $order->created_at->format('d-m-Y h:i A') }}</h6>
                                     <h6>Payment Mode: {{ $order->payment_mode }}</h6>
+                                    <h6>Payment Id: {{$order->payment_id ?? 'N/A'}}</h6>
+
                                     <h6 class="border p-2 text-success">
                                         Order Status Message:
                                         <span class="text-uppercase">{{ $order->status_message }}</span>
@@ -63,6 +65,7 @@
                                     <h6>Phone: {{ $order->phone }}</h6>
                                     <h6>Address: {{ $order->address }}</h6>
                                     <h6>Pin code: {{ $order->pincode }}</h6>
+                                    
                                 </div>
                                 <div class="col-md-4">
                                     <h5>Seller Details</h5>

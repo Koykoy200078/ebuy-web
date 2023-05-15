@@ -50,8 +50,8 @@
                                 <div class="col-md-6 mb-4"> </div>
                                
                                 <div class="col-md-6 mb-3 offset-md-3 text-center">
-                                    <label>Payment Id</label>
-                                    <input type="text" name="payment_id" value="{{ $transaction->payment_id }}" class="form-control" readonly/>
+                                    <label>Transaction ID</label>
+                                    <input type="text" name="payment_id" value="{{ $transaction->payment_id }}" class="form-control"/>
                                     @error('payment_id') <small class="text-danger">{{$message}}</small> @enderror
                                 </div>
                                 
@@ -60,7 +60,8 @@
                                    
                                     <label>Image</label>
                                     <input type="file" name="image_pdf" value="{{ $transaction->image }}" class="form-control" />
-                                    <img src="{{ asset($transaction->image_pdf) }}" width="60px" height="60px"/>
+                                    <img src="{{ asset($transaction->image_pdf) }}" style="display: block; margin: 0 auto; width: 300px; height: 3 00px;" alt="Image">
+
                                     @error('image_pdf') <small class="text-danger">{{$message}}</small> @enderror
                                 </div>
                           

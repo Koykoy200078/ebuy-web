@@ -158,7 +158,7 @@
                 {{-- <td>Order Status:</td>
                 <td>{{ $order->status_message }}</td> --}}
                 <td>Delivery status:</td>
-                <td>{{$order->confirm}}</td>
+                <td>{{$order->confirm ?? 'N/A'}}</td>
 
 
                 <td>Pin code:</td>
@@ -168,7 +168,7 @@
 
                 
             </tr>
-            
+           
         </tbody>
     </table>
 

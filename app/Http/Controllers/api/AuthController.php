@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Mail\VerifyEmail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -107,33 +108,88 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    // public function register(Request $request)
+    // {
+    //     $validator = Validator::make($request->only('name', 'email', 'password'), [
+    //         'name' => 'required|string|between:2,100',
+    //         'email' => 'required|string|email|max:100|unique:users',
+    //         'password' => 'required|string|min:8',
+    //         'address' => 'required|string|max:255',
+    //         'phone' => 'required|string|max:255',
+    //         'birthday' => 'required|date',
+    //         'gender' => 'required|string',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Registration failed. Please check your input.',
+    //             'errors' => $validator->errors()
+    //         ], 422)->header('Content-Type', 'application/json');
+    //     }
+
+    //     $user = User::create([
+    //         'name' => $request->input('name'),
+    //         'email' => $request->input('email'),
+    //         'password' => Hash::make($request->input('password')),
+    //         'address' => $request->input('address'),
+    //         'phone' => $request->input('phone'),
+    //         'birthday' => $request->input('birthday'),
+    //         'gender' => $request->input('gender'),
+    //     ]);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'User successfully registered',
+    //         'user' => $user
+    //     ], 201)->header('Content-Type', 'application/json');
+    // }
+
     public function register(Request $request)
     {
-        $validator = Validator::make($request->only('name', 'email', 'password'), [
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
+        $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'message' => 'Registration failed. Please check your input.',
-                'errors' => $validator->errors()
-            ], 422)->header('Content-Type', 'application/json');
+                'status' => 'error',
+                'message' => $validator->errors()
+            ], 422);
         }
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+        $user = $this->create($request->all());
+
+        $user->sendEmailVerificationNotification();
 
         return response()->json([
-            'success' => true,
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201)->header('Content-Type', 'application/json');
+            'status' => 'success',
+            'message' => 'Check your email to verify your account'
+        ], 201);
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+            'address' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'birthday' => ['required', 'date'],
+            'gender' => ['required', 'string', 'in:male,female'],
+        ]);
+    }
+
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'address' => $data['address'],
+            'phone' => $data['phone'],
+            'birthday' => Carbon::createFromFormat('d/m/Y', $data['birthday'])->format('Y-m-d'),
+            'gender' => $data['gender'],
+        ]);
     }
 
 

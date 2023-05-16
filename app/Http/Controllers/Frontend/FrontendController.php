@@ -40,7 +40,7 @@ class FrontendController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-            $description = 'User ' . $user->name . ' clicked on New Arrival';
+            $description = '' . $user->name . ' clicked on New Arrival';
             
             ActivityLog::create([
                 'user_id' => $user->id,
@@ -55,7 +55,7 @@ class FrontendController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-            $description = 'User ' . $user->name . ' clicked on Featured Product';
+            $description = '' . $user->name . ' clicked on Featured Product';
             
             ActivityLog::create([
                 'user_id' => $user->id,
@@ -71,7 +71,7 @@ class FrontendController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-            $description = 'User ' . $user->name . ' clicked on Category';
+            $description = '' . $user->name . ' clicked on Category';
             
             ActivityLog::create([
                 'user_id' => $user->id,
@@ -88,7 +88,7 @@ class FrontendController extends Controller
         $category = Category::where('slug',$category_slug)->first();
         if (Auth::check()) {
             $user = Auth::user();
-            $description = 'User ' . $user->name . ' clicked on New Arrival';
+            $description = '' . $user->name . ' clicked on category '. $category->name;
             
             ActivityLog::create([
                 'user_id' => $user->id,
@@ -116,9 +116,20 @@ class FrontendController extends Controller
             {
                 if(auth()->user())
                 {
+
+
                 $userId = auth()->user()->id;
                 $productId = $product->id;
         
+                if (Auth::check()) {
+                    $user = Auth::user();
+                    $description = '' . $user->name . ' clicked on Product Id:'. $productId;
+                    
+                    ActivityLog::create([
+                        'user_id' => $user->id,
+                        'description' => $description,
+                    ]);
+                }
                 // return view ($productId );
                 $comment = Orderitem::where('user_id', $userId)
                 ->where('product_id', $productId)

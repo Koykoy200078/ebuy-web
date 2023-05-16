@@ -168,7 +168,15 @@
 
                 
             </tr>
-            
+            <tr>
+               
+
+                
+
+                <td>Payment Id:</td>
+                <td>{{$order->payment_id ?? 'N/A'}}</td>
+                
+            </tr>
         </tbody>
     </table>
 

@@ -1,4 +1,34 @@
 body {
+    margin: 0;
+    padding: 0;
+
+}
+
+.container {
+    position: relative;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    /* background-color: rgba(199, 255, 160, 0.5);  */
+
+    width: 100%;
+
+}
+
+.background-left {
+    left: 0;
+    width: 150px;
+}
+
+.background-right {
+    right: 0;
+    width: 150px;
+}
+body {
   color: #202020;
   font-family: "Lato", sans-serif;
   font-size: 14px;
@@ -29,78 +59,96 @@ footer {
     background-color: #fff !important;
     border: 2px solid #000;
 }
+.product-card {
+  background-color: #c7ffa0;
+  border-radius: 20px; /* Adjust the value as per your preference */
+  padding: 0px; /* Add padding to create space between cards */
+}
 
-.carousel-item .custom-carousel-content{
-    width: 50%;
-    transform: translate(0%, -10%);
+.product-card-img img {
+    border-top-left-radius: 10px; /* Adjust the value to control the rounding of the top-left corner */
+    border-top-right-radius: 10px; /* Adjust the value to control the rounding of the top-right corner */
+    width: 100%; /* Ensure the image takes up the entire container */
+  }
+.carousel-item .custom-carousel-content {
+  width: 50%;
+  transform: translate(0%, -10%);
 }
-.custom-carousel-content{
-    text-align: start;
+
+.custom-carousel-content {
+  text-align: start;
 }
-.custom-carousel-content h1{
-    font-size: 40px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 30px;
+
+.custom-carousel-content h1 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 30px;
 }
-.custom-carousel-content h1 span{
-    color: #fbff00;
+
+.custom-carousel-content h1 span {
+  color: #fbff00;
 }
-.custom-carousel-content p{
-    font-size: 18px;
-    font-weight: 400;
-    color: #fff;
-    margin-bottom: 30px;
+
+.custom-carousel-content p {
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 30px;
 }
-.custom-carousel-content .btn-slider{
-    border: 1px solid #fff;
-    border-radius: 0px;
-    padding: 8px 26px;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+
+.custom-carousel-content .btn-slider {
+  border: 1px solid #fff;
+  border-radius: 0px;
+  padding: 8px 26px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
+
 .carousel-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 24px;
-    color: #fff;
-    width: 32px;
-    height: 32px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 50%;
-    display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  display: none;
 }
 
 .carousel-button:hover {
-    background-color: #4CAF50;
+  background-color: #4CAF50;
 }
 
 .carousel-button i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .carousel-prev {
-    left: 16px;
+  left: 16px;
 }
 
 .carousel-next {
-    right: 16px;
+  right: 16px;
 }
-carousel-control-prev-icon,
+
+.carousel-control-prev-icon,
 .carousel-control-next-icon {
   font-size: 6rem;
 }
+
 
 /* Navbar CSS */
 .main-navbar{
@@ -524,7 +572,7 @@ input[type="search"]:hover {
 /* FOOTER */
 .footer-area{
     padding: 40px 0px;
-    background-color: #ddfdd8;
+    background-color: #91ff80;
     color: #000;
 }
 .footer-area a{

@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Frontend\Cart;
 use App\Models\Cart;
 use App\Models\Product;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 // use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +60,17 @@ class CartShow extends Component
 
     public function removeCartItem(int $cartId)
     {
+
+        $cartsId = Cart::where('user_id', auth()->user()->id)->where('id', $cartId)->value('product_id');
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' remove Product id:'. $cartsId . ' from the Cart';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $cartRemoveData = Cart::where('user_id', auth()->user()->id)->where('id', $cartId)->first();
         if($cartRemoveData)
         {

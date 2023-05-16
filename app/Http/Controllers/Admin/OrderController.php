@@ -46,21 +46,22 @@ class OrderController extends Controller
         $startDate = $request->date ?? $todayData;
         $endDate = $request->date2 ?? $startDate;
         
-        
         if ($request->search) {
             $orders = Order::where('tracking_no', $request->search)->paginate(10);
         } else {
             $orders = Order::when($request->date || $request->date2, function ($q) use ($startDate, $endDate) {
                     return $q->whereBetween('created_at', [$startDate, $endDate]);
                 })
-                ->orWhere(function ($q) use ($todayData) {
-                    return $q->whereDate('created_at', $todayData);
+                ->when($request->status, function ($q) use ($request) {
+                    return $q->where('status_message', '=', $request->status);
                 })
-                ->when($request->status != null, function ($q) use ($request) {
-                    return $q->where('status_message', $request->status);
+                ->when($request->status === 'cancelled', function ($q) {
+                    return $q->orWhere('status_message', '=', 'Cancelled');
                 })
                 ->paginate(10);
         }
+        
+        
         
         return view('admin.orders.index', compact('orders'));
         

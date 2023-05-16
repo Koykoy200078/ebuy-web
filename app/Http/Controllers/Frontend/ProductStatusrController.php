@@ -13,7 +13,7 @@ use App\Mail\InvoiceOrderMailable;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\SellerInvoiceOrderMailable;
-
+use App\Models\ActivityLog;
 
 
 class ProductStatusrController extends Controller
@@ -21,6 +21,15 @@ class ProductStatusrController extends Controller
 
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on Delivery ';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         $orders = Order::where('product_user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         // dd($orders);
         return view('frontend.sellings.index', compact('orders'));
@@ -34,6 +43,15 @@ class ProductStatusrController extends Controller
     {
         $order = Order::where('product_user_id', Auth::user()->id)->where('id', $orderId)->first();
         if ($order) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' clicked on Delivery Id:'.$order->id;
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return view('frontend.sellings.view', compact('order'));
         } else {
             return redirect()->back()->with('message', 'No Order Found');
@@ -75,7 +93,15 @@ class ProductStatusrController extends Controller
                 'status_message' => $request->order_status  ?? $order->status_message
                 
             ]);
-
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' update on Delivery Id:'.$order->id. '.Delivery Status: '. $request->order_status  ?? $order->status_message;
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('product-status/'.$orderId)->with('message', 'Order Status Updated');
         }
         else

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\ActivityLog;
 
 class LoginController extends Controller
 {
@@ -31,17 +32,28 @@ class LoginController extends Controller
 
     protected function authenticated()
     {
-        $userRole = Auth::user()->role_as;
-        if ($userRole === 1 || $userRole === 2) {
+        if (Auth::user()->role_as == '2') {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' Login';
+
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
             return redirect('/admin/dashboard')->with('message', 'Welcome to Dashboard');
         } else {
-            return redirect('/home')->with('status', 'Logged In Successfully');
-            // if (Auth::user()->email_verified_at) {
-            //     return redirect('/home')->with('status', 'Logged In Successfuly');
-            // } else {
-            //     Auth::logout();
-            //     return redirect()->route('login')->with('error', 'Your account is not verified. Please verify your email.');
-            // }
+            if (Auth::check()) {
+                $user = Auth::user();
+                $description = '' . $user->name . ' Login';
+
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'description' => $description,
+                ]);
+            }
+            return redirect('/home')->with('status', 'Logged In Successfuly');
         }
     }
 

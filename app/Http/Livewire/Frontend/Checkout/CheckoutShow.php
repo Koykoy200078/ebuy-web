@@ -14,11 +14,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Arr;
 use App\Mail\SellerInvoiceOrderMailable;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 class CheckoutShow extends Component
 {
     public $carts, $totalProductAmount = 0;
-
+    public $trackingNo = 'ebuy-';
     public $fullname, $email, $phone, $pincode, $address, $payment_mode = NULL, $payment_id = NULL;
 
     protected $listeners = [
@@ -30,6 +32,7 @@ class CheckoutShow extends Component
         $selectedIds = json_decode(request()->query('selectedIds'));
         // $selectedIds will now contain the array of selected IDs from the previous page
         $this->selectedIds = $selectedIds;
+        $this->trackingNo = 'ebuy-' . Str::random(10);
     }
     public function paidOnlineOrder($value)
     {
@@ -37,7 +40,11 @@ class CheckoutShow extends Component
         $this->payment_mode = 'Paid by Paypal';
 
         $codOrder = $this->placeOrder();
+        // return view( $this->payment_id);
+        // return view($codOrder->tracking_no);
+
         if ($codOrder) {
+            
             $ids = $this->selectedIds;
             Cart::where('user_id', auth()->user()->id)
             ->whereIn('id',  Arr::flatten($ids))
@@ -47,6 +54,7 @@ class CheckoutShow extends Component
             try {
                 $order = Order::findOrFail($codOrder->id);
                 Mail::to("$order->email")->send(new PlaceOrderMailable($order));
+                Mail::to("$order->seller_email")->send(new SellerInvoiceOrderMailable($order));
                 // Mail sent successfully
             } catch (\Exception $e) {
                 // Something went wrong
@@ -88,7 +96,10 @@ class CheckoutShow extends Component
 
     public function placeOrder()
     {
-        
+        $ids2 = $this->selectedIds;
+        $activitylog = Cart::where('user_id', auth()->user()->id)
+            ->whereIn('id',  Arr::flatten($ids2))->get('id');
+       
         // foreach ($this->carts as $cartItem) {
         //     $product_id = $cartItem->product_id;
         // // return view($product_id);
@@ -96,7 +107,7 @@ class CheckoutShow extends Component
         //     $test =  Product::where('id', $product_id)->pluck('product_user_id');
         // }
         // return view($test);
-        
+
         $this->validate();
         foreach ($this->carts as $cartItem) {
             $cartItem = $cartItem;
@@ -105,7 +116,7 @@ class CheckoutShow extends Component
 
         $order = Order::create([
             'user_id' => auth()->user()->id,
-            'tracking_no' => 'ebuy-' . Str::random(10),
+            'tracking_no' => $this->trackingNo,
             'fullname' => $this->fullname,
             'email' => $this->email,
             'phone' => $this->phone,
@@ -135,7 +146,7 @@ class CheckoutShow extends Component
             'seller_phone' =>  $test,
 
         ]);
-
+      
         foreach ($this->carts as $cartItem) {
             $orderItems = Orderitem::create([
                 'order_id' => $order->id,
@@ -158,7 +169,15 @@ class CheckoutShow extends Component
                 $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
             }
         }
-
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' Order Id:'.  $order->id. ". Product id ordered: [".$activitylog."]";
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         return $order;
     }
 

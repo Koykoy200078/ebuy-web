@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 class UserController extends Controller
 {
@@ -42,7 +43,15 @@ class UserController extends Controller
                 'address' => $request->address,
             ]
         );
-
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' Profile Updated';
+            
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
         return redirect()->back()->with('message', 'User Profile Updated');
     }
 

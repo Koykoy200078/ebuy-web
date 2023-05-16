@@ -188,4 +188,18 @@ Route::prefix('admin')->middleware(['auth', 'IsAdmin', 'verified'])->group(funct
 
 
     });
+
+    Route::controller(App\Http\Controllers\Admin\TransactionController::class)->group(function () {
+        Route::get('/save-transaction', 'index');
+        Route::get('/save-transaction/create7', 'create');
+        Route::post('/save-transaction', 'store');
+        Route::get('/save-transaction/{transaction}/edit', 'edit');
+        Route::put('/save-transaction/{transaction}', 'update');
+        Route::get('/save-transaction/{transaction}/delete', 'destroy');
+
+        Route::get('save-transaction/{transaction}', 'viewInvoice');
+
+        Route::get('save-transaction/{transaction}/mail', 'mailInvoice');
+
+    });
 });

@@ -11,6 +11,7 @@
                         <h4 class="text-primary">
                             Item Total Amount :
                             <span class="float-end">₱{{ $this->totalProductAmount }}</span>
+                            {{-- <span class="float-end">₱{{ $carts->id }}</span> --}}
                         </h4>
                         <hr>
                         <small>* Items will be delivered in 3 - 5 days.</small>
@@ -33,7 +34,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Phone Number</label>
-                                <input type="number" wire:model.defer="phone" id="phone" class="form-control" placeholder="Enter Phone Number" />
+                                <input type="number" wire:model.defer="phone" id="phone" class="form-control"  placeholder="Enter Phone Number" value="{{ Auth::user()->phone }}"/>
                                 @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
 
                             </div>
@@ -81,7 +82,7 @@
                                             <h6>Online Payment Mode</h6>
                                             <hr/>
                                             {{-- <button type="button" wire:loading.attr="disable" class="btn btn-warning">Pay Now (Online Payment)</button> --}}
-                                            <div >
+                                            <div>
                                                 <div id="paypal-button-container"></div>
                                             </div>
                                         </div>
@@ -110,7 +111,7 @@
 {{-- PAYPYAL --}}
 @push('scripts')
 
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AbvLGuqN6ZLrQPHaA4zYmQ_ciaXF3s6ZDDz_UkIseU-DcqIpK960fSGFlpBQMTob-6TyjhmpOEr6OgdE&currency=PHP"></script>
     <script>
         paypal.Buttons({
             onClick: function()  {
@@ -138,13 +139,19 @@
           // Sets up the transaction when a payment button is clicked
           createOrder: (data, actions) => {
             return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  value: '{{ $this->totalProductAmount }}' // Can also reference a variable or function
-                }
-              }]
+                purchase_units: [
+                {
+                    amount: {
+                    value: '{{ $this->totalProductAmount }}',
+                    },
+                    description: '{{ $trackingNo }}', // Add the description for the entire order
+            
+                },
+                ],
             });
-          },
+            },
+
+
           // Finalize the transaction after payer approval
           onApprove: (data, actions) => {
             return actions.order.capture().then(function(orderData) {
@@ -156,7 +163,9 @@
                 Livewire.emit('transactionEmit', transaction.id);
 
             }
-            //   alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+            console.log('Transaction ID:', transaction.id); // Access the transaction ID here
+
+              alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
 
 
             });

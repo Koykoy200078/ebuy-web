@@ -5,6 +5,7 @@ use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CheckoutController;
+use App\Http\Controllers\api\MyProductsController;
 use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\WishlistController;
@@ -55,8 +56,8 @@ Route::group([
         Route::delete('/product-colors/{prod_color_id}', [ProductController::class, 'deleteProdColor']);
 
 
-
-
+        // myProduct
+        Route::get('/myProducts', [MyProductsController::class, 'indexData']);
 
         // Category
         Route::get('/categories', [CategoryController::class, 'categories']);

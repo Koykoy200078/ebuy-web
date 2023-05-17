@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductFormRequest;
+use App\Models\ActivityLog;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;

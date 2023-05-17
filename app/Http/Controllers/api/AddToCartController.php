@@ -74,27 +74,78 @@ class AddToCartController extends Controller
     //     ]);
     // }
 
+    // public function cartShow(Request $request)
+    // {
+    //     $cart = Cart::where('user_id', auth()->user()->id)
+    //         ->orderBy('product_user_id', 'asc')
+    //         ->get();
+
+    //     $selectedIds = $request->get('selectedIds', []);
+    //     $totalPrice = 0;
+    //     $cartData = [];
+
+    //     foreach ($cart as $cartItem) {
+    //         $product = $cartItem->product;
+    //         $item_name = $product->name;
+    //         $image_url = url($product->productImages[0]->image);
+    //         $product_price = $product->selling_price;
+    //         if (in_array($cartItem->id, $selectedIds)) {
+    //             $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+    //         }
+
+    //         // Get product color information
+    //         $productColors = $product->productColors->map(function ($item) use ($cartItem) {
+    //             if (
+    //                 $item->id === $cartItem->product_color_id
+    //             ) {
+    //                 return [
+    //                     'product_color_id' => $item->id,
+    //                     'color_name' => $item->color->name,
+    //                     'quantity' => $item->quantity,
+    //                 ];
+    //             }
+    //         })->filter();
+
+    //         $productColors = collect($productColors)->values()->first();
+
+    //         $cartData[] = [
+    //             'cart_id' => $cartItem->id,
+    //             'user_id' => $cartItem->user_id,
+    //             'product_id' => $cartItem->product_id,
+    //             'product_color_id' => $cartItem->product_color_id,
+    //             'quantity' => $cartItem->quantity,
+    //             'item_name' => $item_name,
+    //             'image_url' => $image_url,
+    //             'product_price' => $product_price,
+    //             'product_colors' => $productColors,
+    //         ];
+    //     }
+
+    //     return response()->json([
+    //         'cart' => $cartData,
+    //         'totalPrice' => $totalPrice
+    //     ]);
+    // }
+
     public function cartShow(Request $request)
     {
-        $selectedIds = $request->input('selectedIds', []);
         $cart = Cart::where('user_id', auth()->user()->id)
-            ->join('users', 'carts.product_user_id', '=', 'users.id')
             ->orderBy('product_user_id', 'asc')
-            ->get()
-            ->groupBy('product_user_id');
+            ->get();
+
+        $selectedIds = $request->get('selectedIds', []);
         $totalPrice = 0;
-        $cartGrouped = [];
-        foreach ($cart as $productUserId => $cartItems) {
-            $totalPriceForGroup = 0;
-            foreach ($cartItems as $cartItem) {
-                if (in_array($cartItem->id, $selectedIds)) {
-                    $totalPriceForGroup += $cartItem->product->selling_price * $cartItem->quantity;
-                    $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+        $prevProductUserId = null;
+        $cartData = [];
+
+        foreach ($cart as $cartItem) {
+            if ($cartItem->product) {
+                if ($cartItem->product_user_id !== $prevProductUserId) {
+
+                    $prevProductUserId = $cartItem->product_user_id;
                 }
+
                 $product = $cartItem->product;
-                $item_name = $product->name;
-                $image_url = url($product->productImages[0]->image);
-                $product_price = $product->selling_price;
                 // Get product color information
                 $productColors = $product->productColors->map(function ($item) use ($cartItem) {
                     if ($item->id === $cartItem->product_color_id) {
@@ -105,35 +156,30 @@ class AddToCartController extends Controller
                         ];
                     }
                 })->filter();
+
                 $productColors = collect($productColors)->values()->first();
-                $cartItem->productColors = $productColors;
+
+                $cartData[] = [
+                    'cart_item_id' => $cartItem->id,
+                    'store_name' => $cartItem->productStoreUser->storename ?? $cartItem->productUser->name,
+                    'product_name' => $cartItem->product->name,
+                    'image_url' => url($cartItem->product->productImages[0]->image),
+                    'selling_price' => $cartItem->product->selling_price,
+                    'quantity' => $cartItem->quantity,
+                    'product_colors' => $productColors,
+                    'subtotal_price' => $cartItem->product->selling_price * $cartItem->quantity,
+                ];
             }
-            $userDetails = UserDetail::where('user_id', $productUserId)->first();
-            $userDetails2 = User::where('id', $productUserId)->first();
-            $cartGrouped[] = [
-                'product_user_id' => $productUserId,
-                'storename' => $userDetails ? $userDetails->storename : $userDetails2->name,
-                'items' => $cartItems->map(function ($item) use (
-                    
-                    $product,
-                    $item_name,
-                    $image_url,
-                    $product_price
-                ) {
-                    $productColors = $item->productColors;
-                    return collect($item)->except(['created_at', 'updated_at', 'name', 'email', 'email_verified_at', 'password', 'address', 'phone', 'birthday', 'gender', 'remember_token', 'role_as', 'auth_type'])->merge(compact(
-                        'product',
-                        'item_name',
-                        'image_url',
-                        'product_price',
-                        'productColors'
-                    ))->toArray();
-                }),
-                'totalPrice' => $totalPriceForGroup
-            ];
         }
+
+        foreach ($cart as $cartItem) {
+            if (in_array($cartItem->id, $selectedIds)) {
+                $totalPrice += $cartItem->product->selling_price * $cartItem->quantity;
+            }
+        }
+
         return response()->json([
-            'cart' => $cartGrouped,
+            'cart' => $cartData,
             'totalPrice' => $totalPrice
         ]);
     }

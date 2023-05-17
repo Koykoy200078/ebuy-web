@@ -310,4 +310,9 @@ class AuthController extends Controller
             'token' => $newToken
         ], 200)->header('Content-Type', 'application/json');
     }
+
+    public function sms()
+    {
+        $send = json_decode(file_get_contents('http://192.168.0.142:8080'), true);
+    }
 }

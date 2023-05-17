@@ -80,6 +80,7 @@ Route::group([
         // Wishlist
         Route::get('/wishlist/count', [WishlistController::class, 'wishlistCount']); // count
         Route::get('/wishlist', [WishlistController::class, 'wishlistView']); // view
+        Route::post('/wishlist/newAdd/{productId}', [WishlistController::class, 'addToWishlist']); // add
         Route::delete('/wishlist/{wishlistId}', [WishlistController::class, 'destroy']); // delete
 
         // Cart Count

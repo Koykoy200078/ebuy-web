@@ -14,6 +14,7 @@ use Laravel\Socialite\Facades\Socialite;
 class authcontroller extends Controller
 {
     // Github
+
     public function githubredirect(Request $request)
     {
         return Socialite::driver('github')->redirect();
@@ -93,21 +94,23 @@ class authcontroller extends Controller
             Auth::login($user);
             return redirect('/');
         }
+        $defaultpass = 'default123';
 
-        $newUser = $this->createNewUser($userdata);
+        $newUser = $this->createNewUser($userdata, $defaultpass);
 
         Auth::login($newUser);
-        return redirect('/');
+        return redirect('/')->with('message2', 'Your default Password is <strong>default123</strong>');
     }
 
-    private function createNewUser($userdata)
+    private function createNewUser($userdata, $defaultpass)
     {
+        
         $uuid = Str::uuid()->toString();
-
+        // return view ($defaultpass);
         $user = new User();
         $user->name = $userdata->name;
         $user->email = $userdata->email;
-        $user->password = Hash::make($uuid . now());
+        $user->password = Hash::make($defaultpass);
         $user->auth_type = 'google';
         $user->email_verified_at = now();
         $user->save();

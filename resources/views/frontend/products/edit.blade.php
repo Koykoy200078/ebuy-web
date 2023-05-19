@@ -90,11 +90,11 @@
                                     </div>
 
                                     <div class="mb-3">
-                                            <label>Select Brand</label>
+                                            <label>Material Category</label>
                                             <select name="brand" class="form-control">
                                             <option value="{{ $product ->brand }}">{{ $product ->brand }}</option>
                                             <option value="Recycle">Recycle</option>
-                                            <option value="Not Recycle">Not Recycle</option>
+                                            <option value="New">New</option>
                                             </select>
                                     </div>
 
@@ -272,7 +272,6 @@
             var product_id = "{{ $product->id }}";
             var prod_color_id = $(this).val();
             var qty = $(this).closest('.prod-color-tr').find('.productColorQuantity').val();
-            alert(prod_color_id);
 
             if(qty <= 0){
                 alert('Quantity is required');

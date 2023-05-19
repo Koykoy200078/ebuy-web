@@ -60,23 +60,27 @@
                                     <div class="col-md-5 my-auto">
                                         <a href="{{ url('collections/'.$cartItem->product->category->slug.'/'.$cartItem->product->slug) }}">
                                             <label class="product-name">
-
-                                                @if ($cartItem->product->productImages)
-                                                    <img src="{{ asset($cartItem->product->productImages[0]->image) }}"
-                                                    style="width: 100px; height: 100px" alt="">
-                                                @else
-                                                    <img src="" style="width: 100px; height: 000px" alt="">
-                                                @endif
-
-                                                &nbsp;&nbsp;&nbsp;{{ $cartItem->product->name }}
-
-                                                @if ($cartItem->productColor)
-                                                    @if ($cartItem->productColor->color)
-                                                    <span>- Color: {{ $cartItem->productColor->color->name }}</span>
+                                                <div class="product-image">
+                                                    @if ($cartItem->product->productImages)
+                                                        <img src="{{ asset($cartItem->product->productImages[0]->image) }}" style="width: 100px; height: 100px" alt="">
+                                                    @else
+                                                        <img src="" style="width: 100px; height: 100px" alt="">
                                                     @endif
-                                                @endif
-
+                                                </div>
+                                            
+                                                <div class="product-info">
+                                                    <div class="product-name">{{ $cartItem->product->name }}</div>
+                                            
+                                                    @if ($cartItem->productColor)
+                                                        @if ($cartItem->productColor->color)
+                                                            <div class="color-info">Color: {{ $cartItem->productColor->color->name }}</div>
+                                                        @endif
+                                                    @endif
+                                                </div>
                                             </label>
+                                            
+                                            
+                                            
                                         </a>
                                     </div>
                                     <div class="col-md-1 my-auto">

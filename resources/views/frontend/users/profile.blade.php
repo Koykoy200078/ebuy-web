@@ -63,7 +63,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label>Zip/Pin Code</label>
-                                        <input type="text" name="pin_code" value="{{ Auth::user()->userDetail->pin_code ?? '' }}" class="form-control"/>
+                                        <input type="number" name="pin_code" value="{{ Auth::user()->userDetail->pin_code ?? '' }}" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">

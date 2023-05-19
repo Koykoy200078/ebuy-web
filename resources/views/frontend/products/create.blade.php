@@ -54,6 +54,11 @@
                                         Product Color
                                     </button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="submit-tab" data-bs-toggle="tab" data-bs-target="#submit-tab-pane" type="button" role="tab" aria-controls="submit-tab-pane" aria-selected="false">
+                                        Submit Tab
+                                    </button>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade border p-3 show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
@@ -69,7 +74,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label>Product Name</label>
-                                        <input type="text" name="name" class="form-control">
+                                        <input type="text" name="name" class="form-control"> 
                                     </div>
 
                                     <div class="mb-3">
@@ -78,11 +83,11 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label>Select Brand</label>
+                                        <label>Material Category</label>
                                         <select name="brand" class="form-control">
                                             
                                             <option value="Recycle">Recycle</option>
-                                            <option value="Not Recycle">Not Recycle</option>
+                                            <option value="New">New</option>
 
                                         </select>
                                     </div>
@@ -173,9 +178,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade border p-3" id="submit-tab-pane" role="tabpanel" aria-labelledby="submit-tab" tabindex="0">
+                                    <div class="mb-3">
+                                            <br>
+                                            <button type="submit" class="btn btn-primary">Confirm submission</button>
+                                        
+                                        
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                
                             </div>
                         </form>
                     </div>

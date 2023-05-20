@@ -120,6 +120,7 @@ class CheckoutController extends Controller
         $orderResource = new OrderResource($order);
 
         return response()->json([
+            'success' => true,
             'order' => $orderResource,
             'totalProductAmount' => $totalProductAmount,
         ], 201);

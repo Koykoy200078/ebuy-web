@@ -6,6 +6,7 @@ use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CheckoutController;
 use App\Http\Controllers\api\MyProductsController;
+use App\Http\Controllers\api\OrdersController;
 use App\Http\Controllers\api\SearchController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\WishlistController;
@@ -97,7 +98,12 @@ Route::group([
         // Checkout
         Route::post('/add-orders', [CheckoutController::class, 'store']);
 
-
+        // Orders
+        Route::get('/orders', [OrdersController::class, 'index']);
+        Route::get('/orders/{orderId}', [OrdersController::class, 'show']);
+        Route::put('/orders/{orderId}/status', [OrdersController::class, 'updateOrderStatus']);
+        Route::get('/orders/{orderId}/invoice', [OrdersController::class, 'viewInvoice']);
+        Route::post('/orders/{orderId}/invoice', [OrdersController::class, 'mailInvoice']);
 
         // test
         Route::get('/sms', [AuthController::class, 'sms']);

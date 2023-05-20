@@ -21,8 +21,8 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string'],
-            'storename' => ['required', 'string'],          
-            'phone' => ['required', 'min:10','regex:/^\+?[0-9]+$/'],
+            'storename' => ['required', 'string'],
+            'phone' => ['required', 'min:10', 'regex:/^\+?[0-9]+$/'],
             'pin_code' => ['required', 'min:4', 'max:6'],
             'address' => ['required', 'string', 'max:500'],
         ]);
@@ -46,7 +46,7 @@ class UserController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' Profile Updated';
-            
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,

@@ -34,10 +34,11 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Phone Number</label>
-                                <input type="number" wire:model.defer="phone" id="phone" class="form-control"  placeholder="Enter Phone Number" value="{{ Auth::user()->phone }}"/>
+                                <input type="text" wire:model.defer="phone" id="phone" class="form-control" placeholder="Enter Phone Number" value="{{ Auth::user()->phone }}" pattern="\+63[0-9]+" title="Please enter a valid phone number with the format +63XXXXXXXXX">
                                 @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
-
                             </div>
+                            
+                            
                             <div class="col-md-6 mb-3">
                                 <label>Email Address</label>
                                 <input type="email" wire:model.defer="email" id="email" class="form-control" placeholder="Enter Email Address" />
@@ -163,9 +164,9 @@
                 Livewire.emit('transactionEmit', transaction.id);
 
             }
-            console.log('Transaction ID:', transaction.id); // Access the transaction ID here
+            // console.log('Transaction ID:', transaction.id); // Access the transaction ID here
 
-              alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+            //   alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
 
 
             });

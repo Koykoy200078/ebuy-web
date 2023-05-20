@@ -21,9 +21,9 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string'],
-            'storename' => ['required', 'string'],
-            'phone' => ['required', 'min:10', 'max:11'],
-            'pin_code' => ['required', 'max:4'],
+            'storename' => ['required', 'string'],          
+            'phone' => ['required', 'min:10','regex:/^\+?[0-9]+$/'],
+            'pin_code' => ['required', 'min:4', 'max:6'],
             'address' => ['required', 'string', 'max:500'],
         ]);
 

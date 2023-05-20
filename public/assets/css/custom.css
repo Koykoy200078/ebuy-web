@@ -1,3 +1,12 @@
+.whiteText {
+    color: #ffffff; /* white text color */
+}
+
+.defaultText {
+    color: #000000; /* default text color */
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -70,6 +79,10 @@ footer {
     border-top-right-radius: 10px; /* Adjust the value to control the rounding of the top-right corner */
     width: 100%; /* Ensure the image takes up the entire container */
   }
+
+
+
+  
 .carousel-item .custom-carousel-content {
   width: 50%;
   transform: translate(0%, -10%);
@@ -470,6 +483,16 @@ input[type="search"]:hover {
     outline: none;
     text-align: center;
 }
+
+.product-name {
+    display: flex;
+    align-items: center;
+}
+
+.product-image {
+    margin-right: 10px; /* Adjust the spacing between the image and text */
+}
+
 
 
 

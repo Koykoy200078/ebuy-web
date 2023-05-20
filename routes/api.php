@@ -97,6 +97,9 @@ Route::group([
         // Checkout
         Route::post('/add-orders', [CheckoutController::class, 'store']);
 
+
+
+        // test
         Route::get('/sms', [AuthController::class, 'sms']);
     });
 });

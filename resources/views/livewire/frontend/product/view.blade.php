@@ -31,15 +31,19 @@
                 <div class="col-md-7 mt-3">
                     <div class="product-view">
                         <h4 class="product-name">
-                            {{ $product->name }}
+                            {{ $product->name }} 
                         </h4>
+                        <div>
+                            {{-- <p class="sold-count">Sold: {{$sold}}</p> --}}
+                        </div>
                         <hr>
                         <p class="product-path">
                             Home / {{ $product->category->name }} / {{ $product->name }}
                         </p>
                         <div>
                             <span class="selling-price">₱{{ $product->selling_price }}</span>
-                            <span class="original-price">₱{{ $product->original_price }}</span>
+                            <span class="original-price">₱{{ $product->original_price }}</span> 
+                            <span > &nbsp;( {{$sold}} ) </span>
                         </div>
                         <div>
                             @if($product->productColors->count() > 0)
@@ -169,6 +173,7 @@
                                         <span class="selling-price">₱{{ $relatedProductsItem->selling_price }}</span>
                                         <span class="original-price">₱{{ $relatedProductsItem->original_price }}</span>
                                     </div>
+                                  
                                 </div>
                             </div>
                         </div>

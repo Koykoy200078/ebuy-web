@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Frontend\Product;
 
 use App\Models\Cart;
+use App\Models\Orderitem;
 use App\Models\User;
 use App\Models\Product;
 use Livewire\Component;
@@ -12,7 +13,7 @@ use App\Models\ActivityLog;
 class View extends Component
 {
 
-    public $category, $product, $prodColorSelectedQuantity, $quantityCount = 1, $productColorId;
+    public $category, $product, $prodColorSelectedQuantity, $quantityCount = 1, $productColorId, $sold;
 
 
     public function addToWishList($productId)
@@ -266,6 +267,7 @@ class View extends Component
 
     public function mount($category, $product, $comment)
     {
+        
         $this->category = $category;
         $this->product = $product;
         $this->comment = $comment;
@@ -273,10 +275,16 @@ class View extends Component
 
     public function render()
     {
+
+        $sold = OrderItem::where('product_id', $this->product->id)->sum('quantity');
+        $this->sold = $sold;
+
+
         return view('livewire.frontend.product.view', [
             'product' => $this->product,
             'category' => $this->category,
             'comment' => $this->comment,
+            'sold' => $this->sold,
         ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\ActivityLog;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Orderitem;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
@@ -36,41 +37,50 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $sliders = Slider::where('status', '0')->get();
-            $trendingProducts = Product::where('trending', '1')->latest()->take(15)->get();
-            $newArrivalProducts = Product::latest()->take(14)->get();
-            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
-
-            $data = [
-                'sliders' => [],
-                'trending_products' => [],
-                'new_arrival_products' => [],
-                'featured_products' => []
-            ];
-
-            foreach ($sliders as $slider) {
+            $sliders = Slider::where('status', '0')->get()->map(function ($slider) {
                 $sliderData = $slider->toArray();
                 $sliderData['image_url'] = asset($slider->image);
-                $data['sliders'][] = $sliderData;
-            }
+                return $sliderData;
+            });
 
-            foreach ($trendingProducts as $product) {
-                $productData = $product->toArray();
-                $productData['image_url'] = asset($product->productImages[0]->image);
-                $data['trending_products'][] = $productData;
-            }
+            $sold = OrderItem::groupBy('product_id')
+                ->selectRaw('product_id, SUM(quantity) as total_quantity')
+                ->orderByDesc('total_quantity')
+                ->get();
 
-            foreach ($newArrivalProducts as $product) {
-                $productData = $product->toArray();
-                $productData['image_url'] = asset($product->productImages[0]->image);
-                $data['new_arrival_products'][] = $productData;
-            }
+            $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
+                ->latest('updated_at')
+                ->take(15)
+                ->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
+                    return $productData;
+                });
 
-            foreach ($featuredProducts as $product) {
-                $productData = $product->toArray();
-                $productData['image_url'] = asset($product->productImages[0]->image);
-                $data['featured_products'][] = $productData;
-            }
+            $newArrivalProducts = Product::where("status", '0')->latest('updated_at')->take(14)->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
+                    return $productData;
+                });
+
+            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
+                    return $productData;
+                });
+
+            $data = [
+                'sliders' => $sliders,
+                'trending_products' => $trendingProducts,
+                'new_arrival_products' => $newArrivalProducts,
+                'featured_products' => $featuredProducts
+            ];
 
             if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
                 return response()->json([
@@ -86,35 +96,6 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-    // public function productView(string $category_slug, string $product_slug)
-    // {
-    //     $category = Category::where('slug', $category_slug)->first();
-
-    //     if ($category) {
-    //         $product = $category->products()->with('productColors.color')->where('slug', $product_slug)->where('status', '0')->first();
-    //         if ($product) {
-    //             $image_url = url($product->productImages[0]->image);
-
-    //             return response()->json([
-    //                 'product' => $product->toArray(),
-    //                 'category' => $category,
-    //                 'image_url' => $image_url,
-    //                 'product_colors' => $product->productColors->map(function ($item) {
-    //                     return [
-    //                         'product_color_id' => $item->id,
-    //                         'color_name' => $item->color->name,
-    //                         'quantity' => $item->quantity,
-    //                     ];
-    //                 }),
-    //             ], 200);
-    //         } else {
-    //             return response()->json(['error' => 'Product not found'], 404);
-    //         }
-    //     } else {
-    //         return response()->json(['error' => 'Category not found'], 404);
-    //     }
-    // }
 
     public function productView(string $category_slug, string $product_slug)
     {
@@ -157,9 +138,17 @@ class ProductController extends Controller
 
     public function newArrival()
     {
-        // $newArrivalProducts = Product::latest()->take(16)->get();
-        // return response()->json(['message' => 'Success', 'data' => $newArrivalProducts], 200);
-        $newArrivalProducts = Product::latest()->take(16)->get();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $description = '' . $user->name . ' clicked on New Arrival via Mobile App';
+
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'description' => $description,
+            ]);
+        }
+
+        $newArrivalProducts = Product::latest()->where("status", "0")->take(16)->get();
 
         $data = $newArrivalProducts->map(function ($product) {
             $image_url = url($product->productImages[0]->image);
@@ -182,28 +171,6 @@ class ProductController extends Controller
         });
         return response()->json(['message' => 'Success', 'data' => $data], 200);
     }
-
-    // public function productView(Request $request, string $category_slug, string $product_slug)
-    // {
-    //     $category = Category::select('id', 'name', 'slug')
-    //         ->where('slug', $category_slug)
-    //         ->first();
-    //     if ($category) {
-    //         $product = $category->products()->select('id', 'name', 'slug', 'description', 'price')
-    //             ->where('slug', $product_slug)
-    //             ->first();
-    //         if ($product) {
-    //             return response()->json([
-    //                 'category' => $category,
-    //                 'product' => $product
-    //             ], 200);
-    //         } else {
-    //             return response()->json(['message' => 'Product not found'], 404);
-    //         }
-    //     } else {
-    //         return response()->json(['message' => 'Category not found'], 404);
-    //     }
-    // }
 
     public function view()
     {

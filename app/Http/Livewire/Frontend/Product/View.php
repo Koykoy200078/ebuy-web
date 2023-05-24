@@ -10,10 +10,11 @@ use Livewire\Component;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ActivityLog;
+
 class View extends Component
 {
 
-    public $category, $product, $prodColorSelectedQuantity, $quantityCount = 1, $productColorId, $sold;
+    public $category, $product, $comment, $prodColorSelectedQuantity, $quantityCount = 1, $productColorId, $sold;
 
 
     public function addToWishList($productId)
@@ -32,15 +33,15 @@ class View extends Component
                         ]);
                         return false;
                     } else {
-                      
+
                         Wishlist::create([
                             'user_id' => auth()->user()->id,
                             'product_id' => $productId,
                         ]);
                         if (Auth::check()) {
                             $user = Auth::user();
-                            $description = '' . $user->name . ' added Product id:'. $productId . ' to the Wishlist';
-                            
+                            $description = '' . $user->name . ' added Product id:' . $productId . ' to the Wishlist';
+
                             ActivityLog::create([
                                 'user_id' => $user->id,
                                 'description' => $description,
@@ -110,7 +111,7 @@ class View extends Component
 
     public function addToCart(int $productId)
     {
-        
+
         if (Auth::check()) {
             $verify = Product::where('product_user_id', auth()->user()->id)->value('product_user_id');
             $Productverify = Product::where('id', $productId)->value('product_user_id');
@@ -133,7 +134,7 @@ class View extends Component
                                     ]);
                                 } else {
                                     $productColor = $this->product->productColors()->where('id', $this->productColorId)->first();
-                                  
+
                                     if ($productColor->quantity > 0) {
                                         if ($productColor->quantity >= $this->quantityCount) {
                                             // Insert Product to Cart
@@ -147,8 +148,8 @@ class View extends Component
                                             ]);
                                             if (Auth::check()) {
                                                 $user = Auth::user();
-                                                $description = '' . $user->name . ' added Product id:'. $productId . ' to the Cart';
-                                                
+                                                $description = '' . $user->name . ' added Product id:' . $productId . ' to the Cart';
+
                                                 ActivityLog::create([
                                                     'user_id' => $user->id,
                                                     'description' => $description,
@@ -202,8 +203,8 @@ class View extends Component
                                         ]);
                                         if (Auth::check()) {
                                             $user = Auth::user();
-                                            $description = '' . $user->name . ' added Product id:'. $productId . ' to the Cart ';
-                                            
+                                            $description = '' . $user->name . ' added Product id:' . $productId . ' to the Cart ';
+
                                             ActivityLog::create([
                                                 'user_id' => $user->id,
                                                 'description' => $description,
@@ -267,7 +268,7 @@ class View extends Component
 
     public function mount($category, $product, $comment)
     {
-        
+
         $this->category = $category;
         $this->product = $product;
         $this->comment = $comment;

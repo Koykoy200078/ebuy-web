@@ -18,36 +18,28 @@ class FrontendController extends Controller
     {
         $sliders = Slider::where('status', '0')->get();
 
-        
+
         $sold = OrderItem::groupBy('product_id')
-        ->selectRaw('product_id, SUM(quantity) as total_quantity')
-        ->orderByDesc('total_quantity')
-        ->get();
-    
-    $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-        ->latest()
-        ->take(15)
-        ->get();
-    
-    
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->orderByDesc('total_quantity')
+            ->get();
 
-
-
+        $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
+            ->latest()
+            ->take(15)
+            ->get();
 
         $newArrivalProducts = Product::latest()->where("status", '0')->take(14)->get();
         $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
-        return view ('frontend.index', compact('sliders', 'trendingProducts', 'newArrivalProducts', 'featuredProducts', 'sold'));
+        return view('frontend.index', compact('sliders', 'trendingProducts', 'newArrivalProducts', 'featuredProducts', 'sold'));
     }
 
     public function searchProducts(Request $request)
     {
-        if($request->search)
-        {
-            $searchProducts = Product::where('name','Like','%'.$request->search.'%')->latest()->paginate(15);
+        if ($request->search) {
+            $searchProducts = Product::where('name', 'Like', '%' . $request->search . '%')->latest()->paginate(15);
             return view('frontend.pages.search', compact('searchProducts'));
-        }
-        else
-        {
+        } else {
             return redirect()->back()->with('message', 'Empty Search');
         }
     }
@@ -57,30 +49,28 @@ class FrontendController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on New Arrival';
-            
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,
             ]);
         }
         $newArrivalProducts = Product::latest()->where("status", "0")->take(16)->get();
-        return view ('frontend.pages.new-arrival', compact('newArrivalProducts'));
-
+        return view('frontend.pages.new-arrival', compact('newArrivalProducts'));
     }
     public function featuredProducts()
     {
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on Featured Product';
-            
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,
             ]);
         }
         $featuredProducts = Product::where('featured', '1')->latest()->get();
-        return view ('frontend.pages.featured-products', compact('featuredProducts'));
-
+        return view('frontend.pages.featured-products', compact('featuredProducts'));
     }
 
     public function categories()
@@ -88,88 +78,81 @@ class FrontendController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on Category';
-            
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,
             ]);
         }
-        $categories = Category::where('status','0')->get();
+        $categories = Category::where('status', '0')->get();
         return view('frontend.collections.category.index', compact('categories'));
     }
 
     public function products($category_slug)
     {
-        
-        $category = Category::where('slug',$category_slug)->first();
+
+        $category = Category::where('slug', $category_slug)->first();
         if (Auth::check()) {
             $user = Auth::user();
-            $description = '' . $user->name . ' clicked on category '. $category->name;
-            
+            $description = '' . $user->name . ' clicked on category ' . $category->name;
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,
             ]);
         }
-        if($category){
+        if ($category) {
 
-            return view('frontend.collections.products.index' , compact('category'));
-
-        }else{
+            return view('frontend.collections.products.index', compact('category'));
+        } else {
             return redirect()->back();
         }
     }
 
     public function productView(string $category_slug, string $product_slug)
     {
-        $category = Category::where('slug',$category_slug)->first();
+        $category = Category::where('slug', $category_slug)->first();
 
-       
-        if($category){
+
+        if ($category) {
 
             $product = $category->products()->where('slug', $product_slug)->where('status', '0')->first();
-            if($product)
-            {
-                if(auth()->user())
-                {
+            if ($product) {
+                if (auth()->user()) {
 
 
-                $userId = auth()->user()->id;
-                $productId = $product->id;
-        
-                if (Auth::check()) {
-                    $user = Auth::user();
-                    $description = '' . $user->name . ' clicked on Product Id:'. $productId;
-                    
-                    ActivityLog::create([
-                        'user_id' => $user->id,
-                        'description' => $description,
-                    ]);
-                }
-                // return view ($productId );
-                $comment = Orderitem::where('user_id', $userId)
-                ->where('product_id', $productId)
-                ->where('status_message', 'completed')
-                ->value('status_message');
-                // return view ($comment );
-                }
-                else{
+                    $userId = auth()->user()->id;
                     $productId = $product->id;
-        
+
+                    if (Auth::check()) {
+                        $user = Auth::user();
+                        $description = '' . $user->name . ' clicked on Product Id:' . $productId;
+
+                        ActivityLog::create([
+                            'user_id' => $user->id,
+                            'description' => $description,
+                        ]);
+                    }
+                    // return view ($productId );
+                    $comment = Orderitem::where('user_id', $userId)
+                        ->where('product_id', $productId)
+                        ->where('status_message', 'completed')
+                        ->value('status_message');
+                    // return view ($comment );
+                } else {
+                    $productId = $product->id;
+
                     // return view ($productId );
                     $comment = Orderitem::where('user_id', 0)
-                    ->where('product_id', $productId)
-                    ->where('status_message', 'completed')
-                    ->value('status_message');
+                        ->where('product_id', $productId)
+                        ->where('status_message', 'completed')
+                        ->value('status_message');
                 }
                 return view('frontend.collections.products.view', compact('product', 'category', 'comment'));
-
-            }else{
+            } else {
                 return redirect()->back();
             }
-
-
-        }else{
+        } else {
             return redirect()->back();
         }
     }

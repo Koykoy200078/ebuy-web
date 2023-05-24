@@ -17,7 +17,21 @@ class FrontendController extends Controller
     public function index()
     {
         $sliders = Slider::where('status', '0')->get();
-        $trendingProducts = Product::where('trending', '1')->latest()->take(15)->get();
+
+        
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->pluck('product_id');
+
+        // return view($sold);
+        $trendingProducts = Product::whereIn('id', $sold)->latest()->take(15)->get();
+
+
+
+
+
+
         $newArrivalProducts = Product::latest()->where("status", '0')->take(14)->get();
         $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get();
         return view ('frontend.index', compact('sliders', 'trendingProducts', 'newArrivalProducts', 'featuredProducts'));

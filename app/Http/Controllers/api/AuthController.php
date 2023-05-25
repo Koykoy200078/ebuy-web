@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
@@ -29,7 +30,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('JWT', ['except' => ['login', 'register', 'googleRedirect', 'googleCallback']]);
+        $this->middleware('JWT', ['except' => ['login', 'register', 'googleRedirect', 'googleCallback', 'sendResetLinkEmail']]);
     }
 
     /**
@@ -99,51 +100,6 @@ class AuthController extends Controller
             'expires_in' => JWTAuth::factory()->getTTL() * 1440,
         ])->header('Content-Type', 'application/json');
     }
-
-
-
-
-    /**
-     * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->only('name', 'email', 'password'), [
-    //         'name' => 'required|string|between:2,100',
-    //         'email' => 'required|string|email|max:100|unique:users',
-    //         'password' => 'required|string|min:8',
-    //         'address' => 'required|string|max:255',
-    //         'phone' => 'required|string|max:255',
-    //         'birthday' => 'required|date',
-    //         'gender' => 'required|string',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Registration failed. Please check your input.',
-    //             'errors' => $validator->errors()
-    //         ], 422)->header('Content-Type', 'application/json');
-    //     }
-
-    //     $user = User::create([
-    //         'name' => $request->input('name'),
-    //         'email' => $request->input('email'),
-    //         'password' => Hash::make($request->input('password')),
-    //         'address' => $request->input('address'),
-    //         'phone' => $request->input('phone'),
-    //         'birthday' => $request->input('birthday'),
-    //         'gender' => $request->input('gender'),
-    //     ]);
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'User successfully registered',
-    //         'user' => $user
-    //     ], 201)->header('Content-Type', 'application/json');
-    // }
 
     public function register(Request $request)
     {
@@ -310,6 +266,29 @@ class AuthController extends Controller
             'token' => $newToken
         ], 200)->header('Content-Type', 'application/json');
     }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $response = $this->broker()->sendResetLink(
+            $request->only('email')
+        );
+
+        if ($response == Password::RESET_LINK_SENT) {
+            return response()->json(['message' => 'Reset link sent to your email'], 200);
+        } else {
+            return response()->json(['message' => 'Unable to send reset link'], 400);
+        }
+    }
+
+    protected function broker()
+    {
+        return Password::broker();
+    }
+
 
     public function sms()
     {

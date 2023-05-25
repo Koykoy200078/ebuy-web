@@ -24,6 +24,8 @@ Route::group([
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
 
+        Route::post('/forgot/password', [AuthController::class, 'sendResetLinkEmail']);
+
         Route::get('/google/redirect', [AuthController::class, 'googleRedirect']);
         Route::get('/google/callback', [AuthController::class, 'googleCallback']);
     });

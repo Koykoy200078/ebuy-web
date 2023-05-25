@@ -14,6 +14,8 @@
     <meta name="keywords" content="@yield('meta_keywords')">
     <meta name="author" content="ECOMMERCE">
 
+    <link rel="shortcut icon" href="{{ asset('favicon.ico')}}" />
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,19 +19,21 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('admin/css/style.css')}}">
-    
+
     <!-- endinject -->
-    <link rel="shortcut icon" href="{{ asset('admin/images/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico')}}" />
     <style>
-        .form-control{
+        .form-control {
             border: 1px solid #ddd;
         }
-        .sidebar .nav .nav-item.active{
+
+        .sidebar .nav .nav-item.active {
             background-color: #e9e9e9;
         }
     </style>
     @livewireStyles
 </head>
+
 <body>
 
 
@@ -44,7 +47,7 @@
                 <div class="content-wrapper">
                     @yield('content')
                 </div>
-            </div>  
+            </div>
 
         </div>
     </div>
@@ -57,24 +60,25 @@
     <script src="{{ asset('admin/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('admin/js/jquery.cookie.js') }}"></script>
     <script src="{{ asset('admin/js/template.js') }}"></script>
-    
+
     <!-- Custom js for this page -->
     <script src="{{ asset('admin/js/dashboard.js') }}"></script>
     <script src="{{ asset('admin/js/data-table.js') }}"></script>
     <script src="{{ asset('admin/js/dataTables.bootstrap4.js') }}"></script>
     <!-- End custom js for this page -->
-    
+
     <script>
-      $(document).ready(function() {
-        // Your code here
-      });
+        $(document).ready(function() {
+            // Your code here
+        });
     </script>
-    
-    
+
+
     @yield('scripts')
 
     @livewireScripts
 
     @stack('script')
 </body>
+
 </html>

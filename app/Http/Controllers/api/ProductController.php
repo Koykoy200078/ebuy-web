@@ -48,15 +48,6 @@ class ProductController extends Controller
                 ->orderByDesc('total_quantity')
                 ->get();
 
-            if ($sold) {
-                foreach ($sold as $item) {
-                    echo "Product ID: " . $item->product_id . " - Total Quantity Sold: " . $item->total_quantity . "<br>";
-                }
-            } else {
-                echo "No records found.";
-            }
-
-
             $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
                 ->latest('updated_at')
                 ->take(15)

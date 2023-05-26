@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontend\Product;
 
+use App\Models\Orderitem;
 use App\Models\Product;
 use Livewire\Component;
 
@@ -21,6 +22,11 @@ class Index extends Component
     }
     public function render()
     {
+        $this->sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
+
         $this->products = Product::where('category_id', $this->category->id)
             ->when($this->brandInputs, function ($q) {
                 $q->whereIn('brand', $this->brandInputs);
@@ -41,6 +47,7 @@ class Index extends Component
         return view('livewire.frontend.product.index', [
             'products' => $this->products,
             'category' => $this->category,
+            'sold' => $this->sold,
         ]);
     }
 }

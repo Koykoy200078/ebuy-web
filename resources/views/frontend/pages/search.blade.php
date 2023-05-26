@@ -4,7 +4,8 @@
 
 @section('content')
 
-<div class="py-5">
+
+    <div class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -37,6 +38,9 @@
                                 <div>
                                     <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
                                     <span class="original-price">₱{{ $productsItem->original_price }}</span>
+                                    <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
+
+
                                 </div>
                                 <p style="height: 45px; overflow: hidden">
                                    <b>Description: </b> {{ $productsItem->description }}
@@ -63,5 +67,6 @@
         </div>
     </div>
   </div>
+
 
 @endsection

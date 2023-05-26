@@ -41,10 +41,14 @@ class FrontendController extends Controller
 
     public function searchProducts(Request $request)
     {
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
         if($request->search)
         {
             $searchProducts = Product::where('name','Like','%'.$request->search.'%')->latest()->paginate(15);
-            return view('frontend.pages.search', compact('searchProducts'));
+            return view('frontend.pages.search', compact('searchProducts', 'sold'));
         }
         else
         {
@@ -63,8 +67,12 @@ class FrontendController extends Controller
                 'description' => $description,
             ]);
         }
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
         $newArrivalProducts = Product::latest()->where("status", "0")->take(16)->get();
-        return view ('frontend.pages.new-arrival', compact('newArrivalProducts'));
+        return view ('frontend.pages.new-arrival', compact('newArrivalProducts', 'sold'));
 
     }
     public function featuredProducts()
@@ -78,8 +86,12 @@ class FrontendController extends Controller
                 'description' => $description,
             ]);
         }
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
         $featuredProducts = Product::where('featured', '1')->latest()->get();
-        return view ('frontend.pages.featured-products', compact('featuredProducts'));
+        return view ('frontend.pages.featured-products', compact('featuredProducts', 'sold'));
 
     }
 
@@ -94,8 +106,12 @@ class FrontendController extends Controller
                 'description' => $description,
             ]);
         }
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
         $categories = Category::where('status','0')->get();
-        return view('frontend.collections.category.index', compact('categories'));
+        return view('frontend.collections.category.index', compact('categories', 'sold'));
     }
 
     public function products($category_slug)
@@ -111,9 +127,13 @@ class FrontendController extends Controller
                 'description' => $description,
             ]);
         }
+        $sold = OrderItem::groupBy('product_id')
+        ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
         if($category){
 
-            return view('frontend.collections.products.index' , compact('category'));
+            return view('frontend.collections.products.index' , compact('category', 'sold'));
 
         }else{
             return redirect()->back();

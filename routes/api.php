@@ -43,6 +43,10 @@ Route::group([
         Route::get('/products/new-arrival', [ProductController::class, 'newArrival']);
         Route::get('/products/featured-products', [ProductController::class, 'featuredProducts']);
 
+        Route::get('/products/sliders', [ProductController::class, 'getSliders']);
+        Route::get('/products/trending-products', [ProductController::class, 'getTrendingProducts']);
+        Route::get('/products/new-arrival-products', [ProductController::class, 'getNewArrivalProducts']);
+
         // Route::get('/products/view', [ProductController::class, 'view']);
         Route::post('/products/create', [ProductController::class, 'store']);
         // Route::get('/products/{product_id}', [ProductController::class, 'showProduct']);

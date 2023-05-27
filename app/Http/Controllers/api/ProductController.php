@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
 use App\Models\Slider;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -34,134 +35,73 @@ class ProductController extends Controller
         ]);
     }
 
-    // public function index()
-    // {
-    //     try {
-    //         $sliders = Slider::where('status', '0')->get()->map(function ($slider) {
-    //             $sliderData = $slider->toArray();
-    //             $sliderData['image_url'] = asset($slider->image);
-    //             return $sliderData;
-    //         });
-
-    //         $sold = OrderItem::groupBy('product_id')
-    //             ->selectRaw('product_id, SUM(quantity) as total_quantity')
-    //             ->orderByDesc('total_quantity')
-    //             ->get();
-
-    //         $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-    //             ->latest('updated_at')
-    //             ->take(15)
-    //             ->get()
-    //             ->map(function ($product) use ($sold) {
-    //                 $productData = $product->toArray();
-    //                 $productData['image_url'] = asset($product->productImages[0]->image);
-    //                 $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
-    //                 return $productData;
-    //             });
-
-    //         $newArrivalProducts = Product::where("status", '0')->latest('updated_at')->take(14)->get()
-    //             ->map(function ($product) use ($sold) {
-    //                 $productData = $product->toArray();
-    //                 $productData['image_url'] = asset($product->productImages[0]->image);
-    //                 $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
-    //                 return $productData;
-    //             });
-
-    //         $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get()
-    //             ->map(function ($product) use ($sold) {
-    //                 $productData = $product->toArray();
-    //                 $productData['image_url'] = asset($product->productImages[0]->image);
-    //                 $productData['sold_quantity'] = $sold->where('product_id', $product->id)->first()->total_quantity;
-    //                 return $productData;
-    //             });
-
-    //         $data = [
-    //             'sliders' => $sliders,
-    //             'trending_products' => $trendingProducts,
-    //             'new_arrival_products' => $newArrivalProducts,
-    //             'featured_products' => $featuredProducts
-    //         ];
-
-    //         if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
-    //             return response()->json([
-    //                 'message' => 'No products or sliders found',
-    //             ], 404);
-    //         }
-
-    //         return response()->json($data, 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'An error occurred while fetching data',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-    public function index()
+    public function getSliders(): JsonResponse
     {
-        try {
-            $sliders = Slider::where('status', '0')->get()->map(function ($slider) {
-                $sliderData = $slider->toArray();
-                $sliderData['image_url'] = asset($slider->image);
-                return $sliderData;
+        $sliders = Slider::where('status', 0)
+            ->selectRaw('id, title, image, created_at, updated_at, ' .
+                'CONCAT("' . asset('') . '", image) AS image_url')
+            ->get();
+
+        return $sliders->isEmpty() ? response()->json([
+            "status" => 0,
+            "data" => null
+        ], 200) : response()->json([
+            "status" => 1,
+            "data" => $sliders
+        ], 200);
+    }
+
+    public function getTrendingProducts(): JsonResponse // Most sold products
+    {
+        $sold = OrderItem::groupBy('product_id')
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->orderByDesc('total_quantity')
+            ->take(15)
+            ->get();
+
+        $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
+            ->latest()
+            ->with('productImages')
+            ->get()
+            ->map(function ($product) use ($sold) {
+                $productData = $product->toArray();
+                $productData['image_url'] = asset($product->productImages[0]->image);
+                $soldQuantity = $sold->where('product_id', $product->id)->first();
+                $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
+                return $productData;
             });
 
-            $sold = OrderItem::groupBy('product_id')
-                ->selectRaw('product_id, SUM(quantity) as total_quantity')
-                ->orderByDesc('total_quantity')
-                ->get();
-
-            $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-                ->latest('updated_at')
-                ->take(15)
-                ->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $newArrivalProducts = Product::where("status", '0')->latest('updated_at')->take(14)->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $data = [
-                'sliders' => $sliders,
-                'trending_products' => $trendingProducts,
-                'new_arrival_products' => $newArrivalProducts,
-                'featured_products' => $featuredProducts
-            ];
-
-            if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
-                return response()->json([
-                    'message' => 'No products or sliders found',
-                ], 404);
-            }
-
-            return response()->json($data, 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred while fetching data',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return $trendingProducts->isEmpty() ? response()->json([
+            "status" => 0,
+            "data" => null
+        ], 200) : response()->json([
+            "status" => 1,
+            "data" => $trendingProducts
+        ], 200);
     }
+
+    public function getNewArrivalProducts(): JsonResponse
+    {
+        $newArrivalProducts = Product::where('status', 0)
+            ->latest('updated_at')
+            ->with('productImages')
+            ->take(14)
+            ->get()
+            ->map(function ($product) {
+                $productData = $product->toArray();
+                $productData['image_url'] = asset($product->productImages[0]->image);
+                return $productData;
+            });
+
+        return $newArrivalProducts->isEmpty() ? response()->json([
+            "status" => 0,
+            "data" => null
+        ], 200) : response()->json([
+            "status" => 1,
+            "data" => $newArrivalProducts
+        ], 200);
+    }
+
 
 
     public function productView(string $category_slug, string $product_slug)

@@ -35,6 +35,72 @@ class ProductController extends Controller
         ]);
     }
 
+    public function index()
+    {
+        try {
+            $sliders = Slider::where('status', '0')->get()->map(function ($slider) {
+                $sliderData = $slider->toArray();
+                $sliderData['image_url'] = asset($slider->image);
+                return $sliderData;
+            });
+
+            $sold = OrderItem::groupBy('product_id')
+                ->selectRaw('product_id, SUM(quantity) as total_quantity')
+                ->orderByDesc('total_quantity')
+                ->get();
+
+            $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
+                ->latest('updated_at')
+                ->take(15)
+                ->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $soldQuantity = $sold->where('product_id', $product->id)->first();
+                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
+                    return $productData;
+                });
+
+            $newArrivalProducts = Product::where("status", '0')->latest('updated_at')->take(14)->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $soldQuantity = $sold->where('product_id', $product->id)->first();
+                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
+                    return $productData;
+                });
+
+            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get()
+                ->map(function ($product) use ($sold) {
+                    $productData = $product->toArray();
+                    $productData['image_url'] = asset($product->productImages[0]->image);
+                    $soldQuantity = $sold->where('product_id', $product->id)->first();
+                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
+                    return $productData;
+                });
+
+            $data = [
+                'sliders' => $sliders,
+                'trending_products' => $trendingProducts,
+                'new_arrival_products' => $newArrivalProducts,
+                'featured_products' => $featuredProducts
+            ];
+
+            if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
+                return response()->json([
+                    'message' => 'No products or sliders found',
+                ], 404);
+            }
+
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while fetching data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getSliders(): JsonResponse
     {
         $sliders = Slider::where('status', 0)

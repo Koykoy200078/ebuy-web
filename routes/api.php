@@ -33,19 +33,16 @@ Route::group([
     Route::middleware(['auth:api'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
-
         Route::get('/user/info', [AuthController::class, 'me']);
 
         // Product
-        // Route::get('/categories/{category_slug}/products/{product_slug}', [ProductController::class, 'productView']);
-
         Route::get('/products/index', [ProductController::class, 'index']);
         Route::get('/products/new-arrival', [ProductController::class, 'newArrival']);
         Route::get('/products/featured-products', [ProductController::class, 'featuredProducts']);
 
         Route::get('/products/sliders', [ProductController::class, 'getSliders']);
-        Route::get('/products/trending-products', [ProductController::class, 'getTrendingProducts']);
-        Route::get('/products/new-arrival-products', [ProductController::class, 'getNewArrivalProducts']);
+        Route::get('/products/newArrival', [ProductController::class, 'getNewArrivalProducts']);
+        Route::get('/products/trending', [ProductController::class, 'getTrendingProducts']);
 
         // Route::get('/products/view', [ProductController::class, 'view']);
         Route::post('/products/create', [ProductController::class, 'store']);

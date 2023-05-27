@@ -43,6 +43,9 @@ class ProductController extends Controller
     public function store(ProductFormRequest $request)
     {
         $validatedData = $request->validated();
+        if ($request->colors == null) {
+            return redirect('/admin/products/create3')->with('message', 'The Product color field is required.');
+        }
 
         $category = Category::findOrFail($validatedData['category_id']);
         $product = $category ->products()->create([

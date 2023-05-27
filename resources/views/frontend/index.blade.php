@@ -80,7 +80,7 @@
         <div class="container">
             <div class="row" >
                 <div class="col-md-12">
-                    <h4><strong>Most Sale </strong></h4>
+                    <h4><strong>Most Sold </strong></h4>
                     <div class="underline mb-4"></div>
                 </div>
                 @if ($trendingProducts)
@@ -112,7 +112,8 @@
                                             <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
                                             <span class="original-price">₱{{ $productsItem->original_price }}</span>
                                             {{-- <p>Quantity: {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity }}</p> --}}
-                                            <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity }} ) </span>
+                                            <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
+
                                         </div>
                                     </div>
                                 </div>
@@ -168,6 +169,7 @@
                                         <div>
                                             <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
                                             <span class="original-price">₱{{ $productsItem->original_price }}</span>
+                                            <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
                                         </div>
                                     </div>
                                 </div>
@@ -224,6 +226,8 @@
                                         <div>
                                             <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
                                             <span class="original-price">₱{{ $productsItem->original_price }}</span>
+                                            <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
+
                                         </div>
                                     </div>
                                 </div>

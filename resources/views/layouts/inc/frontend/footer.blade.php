@@ -24,8 +24,8 @@
                     <h4 class="footer-heading">Shop Now</h4>
                     <div class="footer-underline"></div>
                     <div class="mb-2"><a href="{{ url('collections')}}" >Collections</a></div>
-                    <div class="mb-2"><a href="{{ url('/')}}" >Trending Products</a></div>
-                    <div class="mb-2"><a href="{{ url('new-arrivals')}}" >New Arrivals Products</a></div>
+                    {{-- <div class="mb-2"><a href="{{ url('/')}}" >Trending Products</a></div> --}}
+                    <div class="mb-2"><a href="{{ url('new-arrivals')}}" >Recent Posted Products</a></div>
                     <div class="mb-2"><a href="{{ url('featured-products')}}" >Featured Products</a></div>
                     <div class="mb-2"><a href="{{ url('cart')}}" >Cart</a></div>
                 </div>

@@ -104,7 +104,7 @@
                         <a class="nav-link" href="{{ url('/collections') }}">All Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/new-arrivals') }}">New Arrivals</a>
+                        <a class="nav-link" href="{{ url('/new-arrivals') }}">Recent Posted Item</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/featured-products') }}">Featured Products</a>

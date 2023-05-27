@@ -5,6 +5,9 @@
 
 <div class="row">
     <div class="col-md-12">
+            @if (session('message'))
+            <div class="alert alert-danger">{{(session('message'))}}</div>
+        @endif
         <div class="card">
             <div class="card-header">
                 <h3>Add Products
@@ -141,12 +144,12 @@
                                         <input type="number" name="quantity" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="mb-3">
                                         <label>Trending</label>
                                         <input type="checkbox" name="trending" style="width: 50px; height: 50px;"/>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label>Featured</label>

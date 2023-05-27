@@ -5,7 +5,7 @@
             @if ($category->brands)
 
             <div class="card">
-                <div class="card-header"><h4>Brands</h4></div>
+                <div class="card-header"><h4>Material Category</h4></div>
                 <div class="card-body">
                
                     <label class="d-block">
@@ -65,6 +65,8 @@
                                 <div>
                                     <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
                                     <span class="original-price">₱{{ $productsItem->original_price }}</span>
+                                    <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
+
                                 </div>
                                 {{-- <div class="mt-2">
                                     <a href="" class="btn btn1">Add To Cart</a>

@@ -120,7 +120,7 @@ class View extends Component
                 if (Auth::check()) {
                     if ($this->product->where('id', $productId)->where('status', '0')->exists()) {
                         // Check for product color quantity and add to cart
-                        if ($this->product->productColors()->count() > 1) {
+                        if ($this->product->productColors()->count() > 0) {
                             if ($this->prodColorSelectedQuantity != NULL) {
                                 if (Cart::where('user_id', auth()->user()->id)
                                     ->where('product_id', $productId)

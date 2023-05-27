@@ -148,12 +148,12 @@
                                         <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="mb-3">
                                         <label>Trending</label>
                                         <input type="checkbox" name="trending" {{ $product->trending == '1' ? 'checked':'' }} style="width: 50px; height: 50px;"/>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label>Featured</label>

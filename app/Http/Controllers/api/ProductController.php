@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
 use App\Models\Slider;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,72 +34,6 @@ class ProductController extends Controller
         return response()->json([
             'productCount' => $productCount
         ]);
-    }
-
-    public function index()
-    {
-        try {
-            $sliders = Slider::where('status', '0')->get()->map(function ($slider) {
-                $sliderData = $slider->toArray();
-                $sliderData['image_url'] = asset($slider->image);
-                return $sliderData;
-            });
-
-            $sold = OrderItem::groupBy('product_id')
-                ->selectRaw('product_id, SUM(quantity) as total_quantity')
-                ->orderByDesc('total_quantity')
-                ->get();
-
-            $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-                ->latest('updated_at')
-                ->take(15)
-                ->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $newArrivalProducts = Product::where("status", '0')->latest('updated_at')->take(14)->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $featuredProducts = Product::where('featured', '1')->latest()->take(14)->get()
-                ->map(function ($product) use ($sold) {
-                    $productData = $product->toArray();
-                    $productData['image_url'] = asset($product->productImages[0]->image);
-                    $soldQuantity = $sold->where('product_id', $product->id)->first();
-                    $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
-                    return $productData;
-                });
-
-            $data = [
-                'sliders' => $sliders,
-                'trending_products' => $trendingProducts,
-                'new_arrival_products' => $newArrivalProducts,
-                'featured_products' => $featuredProducts
-            ];
-
-            if (empty($data['sliders']) && empty($data['trending_products']) && empty($data['new_arrival_products']) && empty($data['featured_products'])) {
-                return response()->json([
-                    'message' => 'No products or sliders found',
-                ], 404);
-            }
-
-            return response()->json($data, 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred while fetching data',
-                'error' => $e->getMessage()
-            ], 500);
-        }
     }
 
     public function getSliders(): JsonResponse
@@ -126,14 +61,22 @@ class ProductController extends Controller
             ->get();
 
         $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-            ->latest()
-            ->with('productImages')
+            ->latest('updated_at')
+            ->with('productImages', 'category')
             ->get()
             ->map(function ($product) use ($sold) {
                 $productData = $product->toArray();
                 $productData['image_url'] = asset($product->productImages[0]->image);
                 $soldQuantity = $sold->where('product_id', $product->id)->first();
                 $productData['sold_quantity'] = $soldQuantity ? $soldQuantity->total_quantity : 0;
+                $productData['category_slug'] = $product->category->slug;
+
+                if ($product->quantity == 0) {
+                    $productData['quantity_status'] = 'Out of stock';
+                } else {
+                    $productData['quantity_status'] = 'In stock';
+                }
+
                 return $productData;
             });
 
@@ -150,14 +93,24 @@ class ProductController extends Controller
     {
         $newArrivalProducts = Product::where('status', 0)
             ->latest('updated_at')
-            ->with('productImages')
+            ->with('productImages', 'category')
             ->take(14)
             ->get()
             ->map(function ($product) {
                 $productData = $product->toArray();
                 $productData['image_url'] = asset($product->productImages[0]->image);
+                $productData['category_slug'] = $product->category->slug;
+
+                if ($product->quantity == 0) {
+                    $productData['quantity_status'] = 'Out of stock';
+                } else {
+                    $productData['quantity_status'] = 'In stock';
+                }
                 return $productData;
             });
+
+
+
 
         return $newArrivalProducts->isEmpty() ? response()->json([
             "status" => 0,
@@ -168,43 +121,48 @@ class ProductController extends Controller
         ], 200);
     }
 
-
-
     public function productView(string $category_slug, string $product_slug)
     {
-        $category = Category::where('slug', $category_slug)->first();
-
-        if ($category) {
-            $product = $category->products()
-                ->with(['productColors' => function ($query) {
-                    $query->where('quantity', '>', 0)->with('color');
-                }])
-                ->where('slug', $product_slug)
-                ->where('status', '0')
-                ->first();
-
-            if ($product) {
-                $image_url = url($product->productImages[0]->image);
-
-                return response()->json([
-                    'product' => $product->toArray(),
-                    'category' => $category,
-                    'image_url' => $image_url,
-                    'product_colors' => $product->productColors->map(function ($item) {
-                        return [
-                            'product_color_id' => $item->id,
-                            'color_name' => $item->color->name,
-                            'color_code' => $item->color->code,
-                            'quantity' => $item->quantity,
-                        ];
-                    }),
-                ], 200);
-            } else {
-                return response()->json(['error' => 'Product not found'], 404);
-            }
-        } else {
+        try {
+            $category = Category::where('slug', $category_slug)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Category not found'], 404);
         }
+
+        $product = $category->products()
+            ->with(['productColors' => function ($query) {
+                $query->where('quantity', '>', 0)->with('color');
+            }])
+            ->where('slug', $product_slug)
+            ->where('status', '0')
+            ->first();
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        $image_url = url($product->productImages[0]->image);
+
+        $product_colors = $product->productColors->map(function ($item) {
+            $status = 'out of stock';
+            if ($item->quantity > 0) {
+                $status = 'in stock';
+            }
+            return [
+                'product_color_id' => $item->id,
+                'color_name' => $item->color->name,
+                'color_code' => $item->color->code,
+                'quantity' => $item->quantity,
+                'status' => $status,
+            ];
+        });
+
+        return response()->json([
+            'product' => $product->toArray(),
+            'category' => $category->name,
+            'image_url' => $image_url,
+            'product_colors' => $product_colors,
+        ], 200);
     }
 
 

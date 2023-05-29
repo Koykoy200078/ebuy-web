@@ -19,6 +19,11 @@ class SearchController extends Controller
             // Retrieve the image URL for each product
             foreach ($searchProducts as $product) {
                 $product->image_url = url($product->productImages[0]->image);
+                if ($product->quantity == 0) {
+                    $product['quantity_status'] = 'Out of stock';
+                } else {
+                    $product['quantity_status'] = 'In stock';
+                }
             }
 
             return response()->json(['searchResults' => $searchProducts], 200)

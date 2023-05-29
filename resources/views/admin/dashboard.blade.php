@@ -15,6 +15,65 @@
             <hr>
         </div>
 
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-body bg-primary text-white mb-3">
+                    <label for="">Total Products</label>
+                    <h1>{{ $totalProducts }}</h1>
+                    <a href="{{ url('admin/products') }}" class="text-white">view</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-body bg-success text-white mb-3">
+                    <label for="">Total Categories</label>
+                    <h1>{{ $totalCategories }}</h1>
+                    <a href="{{ url('admin/category') }}" class="text-white">view</a>
+                </div>
+            </div>
+            <!-- <div class="col-md-3">
+                <div class="card card-body bg-warning text-white mb-3">
+                    <label for="">Total Brands</label>
+                    <h1>{{ $totalBrands }}</h1>
+                    <a href="{{ url('admin/brands') }}" class="text-white">view</a>
+                </div>
+            </div> -->
+        </div>
+     
+        <hr>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-body bg-primary text-white mb-3">
+                    <label for="">All Users</label>
+                    <h1>{{ $totalAllUsers }}</h1>
+                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-body bg-success text-white mb-3">
+                    <label for="">Total Users</label>
+                    <h1>{{ $totalUser }}</h1>
+                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
+                </div>
+            </div>
+            {{-- <div class="col-md-3">
+                <div class="card card-body bg-warning text-white mb-3">
+                    <label for="">Total Support</label>
+                    <h1>{{ $totalSupport }}</h1>
+                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
+                </div>
+            </div> --}}
+            <div class="col-md-3">
+                <div class="card card-body bg-warning text-white mb-3">
+                    <label for="">Total Admins</label>
+                    <h1>{{ $totalAdmin }}</h1>
+                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
+                </div>
+            </div>
+        </div>
+
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <div class="card card-body bg-primary text-white mb-3">
@@ -45,63 +104,8 @@
                 </div>
             </div>
         </div>
-        <hr>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card card-body bg-primary text-white mb-3">
-                    <label for="">Total Products</label>
-                    <h1>{{ $totalProducts }}</h1>
-                    <a href="{{ url('admin/products') }}" class="text-white">view</a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-body bg-success text-white mb-3">
-                    <label for="">Total Categories</label>
-                    <h1>{{ $totalCategories }}</h1>
-                    <a href="{{ url('admin/category') }}" class="text-white">view</a>
-                </div>
-            </div>
-            <!-- <div class="col-md-3">
-                <div class="card card-body bg-warning text-white mb-3">
-                    <label for="">Total Brands</label>
-                    <h1>{{ $totalBrands }}</h1>
-                    <a href="{{ url('admin/brands') }}" class="text-white">view</a>
-                </div>
-            </div> -->
-        </div>
-        <hr>
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card card-body bg-primary text-white mb-3">
-                    <label for="">All Users</label>
-                    <h1>{{ $totalAllUsers }}</h1>
-                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-body bg-success text-white mb-3">
-                    <label for="">Total Users</label>
-                    <h1>{{ $totalUser }}</h1>
-                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-body bg-warning text-white mb-3">
-                    <label for="">Total Support</label>
-                    <h1>{{ $totalSupport }}</h1>
-                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-body bg-danger text-white mb-3">
-                    <label for="">Total Admins</label>
-                    <h1>{{ $totalAdmin }}</h1>
-                    <a href="{{ url('admin/users') }}" class="text-white">view</a>
-                </div>
-            </div>
-        </div>
+       
     </div>
   </div>
 

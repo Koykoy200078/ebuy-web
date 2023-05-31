@@ -52,11 +52,9 @@
                             <div class="cart-item">
                                 <div class="row">
                                     <div class="col-md-1 my-auto text-center">
-                                        {{-- <input type="checkbox" name="cart-item-{{ $cartItem->id }}" wire:click="checkBox({{ $cartItem->id }})"
-                                        value="{{ $cartItem->id }}" data-product-user-id="{{ $cartItem->product_user_id }}"> --}}
-                                        <input type="checkbox" name="cart-item-{{ $cartItem->id }}" wire:click="$emit('checkBox', selectedIds)" value="{{ $cartItem->id }}" data-product-user-id="{{ $cartItem->product_user_id }}">
-
-                                    </div>
+                                        <input type="checkbox" name="cart-item-{{ $cartItem->id }}" wire:click="$emit('checkBox', selectedIds)" 
+                                          value="{{ $cartItem->id }}" data-product-user-id="{{ $cartItem->product_user_id }}" class="bigger-checkbox">
+                                      </div>
                                     <div class="col-md-5 my-auto">
                                         <a href="{{ url('collections/'.$cartItem->product->category->slug.'/'.$cartItem->product->slug) }}">
                                             <label class="product-name">

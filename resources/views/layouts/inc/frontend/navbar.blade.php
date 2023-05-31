@@ -1,9 +1,9 @@
 <div class="main-navbar shadow-sm">
-    <div class="top-navbar" >
+    <div class="top-navbar">
         <div class="container-fluid">
-            <div class="row" >
-                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block" >
-                    <h5 class="brand-name">{{ $appSetting->website_name ?? 'website name'}}</h5>
+            <div class="row">
+                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+                    <h5 class="brand-name mx-2">{{ $appSetting->website_name ?? 'website name'}}</h5>
                 </div>
                 <div class="col-md-5 my-auto">
                     <form action="{{ url('search') }}" method="GET" role="search">
@@ -20,63 +20,62 @@
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('cart') }}">
-                                <i class="fa fa-shopping-cart"></i> Cart (<livewire:frontend.cart.cart-count/>)
+                                <i class="fa fa-shopping-cart"></i> Cart (<livewire:frontend.cart.cart-count />)
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('products') }}">
-                                <i class="fa fa-cart-plus"></i> Sell (<livewire:frontend.product.product-count/>)
+                                <i class="fa fa-cart-plus"></i> Sell (<livewire:frontend.product.product-count />)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('product-status') }}">
-                                <i class="fa fa-cart-plus"></i>  Delivery
+                                <i class="fa fa-cart-plus"></i> Delivery
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('wishlist') }}">
-                                <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count/>)
+                                <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count />)
                             </a>
                         </li>
                         @guest
-                    @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
+                        @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
                         @endif
                         @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
                         @endif
-                    @else
+                        @else
                         @if(Auth::user()->email_verified_at)
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-user" style="color:  #202020;"></i> {{ Auth::user()->name }}
+                                <i class="fa fa-user" style="color:  #202020;"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user" style="color:  #202020;"></i> Profile</a></li>
-                            @if(Auth::user()->role_as == 2)
-                            <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user" style="color:  #202020;"></i> Admin</a></li>
-                            @endif
-                            <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Orders</a></li>
-                            {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-list" style="color:  #202020;"></i> My Store</a></li> --}}
-                            <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart" style="color:  #202020;"></i> My Wishlist</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart" style="color:  #202020;"></i> My Cart</a></li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
+                                <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user" style="color:  #202020;"></i> Profile</a></li>
+                                @if(Auth::user()->role_as == 2)
+                                <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user" style="color:  #202020;"></i> Admin</a></li>
+                                @endif
+                                <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Orders</a></li>
+                                {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-list" style="color:  #202020;"></i> My Store</a></li> --}}
+                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart" style="color:  #202020;"></i> My Wishlist</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart" style="color:  #202020;"></i> My Cart</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
-                                    <i class="fa fa-sign-out" style="color:  #202020;"></i> Logout</a> {{ __('') }}
-                                </a>
-                        
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
+                                        <i class="fa fa-sign-out" style="color:  #202020;"></i> Logout</a> {{ __('') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
                             </ul>
                         </li>
 
@@ -109,21 +108,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/featured-products') }}">Featured Products</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">Electronics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Fashions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Accessories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Appliances</a>
-                    </li> -->
+
                 </ul>
             </div>
         </div>

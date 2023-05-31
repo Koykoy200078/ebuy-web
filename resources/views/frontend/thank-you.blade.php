@@ -4,25 +4,14 @@
 
 @section('content')
 
-    <div class="py-3 pyt-md-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    @if (session('message'))
-                        <h5 class="alert alert-success">{{ session('message') }}</h5>
-                    @endif
-
-                    <div class="p-4 shadow bg-white">
-                        <h2>Thank You for Shopping with {{ $appSetting->website_name ?? 'website name'}}</h2>
-                        <h4>Click here to go to your 
-                            <a href="{{ url('/orders')}}" style="color: inherit; text-decoration: none;">My Order</a>
-
-                        </h4>
-                        <a href="{{ url('collections') }}" class="btn btn-success">SHOP NOW</a>
-                    </div>
+<div class="py-3 py-md-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center"> @if (session('message')) <div class="alert alert-success">{{ session('message') }}</div> @endif <div class="p-4 shadow bg-white">
+                    <h2>Thank you for shopping with {{ $appSetting->website_name ?? 'website name'}}, your local eCommerce platform.</h2>
+                    <h6>Your order has been successfully placed. Please click on the button below to access your order details in "My Orders".</h6> <a href="{{ url('/orders')}}" class="btn btn-primary" role="button">My Orders</a> <a href="{{ url('collections') }}" class="btn btn-success" role="button">Shop Now</a>
                 </div>
             </div>
         </div>
     </div>
-
-@endsection
+</div> @endsection

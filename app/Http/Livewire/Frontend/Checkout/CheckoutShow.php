@@ -44,11 +44,11 @@ class CheckoutShow extends Component
         // return view($codOrder->tracking_no);
 
         if ($codOrder) {
-            
+
             $ids = $this->selectedIds;
             Cart::where('user_id', auth()->user()->id)
-            ->whereIn('id',  Arr::flatten($ids))
-            ->delete();
+                ->whereIn('id',  Arr::flatten($ids))
+                ->delete();
 
             //
             try {
@@ -62,7 +62,7 @@ class CheckoutShow extends Component
 
             }
 
-            session()->flash('message', 'Order Placed Successfuly');
+            session()->flash('message', 'Order Placed Successfully');
             $this->dispatchBrowserEvent('message', [
                 'text' => 'Order Place Successfuly',
                 'type' => 'success',
@@ -99,7 +99,7 @@ class CheckoutShow extends Component
         $ids2 = $this->selectedIds;
         $activitylog = Cart::where('user_id', auth()->user()->id)
             ->whereIn('id',  Arr::flatten($ids2))->get('id');
-       
+
         // foreach ($this->carts as $cartItem) {
         //     $product_id = $cartItem->product_id;
         // // return view($product_id);
@@ -112,7 +112,7 @@ class CheckoutShow extends Component
         foreach ($this->carts as $cartItem) {
             $cartItem = $cartItem;
         }
-       
+
 
         $order = Order::create([
             'user_id' => auth()->user()->id,
@@ -127,16 +127,16 @@ class CheckoutShow extends Component
             'payment_id' => $this->payment_id,
 
             'confirm' => 'pending',
-           
-            $product_id = $cartItem->product_id, 
+
+            $product_id = $cartItem->product_id,
             $test =  Product::where('id', $product_id)->value('product_user_id'),
             'product_user_id' =>  $test,
 
-            $product_id = $cartItem->product_id, 
+            $product_id = $cartItem->product_id,
             $test =  Product::where('id', $product_id)->value('product_user_id'),
             $test =  User::where('id', $test)->value('name'),
             'seller_fullname' =>  $test,
-            $product_id = $cartItem->product_id, 
+            $product_id = $cartItem->product_id,
             $test =  Product::where('id', $product_id)->value('product_user_id'),
             $test =  User::where('id', $test)->value('email'),
             'seller_email' =>  $test,
@@ -146,7 +146,7 @@ class CheckoutShow extends Component
             'seller_phone' =>  $test,
 
         ]);
-      
+
         foreach ($this->carts as $cartItem) {
             $orderItems = Orderitem::create([
                 'order_id' => $order->id,
@@ -159,7 +159,7 @@ class CheckoutShow extends Component
                 'quantity' => $cartItem->quantity,
                 'price' => $cartItem->product->selling_price,
                 'status_message' => 'pending',
-              
+
             ]);
 
             if ($cartItem->product_color_id != NULL) {
@@ -171,8 +171,8 @@ class CheckoutShow extends Component
         }
         if (Auth::check()) {
             $user = Auth::user();
-            $description = '' . $user->name . ' Order Id:'.  $order->id. ". Product id ordered: [".$activitylog."]";
-            
+            $description = '' . $user->name . ' Order Id:' .  $order->id . ". Product id ordered: [" . $activitylog . "]";
+
             ActivityLog::create([
                 'user_id' => $user->id,
                 'description' => $description,
@@ -190,8 +190,8 @@ class CheckoutShow extends Component
         if ($codOrder) {
             $ids = $this->selectedIds;
             Cart::where('user_id', auth()->user()->id)
-            ->whereIn('id',  Arr::flatten($ids))
-            ->delete();
+                ->whereIn('id',  Arr::flatten($ids))
+                ->delete();
             //
             try {
                 $order = Order::findOrFail($codOrder->id);
@@ -203,7 +203,7 @@ class CheckoutShow extends Component
             }
             //
 
-            session()->flash('message', 'Order Placed Successfuly');
+            session()->flash('message', 'Order Placed Successfully');
             $this->dispatchBrowserEvent('message', [
                 'text' => 'Order Place Successfuly',
                 'type' => 'success',
@@ -222,11 +222,11 @@ class CheckoutShow extends Component
     public function totalProductAmount()
     {
         $ids = $this->selectedIds;
-    //    dd($selectedIds);
+        //    dd($selectedIds);
         $this->totalProductAmount = 0;
         $this->carts = Cart::where('user_id', auth()->user()->id)
-        ->whereIn('id',  Arr::flatten($ids))
-        ->get();
+            ->whereIn('id',  Arr::flatten($ids))
+            ->get();
         foreach ($this->carts as $cartItem) {
             $this->totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
         }

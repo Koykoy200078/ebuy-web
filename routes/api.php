@@ -36,7 +36,6 @@ Route::group([
         Route::get('/user/info', [AuthController::class, 'me']);
 
         // Product
-        Route::get('/products/index', [ProductController::class, 'index']);
         Route::get('/products/new-arrival', [ProductController::class, 'newArrival']);
         Route::get('/products/featured-products', [ProductController::class, 'featuredProducts']);
 

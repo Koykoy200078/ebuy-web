@@ -17,22 +17,26 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        try {
-            $user = Auth::user();
-            $description = "{$user->name} clicked on My Order";
-            ActivityLog::create([
-                'user_id' => $user->id,
-                'description' => $description,
-            ]);
+        $user = Auth::user();
 
-            $orders = Order::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
-
-            return response()->json(['orders' => $orders]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+        if (!$user) {
+            return response()->json([
+                'error' => 'Unauthorized',
+            ], 401);
         }
+
+        $description = '' . $user->name . ' clicked on My Order';
+
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'description' => $description,
+        ]);
+
+        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(100);
+
+        return response()->json([
+            'orders' => $orders,
+        ]);
     }
 
 

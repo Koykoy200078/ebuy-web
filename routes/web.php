@@ -32,6 +32,7 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/collections', 'categories');
     Route::get('/collections/{category_slug}', 'products');
     Route::get('/collections/{category_slug}/{product_slug}', 'productView');
+    Route::get('/about-us', 'aboutUs');
 
     //Comment System
     Route::post('/comments', [App\Http\Controllers\Frontend\CommentProductController::class, 'store']);

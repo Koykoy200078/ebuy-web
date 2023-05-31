@@ -13,8 +13,11 @@
                     @endif
 
                     <div class="p-4 shadow bg-white">
-                        <h2>LOGO</h2>
-                        <h4>Thank You for Shopping with</h4>
+                        <h2>Thank You for Shopping with {{ $appSetting->website_name ?? 'website name'}}</h2>
+                        <h4>Click here to go to your 
+                            <a href="{{ url('/orders')}}" style="color: inherit; text-decoration: none;">My Order</a>
+
+                        </h4>
                         <a href="{{ url('collections') }}" class="btn btn-success">SHOP NOW</a>
                     </div>
                 </div>

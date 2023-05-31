@@ -17,8 +17,8 @@
                     <h4 class="footer-heading">Quick Links</h4>
                     <div class="footer-underline"></div>
                     <div class="mb-2"><a href="{{ url('/') }}">Home</a></div>
-                    <div class="mb-2"><a href="" >About Us</a></div>
-                    <div class="mb-2"><a href="" >Contact Us</a></div>
+                    <div class="mb-2"><a href="{{ url('/about-us') }}" >About Us</a></div>
+                    {{-- <div class="mb-2"><a href="" >Contact Us</a></div> --}}
                 </div>
                 <div class="col-md-2">
                     <h4 class="footer-heading">Shop Now</h4>

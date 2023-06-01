@@ -560,7 +560,7 @@ input[type="search"]:hover {
 
 /* About Us */
 .developer-card {
-    background-color: #f5f5f5;
+    background-color: #dbd3d3;
     padding: 20px;
     margin-bottom: 20px;
     text-align: center;
@@ -570,6 +570,15 @@ input[type="search"]:hover {
 
 .developer-card:hover {
     transform: translateY(-5px);
+    background-color: #5c8f5e;
+}
+
+.developer-card:hover h4 {
+    color: #fff; 
+}
+
+.developer-card:hover p {
+    color: #fff; /* Set p text color to white on hover */
 }
 
 .developer-card h4 {
@@ -580,18 +589,17 @@ input[type="search"]:hover {
 
 .developer-card p {
     font-size: 16px;
-    color: #777;
+    color: #777777;
 }
 
-
 .developer-card img {
-    width: 80px;
-    height: 80px;
+    width: 220px;
+    height: 220px;
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 10px;
+    margin-top: -70px;
 }
-
 
 /* CheckOut */
 

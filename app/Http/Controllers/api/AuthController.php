@@ -232,14 +232,28 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function logout(): JsonResponse
     {
-        auth()->guard('api')->logout();
+        // $user = Auth::guard('api')->user();
+
+        // if ($user) {
+        //     $user->tokens()->each(function ($token, $key) {
+        //         $token->delete(); // Revoke each token for the user
+        //     });
+        // }
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'User successfully logged out',
+        // ], 200);
+
+        JWTAuth::invalidate(JWTAuth::getToken());
 
         return response()->json([
             'success' => true,
             'message' => 'User successfully logged out',
-        ], 200)->header('Content-Type', 'application/json');
+        ], 200);
     }
 
 

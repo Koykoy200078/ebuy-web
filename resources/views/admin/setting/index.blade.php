@@ -56,7 +56,7 @@
                             <textarea name="address" class="form-control" rows="3">{{ $setting->address ?? '' }}</textarea>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>Phone 1 *</label>
+                            <label>Phone No. 1</label>
                             <input type="text" name="phone1" value="{{ $setting->phone1 ?? '' }}" class="form-control"/>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -64,7 +64,7 @@
                             <input type="text" name="phone2" value="{{ $setting->phone2 ?? '' }}" class="form-control"/>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>Email Id 1 *</label>
+                            <label>Email Id 1 </label>
                             <input type="text" name="email1" value="{{ $setting->email1 ?? '' }}" class="form-control"/>
                         </div>
                         <div class="col-md-6 mb-3">

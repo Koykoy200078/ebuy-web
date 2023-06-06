@@ -52,6 +52,6 @@ class VerificationController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         Auth::logout();
-        return redirect()->route('login')->with('success', 'The verifcation has been send. Please check your email to verify.');
+        return redirect()->route('login')->with('success', 'The verification has been sent. Please check your email to verify.');
     }
 }

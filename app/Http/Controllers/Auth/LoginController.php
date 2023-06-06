@@ -54,7 +54,7 @@ class LoginController extends Controller
                     'description' => $description,
                 ]);
             }
-            return redirect('/home')->with('status', 'Logged In Successfuly');
+            return redirect('/')->with('status', 'Logged In Successfuly');
           
         }
     }

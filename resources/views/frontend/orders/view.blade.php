@@ -163,7 +163,7 @@
                                         @method('PUT')
 
                                         <div class="input-group">
-                                            <h5>Click here once you got your pakage-></h5><button type="submit" class="btn btn-primary text-white">Item Delivered</button>
+                                            <h5>Click here once you have received your package.-></h5><button type="submit" class="btn btn-primary text-white">Item Delivered</button>
                                         </div>
                                     </form>
                                     @endif

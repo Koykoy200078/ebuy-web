@@ -93,7 +93,7 @@
                     <span>Address: #555, Main road, shivaji nagar, Bangalore, India</span> <br> --}}
                 </th>
                 <th width="33%" colspan="2" class="text-end company-data">
-                    <span>Invoice Id: #{{ $order->id }}</span> <br>
+                    {{-- <span>Invoice Id: #{{ $order->id }}</span> <br> --}}
                     <span>Date: {{ date('d/ m / Y') }}</span> <br>
                     <span>Zip code : 6200</span> <br>
                     <span>Address: {{ $appSetting->address ?? 'Address'}}</span> <br>

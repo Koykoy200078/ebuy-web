@@ -103,6 +103,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('product-color/{prod_color_id}', 'updateProdColorQty');
         Route::get('product-color/{prod_color_id}/delete', 'deleteProdColor');
+
+        Route::get('/my-sales', 'sales');
+
+
     });
 
 });

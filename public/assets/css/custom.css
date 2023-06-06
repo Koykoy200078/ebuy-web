@@ -666,6 +666,31 @@ input[type="search"]:hover {
     
 }
 
+/* SALES */
+.sales-container {
+    padding: 20px;
+}
+
+.sales-container .sales-card {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.sales-container h4 {
+    margin-bottom: 20px;
+}
+
+.sales-container hr {
+    border: none;
+    height: 1px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+.sales-container p {
+    margin-bottom: 10px;
+}
 
 
 .copyright-area{

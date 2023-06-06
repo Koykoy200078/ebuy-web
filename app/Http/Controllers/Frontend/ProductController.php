@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\ProductImage;
+use App\Models\Orderitem;
 use App\Models\ProductColor;
 use App\Models\Category;
 use App\Models\Product;
@@ -15,7 +16,7 @@ use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ActivityLog;
-
+use Carbon\Carbon; 
 class ProductController extends Controller
 {
     public function index()
@@ -324,5 +325,45 @@ class ProductController extends Controller
         $prodColor = ProductColor::findOrFail($prod_color_id);
         $prodColor->delete();
         return response()->json(['message' => 'Product Color Deleted']);
+    }
+
+
+    public function sales()
+    {
+        $userId = Auth::id(); // Get the ID of the current user
+
+        $totalPrice = Orderitem::where('product_user_id', $userId)
+        ->sum(\DB::raw('(quantity * price) * 0.95')); // Calculate the sum of quantity multiplied by price minus 5%
+
+        $currentYear = Carbon::now()->year; // Get the current year
+        $currentMonth = Carbon::now()->month; // Get the current month
+        $currentDate = Carbon::now()->toDateString(); // Get the current date
+    
+      
+        // Calculate the total price for this year
+        $totalPriceYear = Orderitem::where('product_user_id', $userId)
+            ->whereYear('created_at', $currentYear)
+            ->sum(\DB::raw('(quantity * price) * 0.95'));
+    
+        // Calculate the total price for this month
+        $totalPriceMonth = Orderitem::where('product_user_id', $userId)
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', $currentMonth)
+            ->sum(\DB::raw('(quantity * price) * 0.95'));
+    
+        // Calculate the total price for today
+        $totalPriceToday = Orderitem::where('product_user_id', $userId)
+            ->whereDate('created_at', $currentDate)
+            ->sum(\DB::raw('(quantity * price) * 0.95'));
+    
+        return view('frontend.sales.mysales', [
+            'totalPriceYear' => $totalPriceYear,
+            'totalPriceMonth' => $totalPriceMonth,
+            'totalPriceToday' => $totalPriceToday,
+            'totalPrice' => $totalPrice
+        ]);
+        
+   
+
     }
 }

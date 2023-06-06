@@ -34,6 +34,7 @@
                                 <i class="fa fa-cart-plus"></i> Delivery
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('wishlist') }}">
                                 <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count />)
@@ -58,16 +59,18 @@
                                 <i class="fa fa-user" style="color:  #202020;"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user" style="color:  #202020;"></i> Profile</a></li>
-                                @if(Auth::user()->role_as == 2)
-                                <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user" style="color:  #202020;"></i> Admin</a></li>
-                                @endif
-                                <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Orders</a></li>
-                                {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-list" style="color:  #202020;"></i> My Store</a></li> --}}
-                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart" style="color:  #202020;"></i> My Wishlist</a></li>
-                                <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart" style="color:  #202020;"></i> My Cart</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                            <li><a class="dropdown-item" href="{{ url('/profile')}}"><i class="fa fa-user" style="color:  #202020;"></i> Profile</a></li>
+                            @if(Auth::user()->role_as == 2)
+                            <li><a class="dropdown-item" href="{{ url('/admin/dashboard')}}"><i class="fa fa-user" style="color:  #202020;"></i> Admin</a></li>
+                            @endif
+                            <li><a class="dropdown-item" href="{{ url('/orders')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Orders</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/my-sales')}}"><i class="fa fa-list" style="color:  #202020;"></i> My Sales</a></li>
+                            {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-list" style="color:  #202020;"></i> My Store</a></li> --}}
+                            <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart" style="color:  #202020;"></i> My Wishlist</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/cart')}}"><i class="fa fa-shopping-cart" style="color:  #202020;"></i> My Cart</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
                                         <i class="fa fa-sign-out" style="color:  #202020;"></i> Logout</a> {{ __('') }}
                                     </a>

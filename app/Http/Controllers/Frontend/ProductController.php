@@ -218,9 +218,9 @@ class ProductController extends Controller
                     'mimes:png,jpg,jpeg'
                 ],
             ]);
-
-            $product = Category::findOrFail($validatedData['category_id'])
-                ->products()->where('id', $product_id)->first();
+            $product = Product::where('id', $product_id)->first();
+            // $product = Category::findOrFail($validatedData['category_id'])
+            //     ->products()->where('id', $product_id)->first();
             if ($product) {
                 $product->update([
                     'category_id' => $validatedData['category_id'],

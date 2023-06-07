@@ -195,8 +195,9 @@ class ProductController extends Controller
                 ],
             ]);
 
-            $product = Category::findOrFail($validatedData['category_id'])
-                            ->products()->where('id', $product_id)->first();
+            $product = Product::where('id', $product_id)->first();
+            // return view($product);
+                     
             if($product)
             {
                 $product->update([

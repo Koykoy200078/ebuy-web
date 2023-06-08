@@ -127,9 +127,9 @@
                                                     @endif
                                                 @endif
                                             </td>
-                                            <td width="10%">₱ {{ $orderItem->price }}</td>
+                                            <td width="10%">₱ {{ number_format($orderItem->price, 2, '.', ',') }}</td>
                                             <td width="10%">{{ $orderItem->quantity }}</td>
-                                            <td width="10%" class="fw-bold">₱ {{ $orderItem->quantity * $orderItem->price}}</td>
+                                            <td width="10%" class="fw-bold">₱ {{ number_format($orderItem->quantity * $orderItem->price, 2, '.', ',')}}</td>
                                             @php
                                                 $totalPrice += $orderItem->quantity * $orderItem->price;
                                             @endphp
@@ -140,7 +140,7 @@
                                         @endforeach
                                         <tr>
                                             <td colspan="5" class="fw-bold">Subtotal Earnings:</td>
-                                            <td colspan="1" class="fw-bold">₱ {{ $totalPrice }}</td>
+                                            <td colspan="1" class="fw-bold">₱ {{ number_format($totalPrice, 2, '.', ',') }}</td>
                                             
                                         </tr>
                                         @php
@@ -153,12 +153,12 @@
                                         
                                         <tr>
                                             <td colspan="5" class="fw-bold">5% Commission:</td>
-                                            <td colspan="1" class="fw-bold">₱ {{ $percent5 }}</td>
+                                            <td colspan="1" class="fw-bold">₱ {{ number_format($percent5, 2, '.', ',') }}</td>
                                             
                                         </tr>
                                         <tr>
                                             <td colspan="5" class="fw-bold">Total Amount:</td>
-                                            <td colspan="1" class="fw-bold">₱ {{ $totalPrice }}</td>
+                                            <td colspan="1" class="fw-bold">₱ {{ number_format($totalPrice, 2, '.', ',') }}</td>
 
                                             
                                         </tr>

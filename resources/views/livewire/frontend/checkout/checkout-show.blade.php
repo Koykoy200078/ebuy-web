@@ -10,7 +10,7 @@
                     <div class="shadow bg-white p-3">
                         <h4 class="text-primary">
                             Item Total Amount :
-                            <span class="float-end">₱{{ $this->totalProductAmount }}</span>
+                            <span class="float-end">₱{{ number_format($this->totalProductAmount, 2, '.', ',') }}</span>
                             {{-- <span class="float-end">₱{{ $carts->id }}</span> --}}
                         </h4>
                         <hr>

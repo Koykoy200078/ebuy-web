@@ -41,8 +41,10 @@
                             Home / {{ $product->category->name }} / {{ $product->name }}
                         </p>
                         <div>
-                            <span class="selling-price">₱{{ $product->selling_price }}</span>
-                            <span class="original-price">₱{{ $product->original_price }}</span> 
+                            <span class="selling-price">₱{{ number_format($product->selling_price, 2, '.', ',') }}</span>
+                            <span class="original-price">₱{{ number_format($product->original_price, 2, '.', ',') }}</span>
+                            
+                            
                             <span > &nbsp;( {{$sold}} ) </span>
                         </div>
                         <div>
@@ -54,7 +56,8 @@
                                                 style="background-color: {{ $colorItem->color->code }}"
                                                 wire:click="colorSelected({{ $colorItem->id }})">
                                                 <div class="{{ $colorItem->color->code === '#000000' ? 'whiteText' : 'defaultText' }}">
-                                                    {{ $colorItem->color->name }}
+                                                    {{ $colorItem->color->name }} &#40;{{ $colorItem->quantity }}&#41;
+
                                                 </div>
                                         </label>
                                  
@@ -170,8 +173,9 @@
                                         </a>
                                     </h5>
                                     <div>
-                                        <span class="selling-price">₱{{ $relatedProductsItem->selling_price }}</span>
-                                        <span class="original-price">₱{{ $relatedProductsItem->original_price }}</span>
+                                        <span class="selling-price">₱{{ number_format($product->selling_price, 2, '.', ',') }}</span>
+                                        <span class="original-price">₱{{ number_format($product->original_price, 2, '.', ',') }}</span>
+                                        
                                     </div>
                                   
                                 </div>

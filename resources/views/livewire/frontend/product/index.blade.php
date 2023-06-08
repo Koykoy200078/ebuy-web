@@ -63,8 +63,8 @@
                                 </a>
                                 </h5>
                                 <div>
-                                    <span class="selling-price">₱{{ $productsItem->selling_price }}</span>
-                                    <span class="original-price">₱{{ $productsItem->original_price }}</span>
+                                    <span class="selling-price">₱{{  number_format($productsItem->selling_price, 2, '.', ',') }}</span>
+                                    <span class="original-price">₱{{ number_format($productsItem->original_price, 2, '.', ',') }}</span>
                                     <span > &nbsp;( {{ $sold->where('product_id', $productsItem->id)->first()->total_quantity ?? '0' }} ) </span>
 
                                 </div>

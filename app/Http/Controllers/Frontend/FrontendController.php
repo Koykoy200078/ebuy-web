@@ -21,15 +21,17 @@ class FrontendController extends Controller
         
         $sold = OrderItem::groupBy('product_id')
         ->selectRaw('product_id, SUM(quantity) as total_quantity')
-        ->orderByDesc('total_quantity')
+        ->orderBy('total_quantity', 'desc') // Sort by total_quantity in descending order
         ->get();
-    
-    $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
-        ->latest()
+
+        // return view($sold);
+        $trendingProducts = Product::whereIn('id', $sold->pluck('product_id'))
+        ->orderByRaw("FIELD(id, " . $sold->pluck('product_id')->implode(',') . ")") // Sort products based on the order of product_ids in $sold
         ->take(15)
         ->get();
     
     
+        // return view($trendingProducts);
 
 
 

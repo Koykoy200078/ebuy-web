@@ -340,6 +340,24 @@ class ProductController extends Controller
         $currentDate = Carbon::now()->toDateString(); // Get the current date
     
       
+        
+        $mysalesproduct = Orderitem::where('product_user_id', $userId)->paginate(10);;
+
+
+        $todaySales = Orderitem::where('product_user_id', $userId)
+        ->whereDate('created_at', $currentDate)
+        ->paginate(10);
+
+        $monthSales = Orderitem::where('product_user_id', $userId)
+        ->whereYear('created_at', $currentYear)
+        ->whereMonth('created_at', $currentMonth)
+        ->paginate(10);
+
+        $yearSales = Orderitem::where('product_user_id', $userId)
+        ->whereYear('created_at', $currentYear)
+        ->paginate(10);
+
+
         // Calculate the total price for this year
         $totalPriceYear = Orderitem::where('product_user_id', $userId)
             ->whereYear('created_at', $currentYear)
@@ -360,7 +378,12 @@ class ProductController extends Controller
             'totalPriceYear' => $totalPriceYear,
             'totalPriceMonth' => $totalPriceMonth,
             'totalPriceToday' => $totalPriceToday,
-            'totalPrice' => $totalPrice
+            'totalPrice' => $totalPrice,
+
+            'mysalesproduct' =>  $mysalesproduct,
+            'todaySales' =>  $todaySales,
+            'monthSales' =>  $monthSales,
+            'yearSales' =>  $yearSales,
         ]);
         
    

@@ -495,8 +495,26 @@ input[type="search"]:hover {
 
 
 
-
 /* Cart or Wishlist */
+
+/* Total prize on My Sale */
+.total-prize {
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(26, 26, 26);
+}
+.toggle-sales {
+    background-color: #dddddd;
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}
 
 
 /* Checkbox */

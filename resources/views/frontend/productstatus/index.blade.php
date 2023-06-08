@@ -37,7 +37,7 @@
                                             <td>No Colors</td>
                                         
                                         @endif --}}
-                                        <td>₱{{ $productcheking->price }}</td>
+                                        <td>₱{{ number_format($productcheking->price 2, '.', ',') }}</td>
                                         <td>{{ $productcheking->quantity }}</td>
                                         <td>{{ $productcheking->status_message }}</td>
                                         {{-- <td>{{ $productcheking->productUser->name }}</td> --}}

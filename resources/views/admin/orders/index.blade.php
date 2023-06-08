@@ -54,7 +54,7 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Number</th>
+                                    <th>Id</th>
                                     <th>Tracking No</th>
                                     <th>Username</th>
                                     <th>Payment Mode</th>
@@ -69,7 +69,7 @@
                                 @endphp
                                 @forelse ($orders as $item)
                                         <tr>
-                                            <td>{{ $counter }}</td>
+                                            <td>{{ $item->id }}</td>
                                             <td>{{ $item->tracking_no }}</td>
                                             <td>{{ $item->fullname }}</td>
                                             <td>{{ $item->payment_mode }}</td>

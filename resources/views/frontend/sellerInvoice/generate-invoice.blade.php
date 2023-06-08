@@ -213,9 +213,9 @@
                         @endif
                     @endif
                 </td>
-                <td width="10%"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ $orderItem->price }}</td>
+                <td width="10%"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($orderItem->price, 2, '.', ',') }}</td>
                 <td width="10%">{{ $orderItem->quantity }}</td>
-                <td width="15%" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ $orderItem->quantity * $orderItem->price}}</td>
+                <td width="15%" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($orderItem->quantity * $orderItem->price, 2, '.', ',') }}</td>
                 @php
                     $totalPrice += $orderItem->quantity * $orderItem->price;
                     $counter++;
@@ -224,7 +224,7 @@
             @endforeach
             <tr>
                 <td colspan="4" class="fw-bold">Subtotal Earnings:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ $totalPrice }}</td>
+                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($totalPrice, 2, '.', ',') }}</td>
             </tr>
             @php
 
@@ -236,12 +236,12 @@
             
             <tr>
                 <td colspan="4" class="fw-bold">5% Commission:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ $percent5 }}</td>
+                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ number_format($percent5, 2, '.', ',') }}</td>
                 
             </tr>
             <tr>
                 <td colspan="4" class="fw-bold">Total Amount:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ $totalPrice }}</td>
+                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ number_format($totalPrice, 2, '.', ',') }}</td>
 
                 
             </tr>

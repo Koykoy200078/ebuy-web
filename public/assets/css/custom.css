@@ -659,12 +659,12 @@ input[type="search"]:hover {
 /* FOOTER */
 .footer-area{
     padding: 40px 0px;
-    background-color: #91ff80;
-    color: #000;
+    background-color: #2d3128;
+    color: #ffffff;
 }
 .footer-area a{
     text-decoration: none;
-    color: #000;
+    color: #ffffff;
 }
 .footer-area a:hover {
     color: rgb(15, 128, 0);
@@ -673,7 +673,7 @@ input[type="search"]:hover {
 }
 .footer-area .footer-heading{
     font-size: 30px;
-    color: #000;
+    color: #ffffff;
     font-weight: bold;
 }
 .footer-area .footer-underline{

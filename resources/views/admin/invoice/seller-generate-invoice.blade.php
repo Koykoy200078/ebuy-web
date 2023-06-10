@@ -5,7 +5,7 @@
     <title>Invoice #{{$order->id}}</title>
 
     <style>
-        html,
+           html,
         body {
             margin: 10px;
             padding: 10px;
@@ -15,34 +15,36 @@
             font-family: sans-serif;
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 0px !important;
+        width: 85%;
+        border-collapse: collapse;
+        margin-bottom: 0px !important;
+        margin-left: auto;
+        margin-right: auto;
         }
         table thead th {
             height: 28px;
             text-align: left;
-            font-size: 16px;
+            font-size: 26px;
             font-family: sans-serif;
         }
         table, th, td {
             border: 1px solid #ddd;
             padding: 8px;
-            font-size: 14px;
+            font-size: 24px;
         }
 
         .heading {
-            font-size: 24px;
+            font-size: 34px;
             margin-top: 12px;
             margin-bottom: 12px;
             font-family: sans-serif;
         }
         .small-heading {
-            font-size: 18px;
+            font-size: 28px;
             font-family: sans-serif;
         }
         .total-heading {
-            font-size: 18px;
+            font-size: 28px;
             font-weight: 700;
             font-family: sans-serif;
         }
@@ -66,7 +68,7 @@
             margin-bottom: 4px;
             display: inline-block;
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: 24px;
             font-weight: 400;
         }
         .no-border {
@@ -94,7 +96,7 @@
                 </th>
                 <th width="33%" colspan="2" class="text-end company-data">
                     {{-- <span>Invoice Id: #{{ $order->id }}</span> <br> --}}
-                    <span>Date: {{ date('d/ m / Y') }}</span> <br>
+                    <span>Order date: {{ date('M-d-Y') }}</span> <br>
                     <span>Zip code : 6200</span> <br>
                     <span>Address: {{ $appSetting->address ?? 'Address'}}</span> <br>
                 </th>
@@ -117,7 +119,6 @@
 
                 <td>Full Name:</td>
                 <td>{{ $order->seller_fullname }}</td> 
-                
             </tr>
             <tr>
                 {{-- <td>Tracking Id/No.:</td>
@@ -125,10 +126,10 @@
                 <td>Ordered Date:</td>
                 <td>{{ $order->created_at->format('d-m-Y h:i A') }}</td>
 
-                <td>Email Id:</td>
+                <td>Email Address:</td>
                 <td>{{$order->email}}</td>
 
-                <td>Email Id:</td>
+                <td>Email Address:</td>
                 <td>{{ $order->seller_email }}</td>
             </tr>
             <tr>
@@ -148,28 +149,29 @@
                 {{-- <td>Payment Mode:</td>
                 <td>{{$order->payment_mode}}</td> --}}
                 <td>Order Status:</td>
-                <td>{{ $order->status_message }}</td>
+                <td><strong>{{ ucwords($order->status_message) }}</strong></td>
+
 
                 <td>Address:</td>
                 <td>{{$order->address}}</td>
 
-             
              
             </tr>
             <tr>
                 {{-- <td>Order Status:</td>
                 <td>{{ $order->status_message }}</td> --}}
                 <td>Delivery status:</td>
-                <td>{{$order->confirm}}</td>
+                <td><strong>{{ ucwords($order->confirm) }}</td></strong>
 
 
-                <td>Pin code:</td>
+                <td>Zip code:</td>
                 <td>{{$order->pincode}}</td>
 
-           
+             
+
                 
             </tr>
-           
+            
         </tbody>
     </table>
 
@@ -184,8 +186,8 @@
                 <th>ID</th>
                 <th>Product</th>
                 <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-end">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -206,9 +208,9 @@
                         @endif
                     @endif
                 </td>
-                <td width="10%"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{  number_format($orderItem->price, 2, '.', ',') }}</td>
-                <td width="10%">{{ $orderItem->quantity }}</td>
-                <td width="15%" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{  number_format($orderItem->quantity * $orderItem->price, 2, '.', ',')}}</td>
+                <td width="10%"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($orderItem->price, 2, '.', ',') }}</td>
+                <td width="10%" class="text-center">{{ $orderItem->quantity }}</td>
+                <td width="15%" class="fw-bold text-end"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($orderItem->quantity * $orderItem->price, 2, '.', ',') }}</td>
                 @php
                     $totalPrice += $orderItem->quantity * $orderItem->price;
                     $counter++;
@@ -216,8 +218,8 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="4" class="fw-bold">Subtotal Earnings:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{  number_format($totalPrice, 2, '.', ',') }}</td>
+                <td colspan="4" class="fw-bold text-end">Subtotal Earnings:</td>
+                <td colspan="1" class="fw-bold text-end"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>{{ number_format($totalPrice, 2, '.', ',') }}</td>
             </tr>
             @php
 
@@ -228,52 +230,20 @@
 
             
             <tr>
-                <td colspan="4" class="fw-bold">5% Commission:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{  number_format($percent5, 2, '.', ',') }}</td>
+                <td colspan="4" class="fw-bold text-end">5% Commission:</td>
+                <td colspan="1" class="fw-bold text-end"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ number_format($percent5, 2, '.', ',') }}</td>
                 
             </tr>
             <tr>
-                <td colspan="4" class="fw-bold">Total Amount:</td>
-                <td colspan="1" class="fw-bold"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{  number_format($totalPrice, 2, '.', ',') }}</td>
+                <td colspan="4" class="fw-bold text-end">Total Amount:</td>
+                <td colspan="1" class="fw-bold text-end"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ number_format($totalPrice, 2, '.', ',') }}</td>
 
                 
             </tr>
             
         </tbody>
     </table>
-    {{-- <div class="card-body">
-       
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Traking Number</label>
-                    <input type="text" name="tracking_number" value="{{ $transaction->tracking_number }}" class="form-control" readonly/>
-                    @error('tracking_number') <small class="text-danger">{{$message}}</small> @enderror
-                </div>
-                <div class="col-md-6 mb-4"> </div>
-                <div class="col-md-6 mb-4"> </div>
-               
-                <div class="col-md-6 mb-3 offset-md-3 text-center">
-                    <label>Payment Id</label>
-                    <input type="text" name="payment_id" value="{{ $transaction->payment_id }}" class="form-control" readonly/>
-                    @error('payment_id') <small class="text-danger">{{$message}}</small> @enderror
-                </div>
-                
-
-                <div class="col-md-12 mb-3">
-                   
-                    <label>Image</label>
-                    <input type="file" name="image_pdf" value="{{ $transaction->image }}" class="form-control" />
-                    <img src="{{ asset($transaction->image_pdf) }}" width="60px" height="60px"/>
-                    @error('image_pdf') <small class="text-danger">{{$message}}</small> @enderror
-                </div>
-          
-
-                <div class="col-md-12 mb-3">
-                    <button type="submit" class="btn btn-primary float-end">Update</button>
-                </div>
-            </div>
-    </div> --}}
     <br>
     <p class="text-center">
         Thank your for shopping with something

@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="shadow bg-white p-3">
-                        <h4 class="mb-4">My Sales</h4>
+                        <h2 class="mb-4">My Sales</h2>
                         <hr>
 
                         <div class="row">
@@ -41,11 +41,12 @@
                         </div>
                         
                         <div id="myDiv1">
-                            <table class="table table-borderd table-striped">
+                            <table class="table table-borderd table-striped" style="font-size: 16px;">
                                 @php
                                     $totalPrice = 0; // Initialize the total price variable
                                 @endphp
-                                    
+
+                                <h2 class="mb-4">My Total Sales</h2>
                                 <thead>
                                     <tr>
                                         <th>Product</th>
@@ -95,10 +96,11 @@
                         </div>
 
                         <div id="myDiv2">
-                            <table class="table table-borderd table-striped">
+                            <table class="table table-borderd table-striped" style="font-size: 16px;">
                                 @php
                                     $totalPrice = 0; // Initialize the total price variable
                                 @endphp
+                                <h2 class="mb-4">My Today Sales</h2>
                                     
                                 <thead>
                                     <tr>
@@ -148,10 +150,11 @@
                         </div>
 
                         <div id="myDiv3">
-                            <table class="table table-borderd table-striped">
+                            <table class="table table-borderd table-striped" style="font-size: 16px;">
                                 @php
                                     $totalPrice = 0; // Initialize the total price variable
                                 @endphp
+                                <h2 class="mb-4">My Month Sales</h2>
                                     
                                 <thead>
                                     <tr>
@@ -201,10 +204,11 @@
                         </div>
                         
                         <div id="myDiv4">
-                            <table class="table table-borderd table-striped">
+                            <table class="table table-borderd table-striped" style="font-size: 16px;">
                                 @php
                                     $totalPrice = 0; // Initialize the total price variable
                                 @endphp
+                                <h2 class="mb-4">My Year Sales</h2>
                                     
                                 <thead>
                                     <tr>

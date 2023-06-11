@@ -42,7 +42,7 @@
                             <hr>
                             {{-- <h6>Order Id: {{ $order->id }}</h6> --}}
                             <h6>Tracking Id/No.: {{ $order->tracking_no }}</h6>
-                            <h6>Order Date: {{ $order->created_at->format('d-m-Y h:i A') }}</h6>
+                            <h6>Order Date: {{ $order->created_at->format('M-d-Y h:i A') }}</h6>
                             <h6>Payment Mode: {{ $order->payment_mode }}</h6>
 
                             <h6 class="border p-2 text-success">
@@ -58,7 +58,7 @@
                             <h5>User Details</h5>
                             <hr>
                             <h6>Full Name: {{ $order->fullname }}</h6>
-                            <h6>Email Id: {{ $order->email }}</h6>
+                            <h6>Email Address: {{ $order->email }}</h6>
                             <h6>Phone: {{ $order->phone }}</h6>
                             <h6>Address: {{ $order->address }}</h6>
                             <h6>Pin code: {{ $order->pincode }}</h6>
@@ -67,7 +67,7 @@
                             <h5>Seller Details</h5>
                             <hr>
                             <h6>Full Name: {{ $order->seller_fullname }}</h6>
-                            <h6>Email Id: {{ $order->seller_email }}</h6>
+                            <h6>Email Address: {{ $order->seller_email }}</h6>
                             <h6>Phone: {{ $order->seller_phone ?? 'N/A'}}</h6>
                          
                         </div>
@@ -123,7 +123,7 @@
                                         @endif
                                     </td>
                                     <td width="10%">₱ {{ number_format($orderItem->price, 2, '.', ',') }}</td>
-                                    <td width="10%">{{ $orderItem->quantity }}</td>
+                                    <td width="10%" class="text-center">{{ $orderItem->quantity }}</td>
                                     <td width="10%" class="fw-bold">₱ {{ number_format($orderItem->quantity * $orderItem->price, 2, '.', ',')}}</td>
                                     @php
                                         $totalPrice += $orderItem->quantity * $orderItem->price;
@@ -134,7 +134,7 @@
                                 @endphp
                                 @endforeach
                                 <tr>
-                                    <td colspan="5" class="fw-bold">Total Amount:</td>
+                                    <td colspan="5" class="fw-bold text-end">Total Amount:</td>
                                     <td colspan="1" class="fw-bold">₱ {{ number_format($totalPrice, 2, '.', ',') }}</td>
                                 </tr>
                             </tbody>

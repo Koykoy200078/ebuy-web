@@ -45,7 +45,7 @@ class LoginController extends Controller
             return redirect('/admin/dashboard')->with('message', 'Welcome to Dashboard');
         }
         else{
-            if (Auth::check()) {
+            if (Auth::check() && isset(Auth::user()->email_verified_at)) {
                 $user = Auth::user();
                 $description = '' . $user->name . ' Login';
                 
@@ -53,8 +53,12 @@ class LoginController extends Controller
                     'user_id' => $user->id,
                     'description' => $description,
                 ]);
+                return redirect('/')->with('status', 'Logged In Successfuly');
             }
-            return redirect('/')->with('status', 'Logged In Successfuly');
+            else{
+            return redirect('/home')->with('status', 'Logged In Successfuly');
+            }
+          
           
         }
     }

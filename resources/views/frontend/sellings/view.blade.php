@@ -60,7 +60,7 @@
                                     <h5>User Details</h5>
                                     <hr>
                                     <h6>Full Name: {{ $order->fullname }}</h6>
-                                    <h6>Email Id: {{ $order->email }}</h6>
+                                    <h6>Email Address: {{ $order->email }}</h6>
                                     <h6>Phone: {{ $order->phone }}</h6>
                                     <h6>Address: {{ $order->address }}</h6>
                                     <h6>Pin code: {{ $order->pincode }}</h6>
@@ -71,7 +71,7 @@
                                     <h5>Seller Details</h5>
                                     <hr>
                                     <h6>Full Name: {{ $order->seller_fullname }}</h6>
-                                    <h6>Email Id: {{ $order->seller_email }}</h6>
+                                    <h6>Email Address: {{ $order->seller_email }}</h6>
                                     <h6>Phone: {{ $order->seller_phone ?? 'N/A'}}</h6>
                                 
                                 </div>
@@ -89,7 +89,7 @@
                                             <th>Image</th>
                                             <th>Product</th>
                                             <th>Price</th>
-                                            <th>Quantity</th>
+                                            <th class="text-center">Quantity</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
@@ -128,7 +128,7 @@
                                                 @endif
                                             </td>
                                             <td width="10%">₱ {{ number_format($orderItem->price, 2, '.', ',') }}</td>
-                                            <td width="10%">{{ $orderItem->quantity }}</td>
+                                            <td width="10%" class="text-center">{{ $orderItem->quantity }}</td>
                                             <td width="10%" class="fw-bold">₱ {{ number_format($orderItem->quantity * $orderItem->price, 2, '.', ',')}}</td>
                                             @php
                                                 $totalPrice += $orderItem->quantity * $orderItem->price;
@@ -139,7 +139,7 @@
                                         @endphp
                                         @endforeach
                                         <tr>
-                                            <td colspan="5" class="fw-bold">Subtotal Earnings:</td>
+                                            <td colspan="5" class="fw-bold text-end">Subtotal Earnings:</td>
                                             <td colspan="1" class="fw-bold">₱ {{ number_format($totalPrice, 2, '.', ',') }}</td>
                                             
                                         </tr>
@@ -152,12 +152,12 @@
 
                                         
                                         <tr>
-                                            <td colspan="5" class="fw-bold">5% Commission:</td>
+                                            <td colspan="5" class="fw-bold text-end">5% Commission:</td>
                                             <td colspan="1" class="fw-bold">₱ {{ number_format($percent5, 2, '.', ',') }}</td>
                                             
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="fw-bold">Total Amount:</td>
+                                            <td colspan="5" class="fw-bold text-end">Total Amount:</td>
                                             <td colspan="1" class="fw-bold">₱ {{ number_format($totalPrice, 2, '.', ',') }}</td>
 
                                             

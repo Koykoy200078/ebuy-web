@@ -4,8 +4,17 @@
 
     @section('content')
 <div style=" background-color: rgba(199, 255, 160, 0.5);">
-    
+   
     <div class="container">
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+    
+            
+        </div>
         <div class="background background-left"></div>
         <div class="background background-right"></div>
         <div class="container">

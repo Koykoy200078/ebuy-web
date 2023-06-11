@@ -58,6 +58,7 @@ class OrderController extends Controller
                 ->when($request->status === 'cancelled', function ($q) {
                     return $q->orWhere('status_message', '=', 'Cancelled');
                 })
+                ->latest()
                 ->paginate(10);
         }
         

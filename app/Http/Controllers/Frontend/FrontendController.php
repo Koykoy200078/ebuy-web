@@ -16,6 +16,11 @@ class FrontendController extends Controller
 {
     public function index()
     {
+
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         $sliders = Slider::where('status', '0')->get();
 
         
@@ -43,6 +48,10 @@ class FrontendController extends Controller
 
     public function searchProducts(Request $request)
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         $sold = OrderItem::groupBy('product_id')
         ->selectRaw('product_id, SUM(quantity) as total_quantity')
         ->orderByDesc('total_quantity')
@@ -60,6 +69,10 @@ class FrontendController extends Controller
 
     public function newArrival()
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on New Arrival';
@@ -79,6 +92,10 @@ class FrontendController extends Controller
     }
     public function featuredProducts()
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on Featured Product';
@@ -99,6 +116,10 @@ class FrontendController extends Controller
 
     public function categories()
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         if (Auth::check()) {
             $user = Auth::user();
             $description = '' . $user->name . ' clicked on Category';
@@ -118,6 +139,10 @@ class FrontendController extends Controller
 
     public function products($category_slug)
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         
         $category = Category::where('slug',$category_slug)->first();
         if (Auth::check()) {
@@ -144,6 +169,10 @@ class FrontendController extends Controller
 
     public function productView(string $category_slug, string $product_slug)
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         $category = Category::where('slug',$category_slug)->first();
 
        
@@ -198,11 +227,19 @@ class FrontendController extends Controller
 
     public function thankyou()
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         return view('frontend.thank-you');
     }
 
     public function aboutUs()
     {
+        if (Auth::check() && empty(Auth::user()->email_verified_at)) 
+        {
+            Auth::logout();
+        }
         return view('frontend.about-us');
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\ProductImage;
 use App\Models\Orderitem;
+use App\Models\Order;
 use App\Models\ProductColor;
 use App\Models\Category;
 use App\Models\Product;
@@ -332,27 +333,62 @@ class ProductController extends Controller
     {
         $userId = Auth::id(); // Get the ID of the current user
 
-        $totalPrice = Orderitem::where('product_user_id', $userId)
-        ->sum(\DB::raw('(quantity * price) * 0.95')); // Calculate the sum of quantity multiplied by price minus 5%
-
+        $completedOrderId = Order::where('product_user_id', $userId)
+        ->where('status_message', 'completed')
+        ->get('id');
+        
+        // return view($completedOrderId);
+      
         $currentYear = Carbon::now()->year; // Get the current year
         $currentMonth = Carbon::now()->month; // Get the current month
         $currentDate = Carbon::now()->toDateString(); // Get the current date
     
       
+        
+        $mysalesproduct = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
+        ->paginate(10);;
+
+
+        $todaySales = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
+        ->whereIn('order_id', $completedOrderId)
+        ->whereDate('created_at', $currentDate)
+        ->paginate(10);
+
+        $monthSales = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
+        ->whereYear('created_at', $currentYear)
+        ->whereMonth('created_at', $currentMonth)
+        ->paginate(10);
+
+        $yearSales = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
+        ->whereYear('created_at', $currentYear)
+        ->paginate(10);
+
+
+          $totalPrice = Orderitem::where('product_user_id', $userId)
+          ->whereIn('order_id', $completedOrderId)
+        ->sum(\DB::raw('(quantity * price) * 0.95')); // Calculate the sum of quantity multiplied by price minus 5%
+
+
         // Calculate the total price for this year
         $totalPriceYear = Orderitem::where('product_user_id', $userId)
+            ->whereIn('order_id', $completedOrderId)
             ->whereYear('created_at', $currentYear)
             ->sum(\DB::raw('(quantity * price) * 0.95'));
     
         // Calculate the total price for this month
         $totalPriceMonth = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
             ->whereYear('created_at', $currentYear)
             ->whereMonth('created_at', $currentMonth)
             ->sum(\DB::raw('(quantity * price) * 0.95'));
     
         // Calculate the total price for today
         $totalPriceToday = Orderitem::where('product_user_id', $userId)
+        ->whereIn('order_id', $completedOrderId)
             ->whereDate('created_at', $currentDate)
             ->sum(\DB::raw('(quantity * price) * 0.95'));
     
@@ -360,7 +396,12 @@ class ProductController extends Controller
             'totalPriceYear' => $totalPriceYear,
             'totalPriceMonth' => $totalPriceMonth,
             'totalPriceToday' => $totalPriceToday,
-            'totalPrice' => $totalPrice
+            'totalPrice' => $totalPrice,
+
+            'mysalesproduct' =>  $mysalesproduct,
+            'todaySales' =>  $todaySales,
+            'monthSales' =>  $monthSales,
+            'yearSales' =>  $yearSales,
         ]);
         
    

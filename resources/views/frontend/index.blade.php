@@ -4,8 +4,17 @@
 
 @section('content')
 <div style=" background-color: rgba(199, 255, 160, 0.5);">
-
+   
     <div class="container">
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+    
+            
+        </div>
         <div class="background background-left"></div>
         <div class="background background-right"></div>
         <div class="container">
@@ -269,15 +278,34 @@
     });
 
     $(document).ready(function() {
-        $('.carousel').hover(
-            function() {
-                $('.carousel-button').show();
-            },
-            function() {
-                $('.carousel-button').hide();
-            }
-        );
-    });
+    $('.carousel').hover(
+        function() {
+            $('.carousel-button').show();
+        },
+        function() {
+            $('.carousel-button').hide();
+        }
+    );
+});
+
+// $(document).ready(function(){
+//     $(window).scroll(function(){
+//       if($(this).scrollTop() > 50){
+//         $('.navbar').addClass('fixed-top');
+//       }
+//       else{
+//         $('.navbar').removeClass('fixed-top');
+//       }
+//     });
+//   });
+//   window.addEventListener('scroll', function() {
+//   var navbar = document.querySelector('.navbar');
+//   if (window.scrollY > 0) {
+//     navbar.classList.add('scrolled');
+//   } else {
+//     navbar.classList.remove('scrolled');
+//   }
+// });
 
     $(document).ready(function() {
         $(window).scroll(function() {

@@ -495,8 +495,26 @@ input[type="search"]:hover {
 
 
 
-
 /* Cart or Wishlist */
+
+/* Total prize on My Sale */
+.total-prize {
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(26, 26, 26);
+}
+.toggle-sales {
+    background-color: #dddddd;
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}
 
 
 /* Checkbox */
@@ -641,12 +659,12 @@ input[type="search"]:hover {
 /* FOOTER */
 .footer-area{
     padding: 40px 0px;
-    background-color: #91ff80;
-    color: #000;
+    background-color: #2d3128;
+    color: #ffffff;
 }
 .footer-area a{
     text-decoration: none;
-    color: #000;
+    color: #ffffff;
 }
 .footer-area a:hover {
     color: rgb(15, 128, 0);
@@ -655,7 +673,7 @@ input[type="search"]:hover {
 }
 .footer-area .footer-heading{
     font-size: 30px;
-    color: #000;
+    color: #ffffff;
     font-weight: bold;
 }
 .footer-area .footer-underline{

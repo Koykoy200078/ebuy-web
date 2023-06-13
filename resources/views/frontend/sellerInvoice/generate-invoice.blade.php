@@ -5,8 +5,7 @@
     <title>Invoice #{{$order->id}}</title>
 
     <style>
-           html,
-        body {
+          body {
             margin: 10px;
             padding: 10px;
             font-family: sans-serif;
@@ -15,36 +14,34 @@
             font-family: sans-serif;
         }
         table {
-        width: 85%;
-        border-collapse: collapse;
-        margin-bottom: 0px !important;
-        margin-left: auto;
-        margin-right: auto;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px !important;
         }
         table thead th {
             height: 28px;
             text-align: left;
-            font-size: 26px;
+            font-size: 16px;
             font-family: sans-serif;
         }
         table, th, td {
             border: 1px solid #ddd;
             padding: 8px;
-            font-size: 24px;
+            font-size: 14px;
         }
 
         .heading {
-            font-size: 34px;
+            font-size: 24px;
             margin-top: 12px;
             margin-bottom: 12px;
             font-family: sans-serif;
         }
         .small-heading {
-            font-size: 28px;
+            font-size: 18px;
             font-family: sans-serif;
         }
         .total-heading {
-            font-size: 28px;
+            font-size: 18px;
             font-weight: 700;
             font-family: sans-serif;
         }
@@ -68,14 +65,14 @@
             margin-bottom: 4px;
             display: inline-block;
             font-family: sans-serif;
-            font-size: 24px;
+            font-size: 14px;
             font-weight: 400;
         }
         .no-border {
             border: 1px solid #fff !important;
         }
         .bg-blue {
-            background-color: #0f831e;
+            background-color: #1c6d12;
             color: #fff;
         }
     </style>
@@ -246,7 +243,7 @@
 
     <br>
     <p class="text-center">
-        Thank your for shopping with something
+        Thank your for shopping with eBuy - Local eCommerce
     </p>
 
 </body>
